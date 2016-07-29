@@ -22,4 +22,9 @@ class ShopOrder extends Model
     {
         return $this->hasMany('App\Models\Store\LiquidProduct');
     }
+
+    public function customer()
+    {
+        return $this->belongsTo('App\Models\Store\Customer');
+    }
 }

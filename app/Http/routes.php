@@ -76,4 +76,10 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/recipes/{id?}/remove/{iid?}', 'Store\RecipeController@remove');
     Route::post('store/recipes/add', 'Store\RecipeController@add');
 
+    Route::get('store/customers', 'Store\CustomerController@index');
+    Route::post('store/customers/create', 'Store\CustomerController@store');
+    Route::get('store/customers/{id?}/show', 'Store\CustomerController@show');
+    Route::get('store/customers/{id?}/edit', 'Store\CustomerController@edit');
+    Route::post('store/customers/{id?}/edit', 'Store\CustomerController@update');
+
 });
