@@ -4,6 +4,14 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+.popover, .tooltip-inner {
+    background: rgba(255, 255, 255, 0.9) none repeat scroll 0 0 !important;
+}
+
+.popover-title {
+    background-color: #636363 !important;
+}
+
 body {
     overflow-x: hidden;
 }

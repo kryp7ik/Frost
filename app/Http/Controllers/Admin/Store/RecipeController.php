@@ -50,17 +50,23 @@ class RecipeController extends Controller
         return view('backend.store.recipes.edit', compact('recipe'));
     }
 
-    public function update($id, RecipeFormRequest $request)
+    public function ajaxUpdate($id, RecipeFormRequest $request)
+    {
+        $name = $request->get('name');
+        $value = $request->get('value');
+        if($recipe = Recipe::where('id', $id)->update([$name => $value])) {
+            return \Response::json(array('status' => 1));
+        } else {
+            return \Response::json(array('status' => 1));
+        }
+    }
+
+    public function update($id, Request $request)
     {
         $recipe = Recipe::whereId($id)->firstOrFail();
-        $recipe->name = $request->get('name');
-        //$recipe->ingredients()->sync($request->get('ingredients'));
+        $recipe->active = ($request->get('active')) ? true : false;
         $recipe->save();
-        foreach ($request->get('ingredients') as $key => $value) {
-            $recipe->ingredients()->attach([$value['ingredient'] => ['amount' => $value['amount']]]);
-        }
-
-        return redirect('/admin/store/recipes/' . $recipe->id . '/show')->with('status', 'Recipe was updated successfully');
+        return back();
     }
 
     /**

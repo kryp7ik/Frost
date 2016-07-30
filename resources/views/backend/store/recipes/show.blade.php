@@ -19,11 +19,29 @@
                     </tr>
                     <tr>
                         <td><strong>Name:</strong></td>
-                        <td>{{ $recipe->name }}</td>
+                        <td>
+                            <a class="editable"
+                               id = "name"
+                               href="#"
+                               data-name ="name"
+                               pk="{{ $recipe->id }}"
+                               data-type="text"
+                               data-url="/admin/store/recipes/{{ $recipe->id }}/ajax"
+                               data-title="Recipe Name">{{ $recipe->name }}</a>
+                        </td>
                     </tr>
                     <tr>
                         <td><strong>Active:</strong></td>
-                        <td>{{ ($recipe->active) ? 'Yes' : 'No' }}</td>
+                        <td>
+                            <form method="post" action="/admin/store/recipes/{{ $recipe->id }}/update">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="active" value="{{ ($recipe->active) ? '0' : '1' }}">
+                                <input
+                                        type="submit"
+                                        class="btn {{ ($recipe->active) ? 'btn-success' : 'btn-danger' }}"
+                                        value="{{ ($recipe->active) ? 'De-activate' : 'activate' }}">
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -108,4 +126,5 @@
             </div>
         </div>
     </div>
+    @include('shared.editable')
 @endsection

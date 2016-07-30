@@ -52,10 +52,10 @@
                 <a href="/admin/store/recipes">Recipes</a>
             </li>
             <li>
-                <a href="#">About</a>
+                <a href="/admin/store/customers">Customers</a>
             </li>
             <li>
-                <a href="#">Services</a>
+                <a href="/admin/store/discounts">Discounts</a>
             </li>
             <li>
                 <a href="#">Contact</a>

@@ -58,6 +58,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::post('store/products/create', 'Store\ProductController@store');
     Route::get('store/products/{id?}/edit', 'Store\ProductController@edit');
     Route::post('store/products/{id?}/edit', 'Store\ProductController@update');
+    Route::post('store/products/{id?}/editable', 'Store\ProductController@editable');
     Route::post('store/products/{id?}/instance', 'Store\ProductController@addInstance');
     Route::get('store/products/instance/{id?}/edit', 'Store\ProductController@editInstance');
     Route::post('store/products/instance/{id?}/edit', 'Store\ProductController@updateInstance');
@@ -71,15 +72,19 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/recipes/{id?}/show', 'Store\RecipeController@show');
     Route::get('store/recipes/create', 'Store\RecipeController@create');
     Route::post('store/recipes/create', 'Store\RecipeController@store');
-    Route::get('store/recipes/{id?}/edit', 'Store\RecipeController@edit');
-    Route::post('store/recipes/{id?}/edit', 'Store\RecipeController@update');
+    Route::post('store/recipes/{id?}/ajax', 'Store\RecipeController@ajaxUpdate');
+    Route::post('store/recipes/{id?}/update', 'Store\RecipeController@update');
     Route::get('store/recipes/{id?}/remove/{iid?}', 'Store\RecipeController@remove');
     Route::post('store/recipes/add', 'Store\RecipeController@add');
 
     Route::get('store/customers', 'Store\CustomerController@index');
     Route::post('store/customers/create', 'Store\CustomerController@store');
     Route::get('store/customers/{id?}/show', 'Store\CustomerController@show');
-    Route::get('store/customers/{id?}/edit', 'Store\CustomerController@edit');
     Route::post('store/customers/{id?}/edit', 'Store\CustomerController@update');
+
+    Route::get('store/discounts', 'Store\DiscountController@index');
+    Route::post('store/discounts/create', 'Store\DiscountController@store');
+    Route::get('store/discounts/{id?}/edit', 'Store\DiscountController@edit');
+    Route::post('store/discounts/{id?}/edit', 'Store\DiscountController@update');
 
 });

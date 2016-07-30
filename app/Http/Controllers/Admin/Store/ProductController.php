@@ -63,6 +63,24 @@ class ProductController extends Controller
     }
 
     /**
+     * POST action for editable fields AJAX update
+     * @param Int $id
+     * @param Request $request
+     * @return Response::json
+     */
+    public function editable($id, Request $request)
+    {
+        $name = $request->get('name');
+        $value = $request->get('value');
+        if($product = Product::where('id', $id)->update([$name => $value])) {
+            return \Response::json(array('status' => 1));
+        } else {
+            return \Response::json(array('status' => 1));
+        }
+        $customer->$name = $value;
+    }
+
+    /**
      * @param $id The id of the parent Product
      * @param ProductInstanceFormRequest $request
      * @return \Illuminate\Http\RedirectResponse

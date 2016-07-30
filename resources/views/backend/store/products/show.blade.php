@@ -23,15 +23,42 @@
                         </tr>
                         <tr>
                             <td><strong>Name:</strong></td>
-                            <td>{{ $product->name }}</td>
+                            <td>
+                                <a class="editable"
+                                   id ="name"
+                                   href="#"
+                                   data-name ="name"
+                                   pk="{{ $product->id }}"
+                                   data-type="text"
+                                   data-url="/admin/store/products/{{ $product->id }}/editable"
+                                   data-title="Product Name">{{ $product->name }}</a>
+                            </td>
                         </tr>
                         <tr>
                             <td><strong>Cost:</strong></td>
-                            <td>${{ $product->cost }}</td>
+                            <td>$
+                                <a class="editable"
+                                   id ="cost"
+                                   href="#"
+                                   data-name ="cost"
+                                   pk="{{ $product->id }}"
+                                   data-type="text"
+                                   data-url="/admin/store/products/{{ $product->id }}/editable"
+                                   data-title="Cost">{{ $product->cost }}</a>
+                            </td>
                         </tr>
                         <tr>
                             <td><strong>SKU:</strong></td>
-                            <td>{{ $product->sku }}</td>
+                            <td>
+                                <a class="editable"
+                                   id ="sku"
+                                   href="#"
+                                   data-name ="sku"
+                                   pk="{{ $product->id }}"
+                                   data-type="text"
+                                   data-url="/admin/store/products/{{ $product->id }}/editable"
+                                   data-title="SKU">{{ $product->sku }}</a>
+                            </td>
                         </tr>
                         <tr>
                             <td><strong>Category:</strong></td>
@@ -129,4 +156,5 @@
             </div>
         </div>
     </div>
+    @include('shared.editable')
 @endsection

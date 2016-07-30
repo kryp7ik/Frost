@@ -4,7 +4,7 @@ namespace App\Http\Requests\Store;
 
 use App\Http\Requests\Request;
 
-class CustomerFormRequest extends Request
+class DiscountFormRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class CustomerFormRequest extends Request
     public function rules()
     {
         return [
-            'phone' => 'required|integer',
-            'email' => 'email',
-            'name' => 'string',
+            'name' => 'required',
+            'type' => 'required',
+            'filter' => 'required',
+            'amount' => 'required|numeric',
         ];
     }
 }

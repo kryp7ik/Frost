@@ -1,3 +1,4 @@
+<meta name="csrf_token" content="{{ csrf_token() }}">
 <html>
     <head>
         <title> @yield('title') </title>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Store;
 
 use App\Models\Store\Customer;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -14,7 +15,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        return view('backend.customers.index', compact('customers'));
+        return view('backend.store.customers.index', compact('customers'));
     }
 
     public function store(CustomerFormRequest $request)
@@ -31,22 +32,17 @@ class CustomerController extends Controller
     public function show($id)
     {
         $customer = Customer::whereId($id)->firstOrFail();
-        return view('backend.customers.show', compact('customer'));
+        return view('backend.store.customers.show', compact('customer'));
     }
 
-    public function edit($id)
+    public function update($id, Request $request)
     {
-        $customer = Customer::whereId($id)->firstOrFail();
-        return view('backend.customers.edit', compact('customer'));
-    }
-
-    public function update($id, CustomerFormRequest $request)
-    {
-        $customer = Customer::whereId($id)->firstOrFail();
-        $customer->name = $request->get('name');
-        $customer->phone = $request->get('phone');
-        $customer->email = $request->get('email');
-        $customer->save();
-        return view('backend.customers.show', compact('customer'))->with('status', 'The customer has been successfully updated.');
+        $name = $request->get('name');
+        $value = $request->get('value');
+        if($customer = Customer::where('id', $id)->update([$name => $value])) {
+            return \Response::json(array('status' => 1));
+        } else {
+            return \Response::json(array('status' => 1));
+        }
     }
 }
