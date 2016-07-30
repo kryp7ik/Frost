@@ -29,7 +29,7 @@
                                data-name ="name"
                                pk="{{ $customer->id }}"
                                data-type="text"
-                               data-url="/admin/store/customers/{{ $customer->id }}/edit"
+                               data-url="/admin/store/customers/{{ $customer->id }}/ajax"
                                data-title="Name">{{ $customer->name }}</a>
                         </td>
                     </tr>
@@ -42,7 +42,7 @@
                                data-name ="phone"
                                pk="{{ $customer->id }}"
                                data-type="text"
-                               data-url="/admin/store/customers/{{ $customer->id }}/edit"
+                               data-url="/admin/store/customers/{{ $customer->id }}/ajax"
                                data-title="Phone">{{ $customer->phone }}</a>
                         </td>
                     </tr>
@@ -55,7 +55,7 @@
                                data-name ="email"
                                pk="{{ $customer->id }}"
                                data-type="text"
-                               data-url="/admin/store/customers/{{ $customer->id }}/edit"
+                               data-url="/admin/store/customers/{{ $customer->id }}/ajax"
                                data-title="Email">{{ $customer->email }}</a>
                         </td>
                     </tr>

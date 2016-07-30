@@ -30,7 +30,7 @@
                                    data-name ="name"
                                    pk="{{ $product->id }}"
                                    data-type="text"
-                                   data-url="/admin/store/products/{{ $product->id }}/editable"
+                                   data-url="/admin/store/products/{{ $product->id }}/ajax"
                                    data-title="Product Name">{{ $product->name }}</a>
                             </td>
                         </tr>
@@ -43,7 +43,7 @@
                                    data-name ="cost"
                                    pk="{{ $product->id }}"
                                    data-type="text"
-                                   data-url="/admin/store/products/{{ $product->id }}/editable"
+                                   data-url="/admin/store/products/{{ $product->id }}/ajax"
                                    data-title="Cost">{{ $product->cost }}</a>
                             </td>
                         </tr>
@@ -56,7 +56,7 @@
                                    data-name ="sku"
                                    pk="{{ $product->id }}"
                                    data-type="text"
-                                   data-url="/admin/store/products/{{ $product->id }}/editable"
+                                   data-url="/admin/store/products/{{ $product->id }}/ajax"
                                    data-title="SKU">{{ $product->sku }}</a>
                             </td>
                         </tr>

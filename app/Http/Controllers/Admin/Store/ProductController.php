@@ -68,7 +68,7 @@ class ProductController extends Controller
      * @param Request $request
      * @return Response::json
      */
-    public function editable($id, Request $request)
+    public function ajaxUpdate($id, Request $request)
     {
         $name = $request->get('name');
         $value = $request->get('value');
@@ -77,7 +77,6 @@ class ProductController extends Controller
         } else {
             return \Response::json(array('status' => 1));
         }
-        $customer->$name = $value;
     }
 
     /**

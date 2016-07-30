@@ -35,7 +35,7 @@ class CustomerController extends Controller
         return view('backend.store.customers.show', compact('customer'));
     }
 
-    public function update($id, Request $request)
+    public function ajaxUpdate($id, Request $request)
     {
         $name = $request->get('name');
         $value = $request->get('value');
