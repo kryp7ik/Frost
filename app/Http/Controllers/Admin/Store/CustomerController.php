@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Store;
 
 use App\Models\Store\Customer;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
