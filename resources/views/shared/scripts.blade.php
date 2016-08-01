@@ -9,6 +9,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript" src="//cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script src="/js/moment.min.js"></script>
+<script src="/js/bootstrap-datetimepicker.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $.material.init();
@@ -23,6 +26,8 @@
             "paging": false,
             "info" : false,
         });
+
+        $('.datetime').datetimepicker();
 
     });
 </script>

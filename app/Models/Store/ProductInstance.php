@@ -11,10 +11,10 @@ class ProductInstance extends Model
     public $timestamps = false;
 
     public function product() {
-        $this->belongsTo('App\Models\Store\Product');
+        return $this->belongsTo('App\Models\Store\Product');
     }
 
     public function orderProduct() {
-        $this->belongsToMany('App\Models\Store\ShopOrder', 'order_product')->withPivot('quantity');
+        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_product')->withPivot('quantity');
     }
 }

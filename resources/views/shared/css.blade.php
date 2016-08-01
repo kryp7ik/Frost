@@ -11,3 +11,4 @@
 <link href="/css/custom.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css"/>
+<link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet">

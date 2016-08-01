@@ -14,9 +14,6 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="/">Home</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/tickets">Tickets</a></li>
-                <li><a href="/blog">Blog</a></li>
                 @if (Auth::check())
                     @if (Auth::user()->hasRole('manager'))
                         <li><a href="/admin">Dashboard</a></li>
@@ -52,13 +49,16 @@
                 <a href="/admin/store/recipes">Recipes</a>
             </li>
             <li>
-                <a href="/admin/store/customers">Customers</a>
+                <a href="/customers">Customers</a>
             </li>
             <li>
                 <a href="/admin/store/discounts">Discounts</a>
             </li>
             <li>
-                <a href="#">Contact</a>
+                <a href="/orders">All Orders</a>
+            </li>
+            <li>
+                <a href="/orders/create">New Order</a>
             </li>
         </ul>
     </div>

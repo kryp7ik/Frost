@@ -11,14 +11,18 @@
 |
 */
 
-Route::get('/', 'PagesController@home');
-
-Route::get('users/register', 'Auth\AuthController@getRegister');
-Route::post('users/register', 'Auth\AuthController@postRegister');
+/**
+ * Public routes (no authentication required)
+ */
+//Route::get('users/register', 'Auth\AuthController@getRegister');
+//Route::post('users/register', 'Auth\AuthController@postRegister');
 Route::get('users/logout', 'Auth\AuthController@getLogout');
 Route::get('users/login', 'Auth\AuthController@getLogin');
 Route::post('users/login', 'Auth\AuthController@postLogin');
 
+/**
+ * Route group for 'Admin' users only (/admin/*)
+ */
 Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'manager'), function() {
     Route::get('/', 'PagesController@home');
 
@@ -55,14 +59,28 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/recipes/{id?}/remove/{iid?}', 'Store\RecipeController@remove');
     Route::post('store/recipes/add', 'Store\RecipeController@add');
 
-    Route::get('store/customers', 'Store\CustomerController@index');
-    Route::post('store/customers/create', 'Store\CustomerController@store');
-    Route::get('store/customers/{id?}/show', 'Store\CustomerController@show');
-    Route::post('store/customers/{id?}/ajax', 'Store\CustomerController@ajaxUpdate');
-
     Route::get('store/discounts', 'Store\DiscountController@index');
     Route::post('store/discounts/create', 'Store\DiscountController@store');
     Route::get('store/discounts/{id?}/edit', 'Store\DiscountController@edit');
     Route::post('store/discounts/{id?}/edit', 'Store\DiscountController@update');
 
+});
+
+/**
+ * Route group for authenticated users who are not 'Admin' (/*)
+ */
+Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
+    Route::get('/', 'PagesController@home');
+
+    Route::get('customers', 'Store\CustomerController@index');
+    Route::post('customers/create', 'Store\CustomerController@store');
+    Route::get('customers/{id?}/show', 'Store\CustomerController@show');
+    Route::post('customers/{id?}/ajax', 'Store\CustomerController@ajaxUpdate');
+
+    Route::get('orders', 'Store\ShopOrderController@index');
+    Route::post('orders', 'Store\ShopOrderController@index');
+    Route::get('orders/create', 'Store\ShopOrderController@create');
+    Route::post('orders/create', 'Store\ShopOrderController@store');
+    Route::get('orders/{id?}/show', 'Store\ShopOrderController@show');
+    Route::get('orders/{id?}/checkout', 'Store\ShopOrderController@checkout');
 });

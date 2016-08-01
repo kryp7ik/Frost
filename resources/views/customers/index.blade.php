@@ -32,7 +32,7 @@
                             <tbody>
                             @foreach($customers as $customer)
                                 <tr>
-                                    <td><a href="/admin/store/customers/{{ $customer->id }}/show">{{ $customer->name }}</a></td>
+                                    <td><a href="customers/{{ $customer->id }}/show">{{ $customer->name }}</a></td>
                                     <td>{{ $customer->phone }}</td>
                                     <td>{{ $customer->email }}</td>
                                 </tr>
@@ -53,7 +53,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Create new Customer</h4>
                 </div>
-                <form method="post" action="/admin/store/customers/create">
+                <form method="post" action="/customers/create">
                     <div class="modal-body">
                         @foreach ($errors->all() as $error)
                             <p class="alert alert-danger">{{ $error }}</p>

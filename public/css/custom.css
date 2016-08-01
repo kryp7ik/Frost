@@ -4,6 +4,10 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+.liquid-form-group {
+    padding-left: 10px;
+}
+
 .popover, .tooltip-inner {
     background: rgba(255, 255, 255, 0.9) none repeat scroll 0 0 !important;
 }

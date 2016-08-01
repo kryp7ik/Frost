@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Store;
+namespace App\Http\Controllers\Front\Store;
 
 use App\Models\Store\Customer;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        return view('backend.store.customers.index', compact('customers'));
+        return view('customers.index', compact('customers'));
     }
 
     public function store(CustomerFormRequest $request)
@@ -25,13 +25,13 @@ class CustomerController extends Controller
             'email' => $request->get('email')
         ));
         $customer->save();
-        return redirect('/admin/store/customers')->with('status', 'A new customer has been added.');
+        return redirect('/customers')->with('status', 'A new customer has been added.');
     }
 
     public function show($id)
     {
         $customer = Customer::whereId($id)->firstOrFail();
-        return view('backend.store.customers.show', compact('customer'));
+        return view('customers.show', compact('customer'));
     }
 
     public function ajaxUpdate($id, Request $request)

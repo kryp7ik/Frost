@@ -16,7 +16,6 @@ class Manager
      */
     public function handle($request, Closure $next)
     {
-        //return $next($request);
         if(!Auth::check()) {
             return redirect('users/login');
         } else {
@@ -24,9 +23,8 @@ class Manager
             if($user->hasRole('manager')) {
                 return $next($request);
             } else {
-                return redirect('/');
+                return redirect('/')->with('warning', 'You do not have permission to visit that page!');
             }
         }
-        return $next($request);
     }
 }

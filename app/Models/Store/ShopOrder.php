@@ -11,7 +11,7 @@ class ShopOrder extends Model
     /**
      * Many to Many relationship with ProductInstance
      * Added 'quantity' to the pivot table 'order_products' which can be accessed by $shopOrder->productInstances(1)->pivot->quantity
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function productInstances()
     {
@@ -31,5 +31,10 @@ class ShopOrder extends Model
     public function discounts()
     {
         return $this->belongsToMany('App\Models\Store\Discount', 'order_discount');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany('App\Models\Store\Payment');
     }
 }

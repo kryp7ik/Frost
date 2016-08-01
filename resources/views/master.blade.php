@@ -1,5 +1,6 @@
+<!DOCTYPE html>
 <meta name="csrf_token" content="{{ csrf_token() }}">
-<html>
+<html lang="en">
     <head>
         <title> @yield('title') </title>
         @include('shared.css')
