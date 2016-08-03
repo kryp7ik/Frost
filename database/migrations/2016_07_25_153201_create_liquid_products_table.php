@@ -17,7 +17,7 @@ class CreateLiquidProductsTable extends Migration
             $table->integer('shop_order_id')->unsigned()->index();
             $table->integer('recipe_id');
             $table->integer('size');
-            $table->integer('nicotine');
+            $table->decimal('nicotine');
             $table->integer('vg');
             $table->integer('menthol');
             $table->boolean('extra');

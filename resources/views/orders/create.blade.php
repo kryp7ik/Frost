@@ -1,7 +1,7 @@
 @extends('master')
 @section('title', 'Create A New Order')
 @section('content')
-    <div class="container col-md-10 col-md-offset-1">
+    <div class="container col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>Create a new order</h2>
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group liquid-form-group">
                                     <label for="liquid">Flavor</label>
-                                    <select style="width:200px" class="form-control l-select" name="liquids[0][recipe]">
+                                    <select style="width:300px" class="form-control l-select" name="liquids[0][recipe]">
                                         @foreach($recipes as $recipe)
                                             <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
                                         @endforeach
