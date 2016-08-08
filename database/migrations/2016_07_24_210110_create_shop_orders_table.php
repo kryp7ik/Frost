@@ -18,7 +18,7 @@ class CreateShopOrdersTable extends Migration
             $table->integer('customer_id')->unsigned();
             $table->decimal('subtotal');
             $table->decimal('total');
-            $table->boolean('status');
+            $table->boolean('complete')->default(0);
             $table->timestamps();
         });
     }

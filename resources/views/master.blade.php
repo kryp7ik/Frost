@@ -13,5 +13,9 @@
                 @yield('content')
             </div>
         </div>
+        @include('flash::message')
+    <script type="text/javascript">
+        $('div.alert').not('.alert-important').delay(3000).fadeOut(250);
+    </script>
     </body>
 </html>

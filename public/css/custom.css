@@ -4,6 +4,16 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+.alert {
+    border: 0 none;
+    border-radius: 10px !important;
+    bottom: 0 !important;
+    position: fixed !important;
+    right: 20px !important;
+    width: 300px !important;
+    z-index: 9 !important;
+}
+
 .liquid-form-group {
     padding-left: 10px;
 }

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Admin\Store;
 
 use App\Models\Store\Product;
-use App\Models\Store\ProductInstance;
+use App\Repositories\Store\Product\ProductRepositoryContract;
+use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\ProductFormRequest;
 use App\Http\Requests\Store\ProductInstanceFormRequest;
@@ -14,15 +13,25 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    protected $products;
+
+    protected $productInstances;
+
+    public function __construct(ProductRepositoryContract $products, ProductInstanceRepositoryContract $instances)
+    {
+        $this->products = $products;
+        $this->productInstances = $instances;
+    }
+
     public function index()
     {
-        $products = Product::all();
+        $products = $this->products->getAll();
         return view('backend.store.products.index', compact('products'));
     }
 
     public function show($id)
     {
-        $product = Product::whereId($id)->firstOrFail();
+        $product = $this->products->findById($id);
         return view('backend.store.products.show', compact('product'));
     }
 
@@ -34,32 +43,21 @@ class ProductController extends Controller
 
     public function store(ProductFormRequest $request)
     {
-        $cost = (is_float($request->get('cost'))) ? number_format($request->get('cost'), 2) : '0.00';
-        $product = new Product([
-            'name' => $request->get('name'),
-            'cost' => $request->get('cost'),
-            'sku' => $request->get('sku'),
-            'category' => $request->get('category')
-        ]);
-        $product->save();
-        return redirect('/admin/store/products')->with('status', 'Product successfully created');
+        if ($product = $this->products->create($request->all())) {
+            return redirect('/admin/store/products/' . $product->id . '/show');
+        } else return redirect('/admin/store/products');
     }
 
     public function edit($id)
     {
-        $product = Product::whereId($id)->firstOrFail();
+        $product = $this->products->findById($id);
         return view('backend.store.products.edit', compact('product'));
     }
 
     public function update($id, ProductFormRequest $request)
     {
-        $product = Product::whereId($id)->firstOrFail();
-        $product->name = $request->get('name');
-        $product->cost = $request->get('cost');
-        $product->sku = $request->get('sku');
-        $product->category = $request->get('category');
-        $product->save();
-        return redirect('/admin/store/products/' . $product->id . '/show')->with('status', 'Product edited successfully');
+        $product = $this->products->update($id, $request->all());
+        return redirect('/admin/store/products/' . $product->id . '/show');
     }
 
     /**
@@ -70,49 +68,33 @@ class ProductController extends Controller
      */
     public function ajaxUpdate($id, Request $request)
     {
-        $name = $request->get('name');
-        $value = $request->get('value');
-        if($product = Product::where('id', $id)->update([$name => $value])) {
+        if($this->products->updateField($id, $request->get('name'), $request->get('value'))) {
             return \Response::json(array('status' => 1));
         } else {
-            return \Response::json(array('status' => 1));
+            return \Response::json(array('status' => 0));
         }
     }
 
     /**
-     * @param $id The id of the parent Product
+     * @param int $id The id of the parent Product
      * @param ProductInstanceFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function addInstance($id, ProductInstanceFormRequest $request)
     {
-        $instance = new ProductInstance(array(
-            'price' => number_format($request->get('price'), 2),
-            'stock' => $request->get('stock'),
-            'redline' => $request->get('redline'),
-            'store' => Auth::user()->store,
-            'active' => true,
-            'product_id' => $id,
-        ));
-        $instance->save();
-        return back()->with('status', 'Product Instance has been created successfully');
+        $this->productInstances->create($id, Auth::user()->store, $request->all());
+        return back();
     }
 
     public function editInstance($id)
     {
-        $instance = ProductInstance::whereId($id)->firstOrFail();
+        $instance = $this->productInstances->findById($id);
         return view('backend.store.products.editinstance', compact('instance'));
     }
 
     public function updateInstance($id, ProductInstanceFormRequest $request)
     {
-        $instance = ProductInstance::whereId($id)->firstOrFail();
-        $instance->price = number_format($request->get('price'), 2);
-        $instance->stock = $request->get('stock');
-        $instance->redline = $request->get('redline');
-        $instance->active = ($request->get('active')) ? true : false;
-        $instance->save();
-        $pid = $instance->product_id;
-        return redirect('/admin/store/products/' . $pid . '/show')->with('status', 'Product Instance has been updated successfully');
+        $instance = $this->productInstances->update($id, $request->all());
+        return redirect('/admin/store/products/' . $instance->product_id . '/show');
     }
 }

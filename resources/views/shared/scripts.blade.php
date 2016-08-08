@@ -30,4 +30,5 @@
         $('.datetime').datetimepicker();
 
     });
+
 </script>
