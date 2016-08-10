@@ -27,7 +27,7 @@
             "info" : false,
         });
 
-        $('.datetime').datetimepicker();
+
 
     });
 

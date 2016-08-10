@@ -13,6 +13,17 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
     }
 
     /**
+     * Returns all LiquidProducts that belong to the designated store and have not been mixed (completed)
+     * @param int $store_id
+     * @return mixed
+     */
+    public function getIncompleteWhereStore($store_id)
+    {
+        return LiquidProduct::
+                    where('store', $store_id)
+                    ->where('mixed', 0)->get();
+    }
+    /**
      * @param int $id
      * @return LiquidProduct|boolean
      */
@@ -23,13 +34,15 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
 
     /**
      * @param int $shop_order_id
+     * @param int $store_id
      * @param array $data
      * @return bool
      */
-    public function create($shop_order_id, $data)
+    public function create($shop_order_id, $store_id, $data)
     {
         $liquidProduct = new LiquidProduct([
             'shop_order_id' => $shop_order_id,
+            'store' => $store_id,
             'recipe_id' => $data['recipe'],
             'size' => $data['size'],
             'nicotine' => $data['nicotine'],
@@ -39,18 +52,6 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             'mixed' => false
         ]);
         return $liquidProduct->save();
-    }
-
-    /**
-     * Accepts an array of multiple LiquidProducts
-     * @param int $shop_order_id
-     * @param $data
-     */
-    public function createMultiple($shop_order_id, $data)
-    {
-        foreach ($data as $liquidProduct){
-            $this->create($shop_order_id, $liquidProduct);
-        }
     }
 
     /**

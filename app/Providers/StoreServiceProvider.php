@@ -57,5 +57,10 @@ class StoreServiceProvider extends ServiceProvider
             \App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract::class,
             \App\Repositories\Store\LiquidProduct\EloquentLiquidProductRepository::class
         );
+
+        $this->app->bind(
+            \App\Repositories\Store\LiquidProduct\ShopOrderRepositoryContract::class,
+            \App\Repositories\Store\LiquidProduct\EloquentShopOrderRepository::class
+        );
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Front\Store;
 
-use App\Models\Store\LiquidProduct;
 use App\Models\Store\Recipe;
 use App\Models\Store\ShopOrder;
 use App\Http\Requests\Store\ShopOrderFormRequest;
-use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use App\Repositories\Store\Recipe\RecipeRepositoryContract;
+use App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,16 +18,16 @@ class ShopOrderController extends Controller
 
     protected $recipes;
 
-    protected $liquidProducts;
+    protected $orders;
 
     public function __construct(
         ProductInstanceRepositoryContract $instances,
         RecipeRepositoryContract $recipes,
-        LiquidProductRepositoryContract $liquids)
+        ShopOrderRepositoryContract $orders)
     {
         $this->productInstances = $instances;
         $this->recipes = $recipes;
-        $this->liquidProducts = $liquids;
+        $this->orders = $orders;
     }
 
     public function index(Request $request)
@@ -36,22 +35,14 @@ class ShopOrderController extends Controller
         $store = Auth::user()->store;
         if ($request->get('start') != null){
             // Change date range if user submits the date filter form
-            $start = new DateTime($request->get('start'));
-            $end = ($request->get('end') != null ) ? new DateTime($request->get('end')) : new DateTime('now');
-            $orders = ShopOrder::
-                where('store',$store)
-                ->whereBetween('created_at', [$start, $end])->get();
-            return view('orders.index', compact('orders'));
+            $orders = $this->orders->getByStore($store, $request->get('start'), $request->get('end'));
         } else {
             // If no filter is applied select orders from the last day
-            $date = new \DateTime('now');
+            $date = new \DateTime();
             $date->modify('-1 day');
-            $orders = ShopOrder::where([
-                ['store', '=', $store],
-                ['created_at', '>', $date]
-            ])->get();
-            return view('orders.index', compact('orders'));
+            $orders = $this->orders->getByStore($store, $date->format('Y-m-d H:i:s'));
         }
+        return view('orders.index', compact('orders'));
     }
 
     public function create()
@@ -63,21 +54,17 @@ class ShopOrderController extends Controller
 
     public function store(ShopOrderFormRequest $request)
     {
-        $order = new ShopOrder([
-            'store' => Auth::user()->store,
-        ]);
-        $order->save();
-        foreach ($request->get('products') as $productInstance) {
-            $order->productInstances()->attach([$productInstance['instance'] => ['quantity' => $productInstance['quantity']]]);
-        }
-        $this->liquidProducts->createMultiple($order->id, $request->get('liquids'));
-        return redirect('/orders/' . $order->id . '/show');
+        $order = $this->orders->create(Auth::user()->store, $request->all());
+        return ($order) ? redirect('/orders/' . $order->id . '/show') : redirect('/orders/create');
     }
 
     public function show($id)
     {
-        $order = ShopOrder::whereId($id)->first();
-        if (!$order instanceof ShopOrder) return redirect('/orders')->with('warning', 'Order with id: ' . $id . ' could not be found');
+        $order = $this->orders->findById($id);
+        if (!$order instanceof ShopOrder) {
+            flash('Order with id: ' . $id . ' could not be found', 'danger');
+            return redirect('/orders');
+        }
         if ($order->complete) {
             // If the order is complete display the order details only
             return view('orders.show.closed', compact('order'));

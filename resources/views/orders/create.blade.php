@@ -47,8 +47,6 @@
             newEntry.find('.l-extra').attr('name', 'liquids[' + currentCount + '][extra]');
             newEntry.find('.l-menthol').attr('name', 'liquids[' + currentCount + '][menthol]');
             newEntry.find('.l-vg').attr('name', 'liquids[' + currentCount + '][vg]');
-            newEntry.find('.l-new').attr('name', 'liquids[' + currentCount + '][new]');
-            newEntry.find('.l-new').val('');
             controlForm.find('fieldset:not(:last) .liquid-add')
                     .removeClass('liquid-add').addClass('liquid-remove')
                     .removeClass('btn-success').addClass('btn-danger')

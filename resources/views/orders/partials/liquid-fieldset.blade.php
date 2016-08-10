@@ -59,9 +59,6 @@
         </div>
         <div class="form-group liquid-form-group">
             <div class="input-group">
-                <label for="new">New Recipe</label>
-                <input style="width:auto" type="text" class="form-control l-new" name="liquids[0][new]" />
-                <span class="help-block">Creates a new Recipe on the fly.</span>
                 <span class="input-group-btn">
                     <button class="btn btn-success liquid-add" type="button">
                         <span class="glyphicon glyphicon-plus"></span>

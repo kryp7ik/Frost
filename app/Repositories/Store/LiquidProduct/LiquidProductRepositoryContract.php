@@ -14,6 +14,13 @@ interface LiquidProductRepositoryContract
     public function getAll();
 
     /**
+     * Returns all LiquidProducts that belong to the designated store and have not been mixed (completed)
+     * @param int $store_id
+     * @return mixed
+     */
+    public function getIncompleteWhereStore($store_id);
+
+    /**
      * @param int $id
      * @return LiquidProduct|boolean
      */
@@ -21,17 +28,11 @@ interface LiquidProductRepositoryContract
 
     /**
      * @param int $shop_order_id
+     * @param int $store_id
      * @param array $data
      * @return bool
      */
-    public function create($shop_order_id, $data);
-
-    /**
-     * Accepts an array of multiple LiquidProducts
-     * @param int $shop_order_id
-     * @param $data
-     */
-    public function createMultiple($shop_order_id, $data);
+    public function create($shop_order_id, $store_id, $data);
 
     /**
      * @param int $id

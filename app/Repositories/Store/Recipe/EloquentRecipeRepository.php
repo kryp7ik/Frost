@@ -64,7 +64,6 @@ class EloquentRecipeRepository implements RecipeRepositoryContract
     {
         $recipe = Recipe::where('id', $recipe_id)->firstOrFail();
         $recipe->ingredients()->detach($ingredient_id);
-        $recipe->save();
         flash('The ingredient has been successfully removed', 'success');
         return $recipe;
     }
