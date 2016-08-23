@@ -16,6 +16,7 @@ class CreateShopOrdersTable extends Migration
             $table->increments('id');
             $table->integer('store')->unsigned()->index();
             $table->integer('customer_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->decimal('subtotal');
             $table->decimal('total');
             $table->boolean('complete')->default(0);

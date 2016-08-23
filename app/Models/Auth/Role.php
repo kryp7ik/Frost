@@ -6,7 +6,7 @@
  * Time: 7:41 PM
  */
 
-namespace App;
+namespace App\Models\Auth;
 
 use Zizaco\Entrust\EntrustRole;
 

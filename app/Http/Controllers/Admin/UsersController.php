@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Role;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Models\Auth\User;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserEditFormRequest;
 

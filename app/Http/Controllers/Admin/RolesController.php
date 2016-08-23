@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleFormRequest;
-use App\Role;
+use App\Models\Auth\Role;
 
 class RolesController extends Controller
 {

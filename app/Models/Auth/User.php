@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models\Auth;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -39,5 +39,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         } else {
             $this->roles()->detach();
         }
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Store\ShopOrder');
     }
 }

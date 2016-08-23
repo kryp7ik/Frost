@@ -28,6 +28,11 @@ class ShopOrder extends Model
         return $this->belongsTo('App\Models\Store\Customer');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\Auth\User');
+    }
+
     public function discounts()
     {
         return $this->belongsToMany('App\Models\Store\Discount', 'order_discount');
