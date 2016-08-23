@@ -54,6 +54,7 @@ interface ShopOrderRepositoryContract
      * Attaches a single ProductInstance to an order with the quantity in the join table
      * @param ShopOrder $order
      * @param array $data
+     * @return bool
      */
     public function addProductToOrder(ShopOrder $order, $data);
 

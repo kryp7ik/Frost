@@ -40,6 +40,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
      */
     public function create($shop_order_id, $store_id, $data)
     {
+        if ($data['recipe'] == 0) return false;
         $liquidProduct = new LiquidProduct([
             'shop_order_id' => $shop_order_id,
             'store' => $store_id,
@@ -48,7 +49,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             'nicotine' => $data['nicotine'],
             'vg' => $data['vg'],
             'menthol' => $data['menthol'],
-            'extra' => $data['extra'],
+            'extra' => (isset($data['extra'])) ? true : false,
             'mixed' => false
         ]);
         return $liquidProduct->save();

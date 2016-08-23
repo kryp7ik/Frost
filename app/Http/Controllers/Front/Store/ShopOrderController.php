@@ -52,7 +52,7 @@ class ShopOrderController extends Controller
         return view('orders.create', compact('recipes', 'sortedInstances'));
     }
 
-    public function store(ShopOrderFormRequest $request)
+    public function store(Request $request)
     {
         $order = $this->orders->create(Auth::user()->store, $request->all());
         return ($order) ? redirect('/orders/' . $order->id . '/show') : redirect('/orders/create');

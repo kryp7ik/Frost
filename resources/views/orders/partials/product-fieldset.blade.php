@@ -13,7 +13,7 @@
                     @endforeach
                 </select>
                 <label class="input-group-addon">Quantity</label>
-                <input type="text" class="form-control p-quantity" name="products[0][quantity]">
+                <input type="text" class="form-control p-quantity" name="products[0][quantity]" placeholder="0">
                 <span class="input-group-btn">
                     <button class="btn btn-success product-add" type="button">
                         <span class="glyphicon glyphicon-plus"></span>

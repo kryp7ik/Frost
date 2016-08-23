@@ -13,6 +13,7 @@
         <div class="form-group liquid-form-group">
             <label for="liquid">Flavor</label>
             <select style="width:300px" class="form-control l-select" name="liquids[0][recipe]">
+                <option value="0">None</option>
                 @foreach($recipes as $recipe)
                     <option value="{{ $recipe->id }}">{{ $recipe->name }}</option>
                 @endforeach
@@ -22,7 +23,7 @@
             <label for="nicotine">Nicotine</label>
             <select style="width:70px" class="form-control l-nicotine" name="liquids[0][nicotine]">
                 @for($i = 0; $i <= 30; $i++)
-                    <option value="$i">{{ $i }}mg</option>
+                    <option value="{{ $i }}">{{ $i }}mg</option>
                 @endfor
             </select>
         </div>

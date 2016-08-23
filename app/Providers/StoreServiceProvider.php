@@ -59,8 +59,8 @@ class StoreServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            \App\Repositories\Store\LiquidProduct\ShopOrderRepositoryContract::class,
-            \App\Repositories\Store\LiquidProduct\EloquentShopOrderRepository::class
+            \App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract::class,
+            \App\Repositories\Store\ShopOrder\EloquentShopOrderRepository::class
         );
     }
 }

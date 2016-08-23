@@ -99,10 +99,14 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      * Attaches a single ProductInstance to an order with the quantity in the join table
      * @param ShopOrder $order
      * @param array $data
+     * @return boolean
      */
     public function addProductToOrder(ShopOrder $order, $data)
     {
+        if (!is_int($data['quantity'])) return false;
         $order->productInstances()->attach([$data['instance'] => ['quantity' => $data['quantity']]]);
+        flash('A product has been successfully added to the order', 'success');
+        return true;
     }
 
     /**
@@ -113,6 +117,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function removeProductFromOrder(ShopOrder $order, $product_id)
     {
         $order->productInstances()->detach($product_id);
+        flash('A product has been successfully removed from the order', 'danger');
     }
 
     /**
@@ -122,6 +127,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function addLiquidToOrder(ShopOrder $order, $data)
     {
         $this->liquidProductsRepository->create($order->id, $order->store, $data);
+        flash('A liquid has been successfully added to the order', 'success');
     }
 
     /**
@@ -130,5 +136,6 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function removeLiquidFromOrder($liquid_id)
     {
         $this->liquidProductsRepository->delete($liquid_id);
+        flash('A liquid has been successfully removed from the order', 'danger');
     }
 }
