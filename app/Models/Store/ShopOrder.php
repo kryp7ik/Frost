@@ -42,4 +42,9 @@ class ShopOrder extends Model
     {
         return $this->hasMany('App\Models\Store\Payment');
     }
+
+    public function getRemainingBalance()
+    {
+        return $this->total;
+    }
 }

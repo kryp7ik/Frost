@@ -1,16 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
 /**
  * Public routes (no authentication required)
  */
@@ -82,5 +71,8 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders/create', 'Store\ShopOrderController@create');
     Route::post('orders/create', 'Store\ShopOrderController@store');
     Route::get('orders/{id?}/show', 'Store\ShopOrderController@show');
-    Route::get('orders/{id?}/checkout', 'Store\ShopOrderController@checkout');
+    Route::post('orders/{id?}/add-product', 'Store\ShopOrderController@addProduct');
+    Route::get('orders/{id?}/remove-product/{pid?}', 'Store\ShopOrderController@removeProduct');
+    Route::post('orders/{id?}/add-liquid', 'Store\ShopOrderController@addLiquid');
+    Route::get('orders/{id?}/remove-liquid/{lid?}', 'Store\ShopOrderController@removeLiquid');
 });

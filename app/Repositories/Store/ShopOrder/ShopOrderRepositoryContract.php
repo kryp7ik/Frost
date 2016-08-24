@@ -7,6 +7,7 @@
  */
 namespace App\Repositories\Store\ShopOrder;
 
+use App\Models\Auth\User;
 use App\Models\Store\ShopOrder;
 
 interface ShopOrderRepositoryContract
@@ -44,11 +45,11 @@ interface ShopOrderRepositoryContract
 
     /**
      * Creates a new order and all associated entities.
-     * @param int $store_id
+     * @param User $user
      * @param array $data
      * @return ShopOrder|bool
      */
-    public function create($store_id, $data);
+    public function create(User $user, $data);
 
     /**
      * Attaches a single ProductInstance to an order with the quantity in the join table

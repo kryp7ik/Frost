@@ -7,7 +7,7 @@
     </tr>
     @foreach($order->productInstances as $instance)
         <tr>
-            <td><a href="#" class="btn btn-sm btn-danger">Remove</a></td>
+            <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td colspan="4">{{ $instance->product->name }}</td>
             <td>{{ $instance->pivot->quantity }}</td>
             <td>${{ $instance->price * $instance->pivot->quantity }}</td>
@@ -22,15 +22,15 @@
         <td><strong>Menthol</strong></td>
         <td><strong>Price</strong></td>
     </tr>
-    @foreach($order->liquids as $liquid)
+    @foreach($order->liquidProducts as $liquid)
         <tr>
-            <td><a href="#" class="btn btn-sm btn-danger">Remove</a></td>
+            <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td>{{ $liquid->recipe->name }}</td>
             <td>{{ $liquid->size }}ml</td>
             <td>{{ $liquid->nicotine }}mg</td>
             <td>{{ $liquid->vg }}%</td>
             <td>{{ $liquid->menthol }}</td>
-            <td>{{ $liquid->getPrice() }}</td>
+            <td>${{ $liquid->getPrice() }}</td>
         </tr>
     @endforeach
     <tr class="active">
@@ -40,25 +40,25 @@
     </tr>
     @foreach($order->discounts as $discount)
         <tr class="danger">
-            <td><a href="#" class="btn btn-sm btn-danger">Remove</a></td>
+            <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td>{{ $discount->name }}</td>
             <td>{{ $discount->calculate() }}</td>
         </tr>
     @endforeach
     <tr class="warning">
-        <td colspan="6"><strong>SubTotal</strong></td>
-        <td>{{ $order->subtotal }}</td>
+        <td colspan="6"><strong class="pull-right">Subtotal</strong></td>
+        <td>${{ $order->subtotal }}</td>
     </tr>
     <tr class="info">
-        <td colspan="6"><strong>Tax</strong></td>
-        <td>{{ $order->subtotal * .06 }}</td>
+        <td colspan="6"><strong class="pull-right">Tax</strong></td>
+        <td>${{ number_format(($order->subtotal * .06),2) }}</td>
     </tr>
     <tr class="success">
-        <td colspan="6"><strong>Total</strong></td>
-        <td>{{ $order->total }}</td>
+        <td colspan="6"><strong class="pull-right">Total</strong></td>
+        <td>${{ $order->total }}</td>
     </tr>
     <tr class="danger">
-        <td colspan="6"><strong>Remaining Balance</strong></td>
-        <td>{{ $order->getRemainingBalance() }}</td>
+        <td colspan="6"><strong class="pull-right">Remaining Balance</strong></td>
+        <td>${{ $order->getRemainingBalance() }}</td>
     </tr>
 </table>

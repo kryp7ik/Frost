@@ -1,6 +1,7 @@
 <!-- Product Modal -->
+<style>.product-add{ display: none }</style>
 <div class="modal fade" id="product" tabindex="-1" role="dialog" aria-labelledby="product">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width:60%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

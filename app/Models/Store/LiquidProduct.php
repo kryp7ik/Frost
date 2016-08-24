@@ -17,11 +17,11 @@ class LiquidProduct extends Model
     );
 
     public function recipe() {
-        $this->belongsTo('App\Models\Store\Recipe');
+        return $this->belongsTo('App\Models\Store\Recipe');
     }
 
     public function shopOrder() {
-        $this->belongsTo('App\Models\Store\ShopOrder');
+        return $this->belongsTo('App\Models\Store\ShopOrder');
     }
 
     public function getPrice() {

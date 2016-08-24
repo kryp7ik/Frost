@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Front\Store;
 
-use App\Models\Store\Recipe;
 use App\Models\Store\ShopOrder;
 use App\Http\Requests\Store\ShopOrderFormRequest;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
@@ -54,7 +53,7 @@ class ShopOrderController extends Controller
 
     public function store(Request $request)
     {
-        $order = $this->orders->create(Auth::user()->store, $request->all());
+        $order = $this->orders->create(Auth::user(), $request->all());
         return ($order) ? redirect('/orders/' . $order->id . '/show') : redirect('/orders/create');
     }
 
@@ -70,7 +69,8 @@ class ShopOrderController extends Controller
             return view('orders.show.closed', compact('order'));
         } else {
             // If the order is open display a view that allows the user to modify the order and cash out
-            $recipes = Recipe::where('active', 1)->get();
+            //dd($order);
+            $recipes = $this->recipes->getAll(true);
             $sortedInstances = $this->productInstances->getActiveWhereStore(Auth::user()->store, true);
             return view('orders.show.open', compact('order', 'recipes', 'sortedInstances'));
         }

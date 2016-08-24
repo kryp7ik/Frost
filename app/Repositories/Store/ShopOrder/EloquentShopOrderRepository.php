@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Store\ShopOrder;
 
+use App\Models\Auth\User;
 use App\Models\Store\ShopOrder;
 use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
 
@@ -36,7 +37,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      */
     public function findById($id)
     {
-        return ShopOrder::where('id', $id)->first();
+        return ShopOrder::with('liquidProducts', 'productInstances', 'discounts', 'payments')->where('id', $id)->first();
     }
 
     /**
@@ -72,18 +73,19 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
 
     /**
      * Creates a new order and all associated entities.
-     * @param int $store_id
+     * @param User $user
      * @param array $data
      * @return ShopOrder|bool
      */
-    public function create($store_id, $data)
+    public function create(User $user, $data)
     {
         $order = new ShopOrder([
-            'store' => $store_id,
+            'store' => $user->store,
+            'user_id' => $user->id,
         ]);
         if($order->save()) {
             foreach ($data['liquids'] as $liquid){
-                $this->liquidProductsRepository->create($order->id, $store_id, $liquid);
+                $this->liquidProductsRepository->create($order->id, $user->store, $liquid);
             }
             foreach ($data['products'] as $product) {
                 $this->addProductToOrder($order, $product);
@@ -103,8 +105,9 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      */
     public function addProductToOrder(ShopOrder $order, $data)
     {
-        if (!is_int($data['quantity'])) return false;
+        if ($data['quantity'] == 0) return false;
         $order->productInstances()->attach([$data['instance'] => ['quantity' => $data['quantity']]]);
+        $order->save();
         flash('A product has been successfully added to the order', 'success');
         return true;
     }

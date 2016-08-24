@@ -33,17 +33,17 @@
             </div>
 
             <div class="well">
-                <button class="btn btn-block btn-info" data-toggle="modal" data-target="#product">
-                    <span class="glyphicon glyphicon-tag"></span>Add a product
+                <button class="btn btn-block btn-info btn-raised" data-toggle="modal" data-target="#product">
+                    <span class="glyphicon glyphicon-tag"></span> Add a product
                 </button>
-                <button class="btn btn-block btn-info" data-toggle="modal" data-target="#liquid">
-                    <span class="glyphicon glyphicon-tint"></span>Add a liquid
+                <button class="btn btn-block btn-info btn-raised" data-toggle="modal" data-target="#liquid">
+                    <span class="glyphicon glyphicon-tint"></span> Add a liquid
                 </button>
             </div>
 
             <div class="well">
-                <button class="btn btn-block btn-info" data-toggle="modal" data-target="#discount">
-                    <span class=" glyphicon glyphicon-usd"></span>Apply a discount
+                <button class="btn btn-block btn-info btn-raised" data-toggle="modal" data-target="#discount">
+                    <span class=" glyphicon glyphicon-usd"></span> Apply a discount
                 </button>
 
             </div>
@@ -55,7 +55,7 @@
             <div class="well">
                     <div class="row">
                         <div class="col-md-4">
-                            <button class="btn btn-success btn-raised pull-left">Cash</button>
+                            <button class="btn btn-success btn-lg btn-raised pull-left">Cash</button>
                         </div>
                         <div class="col-md-4 text-center">
                             <h3>
@@ -64,7 +64,7 @@
                             </h3>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-success btn-raised pull-right">Credit</button>
+                            <button class="btn btn-success btn-lg btn-raised pull-right">Credit</button>
                         </div>
                     </div>
             </div>
