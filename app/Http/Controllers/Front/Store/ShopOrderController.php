@@ -59,7 +59,7 @@ class ShopOrderController extends Controller
 
     public function show($id)
     {
-        $order = $this->orders->findById($id);
+        $order = $this->orders->findById($id, true);
         if (!$order instanceof ShopOrder) {
             flash('Order with id: ' . $id . ' could not be found', 'danger');
             return redirect('/orders');
@@ -69,7 +69,6 @@ class ShopOrderController extends Controller
             return view('orders.show.closed', compact('order'));
         } else {
             // If the order is open display a view that allows the user to modify the order and cash out
-            //dd($order);
             $recipes = $this->recipes->getAll(true);
             $sortedInstances = $this->productInstances->getActiveWhereStore(Auth::user()->store, true);
             return view('orders.show.open', compact('order', 'recipes', 'sortedInstances'));

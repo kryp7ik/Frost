@@ -8,6 +8,14 @@ class Discount extends Model
 {
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'name',
+        'type',
+        'filter',
+        'amount',
+        'approval',
+    ];
+
     /**
      * An array of available type options with the key being the database value and the value being the display value in the form
      * @var array

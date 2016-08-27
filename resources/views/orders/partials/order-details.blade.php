@@ -25,7 +25,7 @@
     @foreach($order->liquidProducts as $liquid)
         <tr>
             <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
-            <td>{{ $liquid->recipe->name }}</td>
+            <td>{{ $liquid->recipe->name }} {{ ($liquid->extra) ? 'XTRA' : '' }}</td>
             <td>{{ $liquid->size }}ml</td>
             <td>{{ $liquid->nicotine }}mg</td>
             <td>{{ $liquid->vg }}%</td>
@@ -59,6 +59,6 @@
     </tr>
     <tr class="danger">
         <td colspan="6"><strong class="pull-right">Remaining Balance</strong></td>
-        <td>${{ $order->getRemainingBalance() }}</td>
+        <td>${{ $order->calculator()->getRemainingBalance() }}</td>
     </tr>
 </table>

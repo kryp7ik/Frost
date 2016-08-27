@@ -19,9 +19,10 @@ interface RecipeRepositoryContract
 
     /**
      * @param int $id
+     * @param bool $ingredients If true eager load the ingredients
      * @return Recipe|boolean
      */
-    public function findById($id);
+    public function findById($id, $ingredients=false);
 
     /**
      * @param array $data Form data ['name', $ingredients[]['ingredient', 'amount']

@@ -4,6 +4,7 @@ namespace App\Repositories\Store\ShopOrder;
 
 use App\Models\Auth\User;
 use App\Models\Store\ShopOrder;
+use App\Models\Store\ShopOrderCalculator;
 use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
 
 class EloquentShopOrderRepository implements ShopOrderRepositoryContract
@@ -33,11 +34,16 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     /**
      * Retrieves a single order by it's id.
      * @param int $id
+     * @param bool $eager If true load the entire object with all associated entities
      * @return mixed
      */
-    public function findById($id)
+    public function findById($id, $eager = false)
     {
-        return ShopOrder::with('liquidProducts', 'productInstances', 'discounts', 'payments')->where('id', $id)->first();
+        if ($eager) {
+            return ShopOrder::with('liquidProducts', 'productInstances', 'discounts', 'payments')->where('id', $id)->first();
+        } else {
+            return ShopOrder::where('id', $id)->first();
+        }
     }
 
     /**
@@ -90,6 +96,9 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
             foreach ($data['products'] as $product) {
                 $this->addProductToOrder($order, $product);
             }
+            $order->calculator()->calculateTotal();
+            //$calc = new ShopOrderCalculator($order);
+            //$order = $calc->calculateTotal();
             flash('The order has been created successfully', 'success');
             return $order;
         }

@@ -8,6 +8,13 @@ class Product extends Model
 {
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'name',
+        'sku',
+        'category',
+        'cost'
+    ];
+
     public $timestamps = false;
 
     public $categoriesArray = array(

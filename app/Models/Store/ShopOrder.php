@@ -8,6 +8,15 @@ class ShopOrder extends Model
 {
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'store',
+        'customer_id',
+        'user_id',
+        'subtotal',
+        'total',
+        'complete'
+    ];
+
     /**
      * Many to Many relationship with ProductInstance
      * Added 'quantity' to the pivot table 'order_products' which can be accessed by $shopOrder->productInstances(1)->pivot->quantity
@@ -43,8 +52,10 @@ class ShopOrder extends Model
         return $this->hasMany('App\Models\Store\Payment');
     }
 
-    public function getRemainingBalance()
-    {
-        return $this->total;
+    /**
+     * @return ShopOrderCalculator
+     */
+    public function calculator() {
+        return new ShopOrderCalculator($this);
     }
 }

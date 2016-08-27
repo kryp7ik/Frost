@@ -8,6 +8,11 @@ class Recipe extends Model
 {
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'name',
+        'active'
+    ];
+
     public function ingredients() {
         return $this->belongsToMany('App\Models\Store\Ingredient', 'recipe_ingredient')->withPivot('amount');
     }

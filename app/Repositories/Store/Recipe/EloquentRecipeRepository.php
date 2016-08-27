@@ -22,11 +22,16 @@ class EloquentRecipeRepository implements RecipeRepositoryContract
 
     /**
      * @param int $id
+     * @param bool $ingredients If true eager load the ingredients
      * @return Recipe|boolean
      */
-    public function findById($id)
+    public function findById($id, $ingredients = false)
     {
-        return Recipe::where('id', $id)->firstOrFail();
+        if($ingredients) {
+            return Recipe::with('ingredients')->where('id', $id)->firstOrFail();
+        } else {
+            return Recipe::where('id', $id)->firstOrFail();
+        }
     }
 
     /**
@@ -53,6 +58,7 @@ class EloquentRecipeRepository implements RecipeRepositoryContract
      */
     public function addIngredient(Recipe $recipe, $data) {
         $recipe->ingredients()->attach([$data['ingredient'] => ['amount' => $data['amount']]]);
+        flash('The ingredient has been added successfully', 'success');
     }
 
     /**

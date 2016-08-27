@@ -76,8 +76,8 @@ class RecipeController extends Controller
      */
     public function remove($id, $iid)
     {
-        $recipe = $this->recipes->removeIngredient($id, $iid);
-        return redirect('/admin/store/recipes/' . $recipe->id . '/show');
+        $this->recipes->removeIngredient($id, $iid);
+        return back();
     }
 
     /**
@@ -90,7 +90,6 @@ class RecipeController extends Controller
     {
         $recipe = $this->recipes->findById($request->get('recipe'));
         $this->recipes->addIngredient($recipe, $request->all());
-        flash('The ingredient has been added successfully', 'success');
-        return redirect('/admin/store/recipes/' . $recipe->id . '/show');
+        return back();
     }
 }

@@ -8,6 +8,14 @@ class ProductInstance extends Model
 {
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'price',
+        'stock',
+        'redline',
+        'active',
+        'store'
+    ];
+
     public $timestamps = false;
 
     public function product() {

@@ -20,41 +20,34 @@
             @else
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <div class="panel panel-default">
-                                <div class="panel-heading"><h3>Date Filter</h3></div>
+                                <div class="panel-heading"><h3>Filters</h3></div>
                                 <div class="panel-body">
                                     <form method="post" class="form-horizontal">
-                                        <div class="form-group">
-                                            <div class="input-group date datepicker">
-                                                <label for="start">Start</label>
-                                                <input type="text" name="start" class="form-control"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="start" class="col-md-2 control-label">Date</label>
+                                                <div class="input-group date datepicker col-md-10">
+                                                    <input type="text" name="start" class="form-control"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="input-group date datepicker">
-                                                <label for="end">End</label>
-                                                <input type="text" name="end" class="form-control"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                                <span class="help-block">If an end date is not specified today's date will be used.</span>
+                                        <div class="col-md-6 text-center">
+                                            <div class="form-group">
+                                                <label for="customer" class="control-label">Orders Without A Customer?</label>
+                                                <div class="togglebutton">
+                                                    <label>
+                                                        <input type="checkbox" id="customer" name="customer">
+                                                    </label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <input type="submit" class="btn btn-primary btn-raised" value="Apply"/>
+                                            <input type="submit" class="btn btn-primary btn-raised pull-right" value="Apply"/>
+                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><h3>Other Filters</h3></div>
-                                <div class="panel-body">
-                                    <a class="btn btn-raised btn-info btn-block" href="#">Incomplete Orders Only</a>
-                                    <a class="btn btn-raised btn-info btn-block" href="#">Orders Without A Customer</a>
                                 </div>
                             </div>
                         </div>
@@ -63,13 +56,13 @@
                                 <div class="panel-heading"><h3>Order Lookup</h3></div>
                                 <div class="panel-body">
                                     <div class="form-group">
-                                        <label for="order-id">Order </label>
-                                        <div class="input-group">
+                                        <label for="order-id" class="col-md-2 control-label">Order </label>
+                                        <div class="input-group col-md-10">
                                             <span class="input-group-addon">#</span>
                                             <input type="text" class="form-control" id="order-id" />
                                         </div>
                                     </div>
-                                    <a href="#" id="lookup" class="btn btn-raised btn-primary">Lookup</a>
+                                    <a href="#" id="lookup" class="btn btn-raised btn-primary pull-right">Lookup</a>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +90,7 @@
                                             @endif
                                         </td>
                                         <td>${{ $order->total }}</td>
-                                        <td>{{ ($order->status) ? 'Completed' : 'Uncompleted' }}</td>
+                                        <td>{{ ($order->status) ? 'Completed' : 'Incomplete' }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
