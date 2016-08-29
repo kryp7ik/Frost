@@ -11,13 +11,6 @@
                     {{ session('warning') }}
                 </div>
             @endif
-            @if ($orders->isEmpty())
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-1">
-                        <h3>You currently do not have any orders.</h3>
-                    </div>
-                </div>
-            @else
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-8">
@@ -25,11 +18,12 @@
                                 <div class="panel-heading"><h3>Filters</h3></div>
                                 <div class="panel-body">
                                     <form method="post" class="form-horizontal">
+                                        {{ csrf_field() }}
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="start" class="col-md-2 control-label">Date</label>
-                                                <div class="input-group date datepicker col-md-10">
-                                                    <input type="text" name="start" class="form-control"/>
+                                                <div class="input-group col-md-10">
+                                                    <input type="text" name="start" class="form-control" id="datepicker" value="{{ $date }}"/>
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                     </span>
@@ -67,6 +61,13 @@
                             </div>
                         </div>
                     </div>
+                    @if ($orders->isEmpty())
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-1">
+                                <h3>You currently do not have any orders.</h3>
+                            </div>
+                        </div>
+                    @else
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1">
                             <table class="table table-hover display">
@@ -76,6 +77,7 @@
                                     <th>Customer</th>
                                     <th>Total</th>
                                     <th>Status</th>
+                                    <th>Created At</th>
                                 </thead>
                                 <tbody>
                                 @foreach($orders as $order)
@@ -83,7 +85,7 @@
                                         <td><a href="orders/{{ $order->id }}/show" class="btn btn-sm btn-raised btn-info">{{ $order->id }}</a></td>
                                         <td>{{ $order->store }}</td>
                                         <td>
-                                            @if($order->customer() instanceof \App\Models\Store\Customer)
+                                            @if($order->customer)
                                                 <a href="/customers/{{ $order->customer()->id }}/show">{{ $order->customer()->phone }}</a>
                                             @else
                                                 No Customer
@@ -91,6 +93,7 @@
                                         </td>
                                         <td>${{ $order->total }}</td>
                                         <td>{{ ($order->status) ? 'Completed' : 'Incomplete' }}</td>
+                                        <td>{{ $order->created_at }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -102,11 +105,12 @@
         </div>
     </div>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#order-id').change(function() {
-                var orderId = $('#order-id').val();
-                $('#lookup').attr('href', '/orders/' + orderId + '/show');
-            });
+        $('#order-id').keyup(function() {
+                var orderId = this.value;
+            $('#lookup').attr('href', '/orders/' + orderId + '/show');
+        });
+        $(function () {
+
         });
     </script>
 @endsection

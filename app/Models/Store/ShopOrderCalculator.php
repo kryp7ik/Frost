@@ -64,6 +64,7 @@ class ShopOrderCalculator {
      */
     private function calculateOrder()
     {
+        $this->order = $this->order->fresh(['liquidProducts', 'productInstances', 'discounts']);
         $this->calculateLiquidProductTotal();
         $this->calculateProductTotal();
         $this->applyDiscounts();

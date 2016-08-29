@@ -7,7 +7,6 @@
                 <option value="30">30ml</option>
                 <option value="50">50ml</option>
                 <option value="100">100ml</option>
-                <option value="250">250ml</option>
             </select>
         </div>
         <div class="form-group liquid-form-group">

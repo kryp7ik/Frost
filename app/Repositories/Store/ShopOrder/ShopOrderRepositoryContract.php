@@ -73,7 +73,8 @@ interface ShopOrderRepositoryContract
     public function addLiquidToOrder(ShopOrder $order, $data);
 
     /**
+     * @param ShopOrder $order the order being modified
      * @param int $liquid_id The id of the LiquidProduct to be deleted
      */
-    public function removeLiquidFromOrder($liquid_id);
+    public function removeLiquidFromOrder(ShopOrder $order, $liquid_id);
 }

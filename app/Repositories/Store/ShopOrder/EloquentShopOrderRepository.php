@@ -4,7 +4,6 @@ namespace App\Repositories\Store\ShopOrder;
 
 use App\Models\Auth\User;
 use App\Models\Store\ShopOrder;
-use App\Models\Store\ShopOrderCalculator;
 use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
 
 class EloquentShopOrderRepository implements ShopOrderRepositoryContract
@@ -25,7 +24,8 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function getAll($startDate = null, $endDate = null)
     {
         if ($startDate) {
-            if (!$endDate) $endDate = date('Y-m-d H:i:s');
+            if (!$endDate) $endDate = $startDate . ' 23:59:59';
+            $startDate .= ' 00:00:00';
             return ShopOrder::whereBetween('created_at', [$startDate, $endDate])->get();
         }
         return ShopOrder::all();
@@ -68,7 +68,8 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function getByStore($store_id, $startDate = null, $endDate = null)
     {
         if ($startDate) {
-            if (!$endDate) $endDate = date('Y-m-d H:i:s');
+            if (!$endDate) $endDate = $startDate . ' 23:59:59';
+            $startDate .= ' 00:00:00';
             return ShopOrder::
                 where('store',$store_id)
                 ->whereBetween('created_at', [$startDate, $endDate])->get();
@@ -97,8 +98,6 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
                 $this->addProductToOrder($order, $product);
             }
             $order->calculator()->calculateTotal();
-            //$calc = new ShopOrderCalculator($order);
-            //$order = $calc->calculateTotal();
             flash('The order has been created successfully', 'success');
             return $order;
         }
@@ -117,6 +116,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
         if ($data['quantity'] == 0) return false;
         $order->productInstances()->attach([$data['instance'] => ['quantity' => $data['quantity']]]);
         $order->save();
+        $order->calculator()->calculateTotal();
         flash('A product has been successfully added to the order', 'success');
         return true;
     }
@@ -129,6 +129,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function removeProductFromOrder(ShopOrder $order, $product_id)
     {
         $order->productInstances()->detach($product_id);
+        $order->calculator()->calculateTotal();
         flash('A product has been successfully removed from the order', 'danger');
     }
 
@@ -139,15 +140,18 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function addLiquidToOrder(ShopOrder $order, $data)
     {
         $this->liquidProductsRepository->create($order->id, $order->store, $data);
+        $order->calculator()->calculateTotal();
         flash('A liquid has been successfully added to the order', 'success');
     }
 
     /**
+     * @param ShopOrder $order the order being modified
      * @param int $liquid_id The id of the LiquidProduct to be deleted
      */
-    public function removeLiquidFromOrder($liquid_id)
+    public function removeLiquidFromOrder(ShopOrder $order, $liquid_id)
     {
         $this->liquidProductsRepository->delete($liquid_id);
+        $order->calculator()->calculateTotal();
         flash('A liquid has been successfully removed from the order', 'danger');
     }
 }

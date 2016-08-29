@@ -7,7 +7,7 @@
     </tr>
     @foreach($order->productInstances as $instance)
         <tr>
-            <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+            <td><a href="/orders/{{ $order->id }}/remove-product/{{ $instance->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td colspan="4">{{ $instance->product->name }}</td>
             <td>{{ $instance->pivot->quantity }}</td>
             <td>${{ $instance->price * $instance->pivot->quantity }}</td>
@@ -24,7 +24,7 @@
     </tr>
     @foreach($order->liquidProducts as $liquid)
         <tr>
-            <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+            <td><a href="/orders/{{ $order->id }}/remove-liquid/{{ $liquid->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td>{{ $liquid->recipe->name }} {{ ($liquid->extra) ? 'XTRA' : '' }}</td>
             <td>{{ $liquid->size }}ml</td>
             <td>{{ $liquid->nicotine }}mg</td>

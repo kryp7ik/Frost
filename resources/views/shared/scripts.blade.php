@@ -16,8 +16,9 @@
         $.material.init();
         $.material.ripples();
         $('select').select2();
-
-
+        $('#datepicker').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
         $(table).DataTable( {
             "paging": false,
             "info" : false,

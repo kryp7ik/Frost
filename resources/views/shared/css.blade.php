@@ -4,8 +4,6 @@
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-<!-- Include roboto.css to use the Roboto web font, material.css to include the theme and ripples.css to style the ripple effect -->
-<link href="/css/roboto.min.css" rel="stylesheet">
 <link href="/css/bootstrap-material-design.min.css" rel="stylesheet">
 <link href="/css/ripples.min.css" rel="stylesheet">
 <link href="/css/custom.css" rel="stylesheet">
