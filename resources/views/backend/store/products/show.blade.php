@@ -117,12 +117,14 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Create new Product Instance</h4>
                 </div>
-                <form method="post" action="/admin/store/products/{!! $product->id !!}/instance">
+                <form method="post" action="/admin/store/products/instance">
+                    <input type="hidden" name="product" value="{{ $product->id }}" />
                     <div class="modal-body">
                             @foreach ($errors->all() as $error)
                                 <p class="alert alert-danger">{{ $error }}</p>
                             @endforeach
-                            <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                            {{ csrf_field() }}
+
                             <div class="form-group">
                                 <label for="price" class="col-lg-2 control-label">Price</label>
                                 <div class="col-lg-10 input-group">

@@ -23,14 +23,14 @@
                                     @endforeach
                                 </select>
                                 <label class="input-group-addon">Quantity</label>
-                                <input type="text" class="form-control p-quantity" name="quantity" placeholder="0">
+                                <input type="text" class="form-control p-quantity" name="quantity" value="1">
                             </div>
                         </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    <button type="submit" class="btn btn-primary">Add Product</button>
                 </div>
             </form>
         </div>

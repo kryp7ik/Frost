@@ -13,7 +13,8 @@ class ProductInstance extends Model
         'stock',
         'redline',
         'active',
-        'store'
+        'store',
+        'product_id'
     ];
 
     public $timestamps = false;
@@ -23,6 +24,6 @@ class ProductInstance extends Model
     }
 
     public function orderProduct() {
-        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_product')->withPivot('quantity');
+        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_product')->withPivot('quantity', 'id');
     }
 }

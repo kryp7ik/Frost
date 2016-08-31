@@ -76,13 +76,12 @@ class ProductController extends Controller
     }
 
     /**
-     * @param int $id The id of the parent Product
      * @param ProductInstanceFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function addInstance($id, ProductInstanceFormRequest $request)
+    public function addInstance(ProductInstanceFormRequest $request)
     {
-        $this->productInstances->create($id, Auth::user()->store, $request->all());
+        $this->productInstances->create(Auth::user()->store, $request->all());
         return back();
     }
 

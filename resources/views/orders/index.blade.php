@@ -86,7 +86,7 @@
                                         <td>{{ $order->store }}</td>
                                         <td>
                                             @if($order->customer)
-                                                <a href="/customers/{{ $order->customer()->id }}/show">{{ $order->customer()->phone }}</a>
+                                                <a href="/customers/{{ $order->customer->id }}/show">{{ $order->customer->phone }}</a>
                                             @else
                                                 No Customer
                                             @endif

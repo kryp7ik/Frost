@@ -50,12 +50,11 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     }
 
     /**
-     * @param int $product_id
      * @param int $store_id
      * @param array $data
      * @return ProductInstance|bool
      */
-    public function create($product_id, $store_id, $data)
+    public function create($store_id, $data)
     {
         $instance = new ProductInstance(array(
             'price' => number_format($data['price'], 2),
@@ -63,7 +62,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
             'redline' => $data['redline'],
             'store' => $store_id,
             'active' => true,
-            'product_id' => $product_id,
+            'product_id' => $data['product'],
         ));
         if($instance->save()) {
             flash('The product instance has been created successfully', 'success');

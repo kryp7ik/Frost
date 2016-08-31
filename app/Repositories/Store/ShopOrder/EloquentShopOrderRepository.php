@@ -3,8 +3,11 @@
 namespace App\Repositories\Store\ShopOrder;
 
 use App\Models\Auth\User;
+use App\Models\Store\Customer;
+use App\Models\Store\Payment;
 use App\Models\Store\ShopOrder;
 use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
+use Illuminate\Support\Facades\DB;
 
 class EloquentShopOrderRepository implements ShopOrderRepositoryContract
 {
@@ -106,6 +109,27 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     }
 
     /**
+     * Deletes an order and all associated entities
+     * @param int $order_id
+     * @return bool
+     */
+    public function delete($order_id)
+    {
+        $order = $this->findById($order_id);
+        if($order->complete) {
+            flash('You cannot delete an order that has been paid for', 'danger');
+            return false;
+        } else {
+            foreach ($order->liquidProducts as $liquid) {
+                $liquid->delete();
+            }
+            $order->delete();
+            flash('The order has been deleted successfully', 'success');
+            return true;
+        }
+    }
+
+    /**
      * Attaches a single ProductInstance to an order with the quantity in the join table
      * @param ShopOrder $order
      * @param array $data
@@ -122,15 +146,33 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     }
 
     /**
-     * Detaches a Product Instance from the order
-     * @param ShopOrder $order
-     * @param int $product_id
+     * Updates the quantity of the given product by +1 or -1.
+     * @param int $order_id
+     * @param int $product_pivot_id
+     * @param string $increment
      */
-    public function removeProductFromOrder(ShopOrder $order, $product_id)
+    public function updateProductQuantity($order_id, $product_pivot_id, $increment)
     {
-        $order->productInstances()->detach($product_id);
+        if ($increment == 'plus') {
+            DB::table('order_product')->where('id', $product_pivot_id)->increment('quantity');
+        } else {
+            DB::table('order_product')->where('id', $product_pivot_id)->decrement('quantity');
+        }
+        $order = $this->findById($order_id);
         $order->calculator()->calculateTotal();
-        flash('A product has been successfully removed from the order', 'danger');
+        flash('Quantity has been successfully updated', 'success');
+    }
+
+    /**
+     * Detaches a Product Instance from the order using the 'id' in the pivot table in case of duplicate products on one order
+     * @param ShopOrder $order
+     * @param int $product_pivot_id
+     */
+    public function removeProductFromOrder(ShopOrder $order, $product_pivot_id)
+    {
+        DB::table('order_product')->where('id', $product_pivot_id)->delete();
+        $order->calculator()->calculateTotal();
+        flash('A product has been successfully removed from the order', 'info');
     }
 
     /**
@@ -152,6 +194,50 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     {
         $this->liquidProductsRepository->delete($liquid_id);
         $order->calculator()->calculateTotal();
-        flash('A liquid has been successfully removed from the order', 'danger');
+        flash('A liquid has been successfully removed from the order', 'info');
+    }
+
+    /**
+     * @param ShopOrder $order
+     * @param int $discount_id
+     */
+    public function addDiscountToOrder(ShopOrder $order, $discount_id)
+    {
+        $order->discounts()->attach($discount_id);
+        $order->calculator()->calculateTotal();
+        flash('A discount has been successfully added to the order', 'success');
+    }
+
+    /**
+     * @param ShopOrder $order
+     * @param int $discount_pivot_id
+     */
+    public function removeDiscountFromOrder(ShopOrder $order, $discount_pivot_id)
+    {
+        DB::table('order_discount')->where('id', '=', $discount_pivot_id)->delete();
+        $order->calculator()->calculateTotal();
+        flash('A discount has been successfully removed from the order', 'info');
+    }
+
+    /**
+     * Adds or updates the customer for the given order
+     * @param ShopOrder $order
+     * @param Customer $customer
+     */
+    public function addCustomerToOrder(ShopOrder $order, Customer $customer)
+    {
+        $order->customer_id = $customer->id;
+        $order->save();
+        flash('A customer has been successfully added to the order', 'success');
+    }
+
+    public function addPaymentToOrder(ShopOrder $order, $data)
+    {
+        $payment = new Payment([
+            'shop_order_id' => $order->id,
+            'type' => $data['type'],
+            'amount' => isset($data['amount']) ? $data['amount'] : $order->calculator()->getRemainingBalance()
+        ]);
+        $payment->save();
     }
 }

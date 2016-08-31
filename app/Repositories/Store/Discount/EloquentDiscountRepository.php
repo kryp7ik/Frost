@@ -7,9 +7,22 @@ use App\Models\Store\Discount;
 class EloquentDiscountRepository implements DiscountRepositoryContract
 {
 
-    public function getAll()
+    public function getAll($sort = false)
     {
-        return Discount::all();
+        $discounts = Discount::all();
+        if ($sort) {
+            $sorted = [];
+            foreach ($discounts as $discount) {
+                if ($discount->approval) {
+                    $sorted['Approval Required'][] = ['discount' => $discount->id, 'name' => $discount->name];
+                } else {
+                    $sorted['Standard'][] = ['discount' => $discount->id, 'name' => $discount->name];
+                }
+            }
+            return $sorted;
+        } else {
+            return $discounts;
+        }
     }
 
     public function findById($id)

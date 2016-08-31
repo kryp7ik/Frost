@@ -80,16 +80,14 @@
                             <th>Date</th>
                             <th>Order Total</th>
                             <th>Store</th>
-                            <th>View</th>
                             </thead>
                             <tbody>
                             @foreach($customer->orders as $order)
                                 <tr>
-                                    <td>{{ $order->id }}</td>
+                                    <td><a class="btn btn-xs btn-raised btn-info" href="/orders/{{ $order->id }}/show">{{ $order->id }}</a></td>
                                     <td>{{ $order->updated_at }}</td>
                                     <td>${{ $order->total }}</td>
                                     <td>{{ $order->store }}</td>
-                                    <td><a class="btn btn-xs btn-raised btn-info" href="/orders/{{ $order->id }}/show">View</a></td>
                                 </tr>
                             @endforeach
                             </tbody>

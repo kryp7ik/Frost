@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Front\Store;
 
-use App\Models\Store\ShopOrder;
 use App\Http\Requests\Store\ShopOrderFormRequest;
+use App\Repositories\Store\Customer\CustomerRepositoryContract;
+use App\Repositories\Store\Discount\DiscountRepositoryContract;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use App\Repositories\Store\Recipe\RecipeRepositoryContract;
 use App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract;
@@ -77,9 +78,10 @@ class ShopOrderController extends Controller
 
     /**
      * @param int $id
+     * @param DiscountRepositoryContract $discountRepo
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-    public function show($id)
+    public function show($id, DiscountRepositoryContract $discountRepo)
     {
         $order = $this->orders->findById($id, true);
         if (!$order) {
@@ -93,8 +95,20 @@ class ShopOrderController extends Controller
             // If the order is open display a view that allows the user to modify the order and cash out
             $recipes = $this->recipes->getAll(true);
             $sortedInstances = $this->productInstances->getActiveWhereStore(Auth::user()->store, true);
-            return view('orders.show.open', compact('order', 'recipes', 'sortedInstances'));
+            $sortedDiscounts = $discountRepo->getAll(true);
+            $orderDiscount = $order->calculator()->getDiscountAppliedTotals();
+            return view('orders.show.open', compact('order', 'recipes', 'sortedInstances', 'sortedDiscounts', 'orderDiscount'));
         }
+    }
+
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function delete($id)
+    {
+        $this->orders->delete($id);
+        return redirect('/orders/create');
     }
 
     /**
@@ -104,19 +118,27 @@ class ShopOrderController extends Controller
      */
     public function addProduct($id, Request $request)
     {
-        $order = $this->orders->findById($id, true);
+        $order = $this->orders->findById($id);
         $this->orders->addProductToOrder($order, $request->all());
+        return back();
+    }
+
+    public function quantityUpdate($id, Request $request)
+    {
+        if($request->query('pid') && $request->query('inc')) {
+            $this->orders->updateProductQuantity($id, $request->query('pid'), $request->query('inc'));
+        }
         return back();
     }
 
     /**
      * @param int $id
-     * @param int $pid
+     * @param int $pid the id of the row in the pivot table
      * @return \Illuminate\Http\RedirectResponse
      */
     public function removeProduct($id, $pid)
     {
-        $order = $this->orders->findById($id, true);
+        $order = $this->orders->findById($id);
         $this->orders->removeProductFromOrder($order, $pid);
         return back();
     }
@@ -128,7 +150,7 @@ class ShopOrderController extends Controller
      */
     public function addLiquid($id, Request $request)
     {
-        $order = $this->orders->findById($id, true);
+        $order = $this->orders->findById($id);
         $this->orders->addLiquidToOrder($order, $request->all());
         return back();
     }
@@ -140,9 +162,64 @@ class ShopOrderController extends Controller
      */
     public function removeLiquid($id, $lid)
     {
-        $order = $this->orders->findById($id, true);
+        $order = $this->orders->findById($id);
         $this->orders->removeLiquidFromOrder($order, $lid);
         return back();
     }
 
+    /**
+     * @param int $id
+     * @param Request $request
+     * @param DiscountRepositoryContract $discountRepo
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function addDiscount($id, Request $request, DiscountRepositoryContract $discountRepo)
+    {
+        $order = $this->orders->findById($id);
+        $discount = $discountRepo->findById($request->get('discount'));
+        if ($discount->approval) {
+            if ($request->get('pin') == config('store.manager_pin')) {
+                $this->orders->addDiscountToOrder($order, $discount->id);
+            } else {
+                flash('Sorry the manager pin was incorrect', 'danger');
+            }
+            return back();
+        } else {
+            $this->orders->addDiscountToOrder($order, $discount->id);
+            return back();
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param int $did
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function removeDiscount($id, $did)
+    {
+        $order = $this->orders->findById($id);
+        $this->orders->removeDiscountFromOrder($order, $did);
+        return back();
+    }
+
+    /**
+     * Adds or changes the customer for the given order
+     * @param int $id ID of the ShopOrder that is being modified
+     * @param Request $request
+     * @param CustomerRepositoryContract $customerRepo
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function customer($id, Request $request, CustomerRepositoryContract $customerRepo)
+    {
+        $order = $this->orders->findById($id);
+        $customer = $customerRepo->findByPhone($request->get('phone'));
+        if (!$customer) return back();
+        $this->orders->addCustomerToOrder($order, $customer);
+        return back();
+    }
+
+    public function payment($id, Request $request)
+    {
+        $order = $this->orders->findById($id);
+    }
 }

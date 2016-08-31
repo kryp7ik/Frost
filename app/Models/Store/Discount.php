@@ -37,7 +37,7 @@ class Discount extends Model
 
     public function orders()
     {
-        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_discount');
+        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_discount')->withPivot('id');
     }
 
 }

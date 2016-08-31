@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Models\Store;
+namespace App\Services\Store;
+
+use App\Models\Store\Discount;
+use App\Models\Store\ShopOrder;
 
 class ShopOrderCalculator {
 
@@ -14,6 +17,8 @@ class ShopOrderCalculator {
     private $productTotal = 0;
 
     private $subTotal = 0;
+
+    private $discountAppliedTotals = [];
 
     public function __construct(ShopOrder $order)
     {
@@ -57,6 +62,12 @@ class ShopOrderCalculator {
         $this->order->total = $this->subTotal * (1 + $tax);
         $this->order->save();
         return $this->order;
+    }
+
+    public function getDiscountAppliedTotals()
+    {
+        $this->calculateOrder();
+        return $this->discountAppliedTotals;
     }
 
     /**
@@ -125,8 +136,11 @@ class ShopOrderCalculator {
     {
         foreach ($noFilterDiscounts as $discount) {
             if ($discount->type == 'percent') {
-                $this->subTotal *= (100 - $discount->amount) / 100;
+                $amount = $this->subTotal * ($discount->amount / 100);
+                $this->discountAppliedTotals[$discount->id] = $amount;
+                $this->subTotal -= $amount;
             } else {
+                $this->discountAppliedTotals[$discount->id] = $discount->amount;
                 $this->subTotal -= $discount->amount;
             }
         }
@@ -139,8 +153,11 @@ class ShopOrderCalculator {
     private function applyProductDiscount(Discount $discount)
     {
         if($discount->type == 'percent') {
-            $this->productTotal *= (100 - $discount->amount) / 100;
+            $amount = $this->productTotal * ($discount->amount / 100);
+            $this->discountAppliedTotals[$discount->id] = $amount;
+            $this->productTotal -= $amount;
         } else {
+            $this->discountAppliedTotals[$discount->id] = $discount->amount;
             $this->productTotal -= $discount->amount;
         }
     }
@@ -152,9 +169,12 @@ class ShopOrderCalculator {
     private function applyLiquidDiscount(Discount $discount)
     {
         if($discount->type == 'percent') {
-            $this->liquidTotal *= (100 - $discount->amount) / 100;
+            $amount = $this->liquidTotal * ($discount->amount / 100);
+            $this->discountAppliedTotals[$discount->id] = $amount;
+            $this->liquidTotal -= $amount;
         } else {
             $this->liquidTotal -= $discount->amount;
+            $this->discountAppliedTotals[$discount->id] = $discount->amount;
         }
     }
 }

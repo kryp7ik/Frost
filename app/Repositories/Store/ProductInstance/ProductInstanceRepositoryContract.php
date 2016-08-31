@@ -26,12 +26,11 @@ interface ProductInstanceRepositoryContract
     public function findById($id);
 
     /**
-     * @param int $product_id
      * @param int $store_id
      * @param array $data
      * @return ProductInstance|bool
      */
-    public function create($product_id, $store_id, $data);
+    public function create($store_id, $data);
 
     /**
      * @param int $id

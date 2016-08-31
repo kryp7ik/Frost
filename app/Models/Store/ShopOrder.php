@@ -2,6 +2,7 @@
 
 namespace App\Models\Store;
 
+use App\Services\Store\ShopOrderCalculator;
 use Illuminate\Database\Eloquent\Model;
 
 class ShopOrder extends Model
@@ -24,7 +25,7 @@ class ShopOrder extends Model
      */
     public function productInstances()
     {
-        return $this->belongsToMany('App\Models\Store\ProductInstance', 'order_product')->withPivot('quantity');
+        return $this->belongsToMany('App\Models\Store\ProductInstance', 'order_product')->withPivot('quantity', 'id');
     }
 
     public function liquidProducts()
@@ -44,7 +45,7 @@ class ShopOrder extends Model
 
     public function discounts()
     {
-        return $this->belongsToMany('App\Models\Store\Discount', 'order_discount');
+        return $this->belongsToMany('App\Models\Store\Discount', 'order_discount')->withPivot('id');
     }
 
     public function payments()

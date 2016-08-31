@@ -24,6 +24,7 @@ class ProductInstanceFormRequest extends Request
     public function rules()
     {
         return [
+            'product' => 'required|integer',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'redline' => 'required|integer',

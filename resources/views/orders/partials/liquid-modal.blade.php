@@ -71,7 +71,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Save">
+                    <button type="submit" class="btn btn-primary">Add Liquid</button>
                 </div>
             </form>
         </div>

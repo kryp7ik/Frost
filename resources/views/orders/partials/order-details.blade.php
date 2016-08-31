@@ -7,9 +7,17 @@
     </tr>
     @foreach($order->productInstances as $instance)
         <tr>
-            <td><a href="/orders/{{ $order->id }}/remove-product/{{ $instance->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+            <td><a href="/orders/{{ $order->id }}/remove-product/{{ $instance->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td colspan="4">{{ $instance->product->name }}</td>
-            <td>{{ $instance->pivot->quantity }}</td>
+            <td>
+                <a href="/orders/{{ $order->id }}/quantity-update?pid={{ $instance->pivot->id }}&inc=minus">
+                    <span class="glyphicon glyphicon-minus-sign"></span>
+                </a>
+                {{ $instance->pivot->quantity }}
+                <a href="/orders/{{ $order->id }}/quantity-update?pid={{ $instance->pivot->id }}&inc=plus">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                </a>
+            </td>
             <td>${{ $instance->price * $instance->pivot->quantity }}</td>
         </tr>
     @endforeach
@@ -40,9 +48,10 @@
     </tr>
     @foreach($order->discounts as $discount)
         <tr class="danger">
-            <td><a href="#" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+            <td><a href="/orders/{{ $order->id }}/remove-discount/{{ $discount->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td>{{ $discount->name }}</td>
-            <td>{{ $discount->calculate() }}</td>
+            <td colspan="4"></td>
+            <td><strong>-${{ number_format($orderDiscount[$discount->id], 2) }}</strong></td>
         </tr>
     @endforeach
     <tr class="warning">

@@ -30,7 +30,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/products/{id?}/edit', 'Store\ProductController@edit');
     Route::post('store/products/{id?}/edit', 'Store\ProductController@update');
     Route::post('store/products/{id?}/ajax', 'Store\ProductController@ajaxUpdate');
-    Route::post('store/products/{id?}/instance', 'Store\ProductController@addInstance');
+    Route::post('store/products/instance', 'Store\ProductController@addInstance');
     Route::get('store/products/instance/{id?}/edit', 'Store\ProductController@editInstance');
     Route::post('store/products/instance/{id?}/edit', 'Store\ProductController@updateInstance');
 
@@ -71,8 +71,14 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders/create', 'Store\ShopOrderController@create');
     Route::post('orders/create', 'Store\ShopOrderController@store');
     Route::get('orders/{id?}/show', 'Store\ShopOrderController@show');
+    Route::get('orders/{id?}/delete', 'Store\ShopOrderController@delete');
     Route::post('orders/{id?}/add-product', 'Store\ShopOrderController@addProduct');
+    Route::get('orders/{id?}/quantity-update', 'Store\ShopOrderController@quantityUpdate');
     Route::get('orders/{id?}/remove-product/{pid?}', 'Store\ShopOrderController@removeProduct');
     Route::post('orders/{id?}/add-liquid', 'Store\ShopOrderController@addLiquid');
     Route::get('orders/{id?}/remove-liquid/{lid?}', 'Store\ShopOrderController@removeLiquid');
+    Route::post('orders/{id?}/add-discount', 'Store\ShopOrderController@addDiscount');
+    Route::get('orders/{id?}/remove-discount/{did?}', 'Store\ShopOrderController@removeDiscount');
+    Route::post('orders/{id?}/customer', 'Store\ShopOrderController@customer');
+    Route::post('orders/{id?}/payment', 'Store\ShopOrderController@payment');
 });
