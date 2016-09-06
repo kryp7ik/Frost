@@ -15,7 +15,6 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\OrderCompleted' => [
             'App\Listeners\EarnCustomerPoints',
-            'App\Listeners\GenerateReceipt',
             'App\Listeners\UpdateInventory',
         ],
     ];

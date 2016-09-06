@@ -79,7 +79,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
      */
     public function update($id, $data)
     {
-        $instance = ProductInstance::where('id', $id)->firstOrFail();
+        $instance = $this->findById($id);
         $instance->price = number_format($data['price'], 2);
         $instance->stock = $data['stock'];
         $instance->redline = $data['redline'];

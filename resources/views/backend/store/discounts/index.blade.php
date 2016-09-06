@@ -1,7 +1,7 @@
 @extends('master')
 @section('title', 'All Discounts')
 @section('content')
-    <div class="container col-md-8 col-md-offset-2">
+    <div class="container col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
@@ -28,11 +28,13 @@
                     <div class="col-md-10 col-md-offset-1">
                         <table class="table table-hover display" id="table">
                             <thead>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Filter</th>
-                            <th>Amount</th>
-                            <th>Admin Approval</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Filter</th>
+                                <th>Amount</th>
+                                <th>Admin Approval</th>
+                                <th>Redeemable</th>
+                                <th>Value</th>
                             </thead>
                             <tbody>
                             @foreach($discounts as $discount)
@@ -42,6 +44,8 @@
                                     <td>{{ ucfirst($discount->filter) }}</td>
                                     <td>{{ $discount->amount }}</td>
                                     <td>{{ ($discount->approval) ? 'Required' : 'Not Required' }}</td>
+                                    <td>{{ ($discount->redeemable) ? 'Yes' : 'No' }}</td>
+                                    <td>{{ $discount->value }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -62,7 +66,7 @@
                 </div>
                 <form method="post" action="/admin/store/discounts/create">
                     <div class="modal-body">
-                        <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                        {{ csrf_field() }}
                         <div class="form-group">
                             <label for="name" class="col-lg-2 control-label">Name</label>
                             <div class="col-lg-10 input-group">
@@ -107,11 +111,27 @@
                                     <span class="help-block">If activated this discount will require admin approval to use.</span>
                                 </label>
                             </div>
+                        </div><br/>
+                        <div class="form-group">
+                            <label for="redeemable" class="col-lg-2 control-label">Redeemable?</label>
+                            <div class="togglebutton col-lg-10">
+                                <label>
+                                    <input type="checkbox" id="redeemable" name="redeemable">
+                                    <span class="help-block">Allows users to redeem reward points for this discount</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="value" class="col-lg-2 control-label">Redemption Value</label>
+                            <div class="col-lg-10 input-group">
+                                <input type="text" class="form-control" placeholder="100" id="value" name="value">
+                                <span class="help-block">The amount of reward points this discount will cost.</span>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary" value="Save">
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>

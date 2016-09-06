@@ -16,6 +16,7 @@ class CreateOrderDiscountTable extends Migration
             $table->increments('id')->unsigned();
             $table->integer('shop_order_id')->unsigned()->index();
             $table->integer('discount_id')->unsigned()->index();
+            $table->decimal('applied')->nullable();
 
             $table->foreign('shop_order_id')->references('id')->on('shop_orders')
                 ->onUpdate('cascade')

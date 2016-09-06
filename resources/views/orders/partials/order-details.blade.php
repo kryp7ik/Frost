@@ -51,7 +51,7 @@
             <td><a href="/orders/{{ $order->id }}/remove-discount/{{ $discount->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
             <td>{{ $discount->name }}</td>
             <td colspan="4"></td>
-            <td><strong>-${{ number_format($orderDiscount[$discount->id], 2) }}</strong></td>
+            <td><strong>-${{ $discount->pivot->applied }}</strong></td>
         </tr>
     @endforeach
     <tr class="warning">

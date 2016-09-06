@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label for="amount" class="col-lg-2 control-label">Amount</label>
                         <div class="col-lg-10 input-group">
-                            <input type="text" class="form-control" placeholder="20" id="amount" name="amount" value="{{ $discount->amount }}">
+                            <input type="text" class="form-control" id="amount" name="amount" value="{{ $discount->amount }}">
                             <span class="help-block">The amount of the discount.</span>
                         </div>
                     </div>
@@ -55,6 +55,22 @@
                                 <input type="checkbox" id="approval" name="approval" @if($discount->approval) checked @endif >
                                 <span class="help-block">If activated this discount will require admin approval to use.</span>
                             </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="redeemable" class="col-lg-2 control-label">Redeemable?</label>
+                        <div class="togglebutton col-lg-10">
+                            <label>
+                                <input type="checkbox" id="redeemable" name="redeemable" @if($discount->redeemable) checked @endif >
+                                <span class="help-block">Allows users to redeem reward points for this discount</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="value" class="col-lg-2 control-label">Redemption Value</label>
+                        <div class="col-lg-10 input-group">
+                            <input type="text" class="form-control" value="{{ $discount->value }}" name="value" />
+                            <span class="help-block">The amount of reward points this discount will cost.</span>
                         </div>
                     </div>
                     <div class="form-group">

@@ -22,7 +22,7 @@ class SampleDataSeeder extends Seeder
         DB::table('product_instances')->insert([
             [
                 'product_id' => 1,
-                'price' => '11.00',
+                'price' => '39.99',
                 'stock' => '6',
                 'redline' => '5',
                 'active' => 1,
@@ -30,7 +30,7 @@ class SampleDataSeeder extends Seeder
             ],
             [
                 'product_id' => 1,
-                'price' => '12.00',
+                'price' => '39.99',
                 'stock' => '6',
                 'redline' => '5',
                 'active' => 1,
@@ -38,7 +38,7 @@ class SampleDataSeeder extends Seeder
             ],
             [
                 'product_id' => 1,
-                'price' => '13.00',
+                'price' => '39.99',
                 'stock' => '6',
                 'redline' => '5',
                 'active' => 1,
@@ -94,7 +94,7 @@ class SampleDataSeeder extends Seeder
                 'name' => 'John Doe',
                 'phone' => 6162180611,
                 'email' => 'john@gmail.com',
-                'points' => 0,
+                'points' => 500,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
             ],
@@ -102,7 +102,7 @@ class SampleDataSeeder extends Seeder
                 'name' => 'Jim Jones',
                 'phone' => 6163185537,
                 'email' => 'jim@hotmail.com',
-                'points' => 0,
+                'points' => 500,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
             ],
@@ -114,6 +114,8 @@ class SampleDataSeeder extends Seeder
                 'filter' => 'none',
                 'amount' => 10,
                 'approval' => 0,
+                'redeemable' => false,
+                'value' => null,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
             ],
@@ -123,6 +125,19 @@ class SampleDataSeeder extends Seeder
                 'filter' => 'liquid',
                 'amount' => 50,
                 'approval' => 1,
+                'redeemable' => false,
+                'value' => null,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
+            ],
+            [
+                'name' => '10ml Discount',
+                'type' => 'amount',
+                'filter' => 'liquid',
+                'amount' => 4.49,
+                'approval' => 1,
+                'redeemable' => true,
+                'value' => 100,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
             ],

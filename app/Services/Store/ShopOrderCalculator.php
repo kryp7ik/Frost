@@ -4,6 +4,7 @@ namespace App\Services\Store;
 
 use App\Models\Store\Discount;
 use App\Models\Store\ShopOrder;
+use Illuminate\Support\Facades\DB;
 
 class ShopOrderCalculator {
 
@@ -17,8 +18,6 @@ class ShopOrderCalculator {
     private $productTotal = 0;
 
     private $subTotal = 0;
-
-    private $discountAppliedTotals = [];
 
     public function __construct(ShopOrder $order)
     {
@@ -35,6 +34,20 @@ class ShopOrderCalculator {
         $points = ceil($this->liquidTotal * 2);
         $points += ceil($this->productTotal);
         return $points;
+    }
+
+    /**
+     * @return bool Completed?
+     */
+    public function checkComplete()
+    {
+        $this->order = $this->order->fresh(['payments']);
+        if ($this->getRemainingBalance() == 0){
+            $this->order->complete = true;
+            $this->order->save();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -62,12 +75,6 @@ class ShopOrderCalculator {
         $this->order->total = $this->subTotal * (1 + $tax);
         $this->order->save();
         return $this->order;
-    }
-
-    public function getDiscountAppliedTotals()
-    {
-        $this->calculateOrder();
-        return $this->discountAppliedTotals;
     }
 
     /**
@@ -104,7 +111,7 @@ class ShopOrderCalculator {
     /**
      * Applies all discounts and generates $this->subTotal
      * NOTE: If a discount does not have a filter it is stacked to an array that is applied after all other
-     * discounts have been applied so the no filter discounts do not apply to already discounted items
+     * discounts have been applied so the no filter discounts do not apply to the full value of already discounted items
      */
     private function applyDiscounts()
     {
@@ -136,12 +143,18 @@ class ShopOrderCalculator {
     {
         foreach ($noFilterDiscounts as $discount) {
             if ($discount->type == 'percent') {
-                $amount = $this->subTotal * ($discount->amount / 100);
-                $this->discountAppliedTotals[$discount->id] = $amount;
+                $amount = number_format($this->subTotal * ($discount->amount / 100), 2);
+                if ($discount->pivot->applied != $amount) {
+                    DB::table('order_discount')->where('id', $discount->pivot->id)->update(['applied' => $amount]);
+                }
                 $this->subTotal -= $amount;
             } else {
-                $this->discountAppliedTotals[$discount->id] = $discount->amount;
-                $this->subTotal -= $discount->amount;
+                if ($discount->amount > $this->subTotal) {
+                    DB::table('order_discount')->where('id', $discount->pivot->id)->update(['applied' => $this->subTotal]);
+                    $this->subTotal = 0;
+                } else {
+                    $this->subTotal -= $discount->amount;
+                }
             }
         }
     }
@@ -153,12 +166,18 @@ class ShopOrderCalculator {
     private function applyProductDiscount(Discount $discount)
     {
         if($discount->type == 'percent') {
-            $amount = $this->productTotal * ($discount->amount / 100);
-            $this->discountAppliedTotals[$discount->id] = $amount;
+            $amount = number_format($this->productTotal * ($discount->amount / 100), 2);
+            if ($discount->pivot->applied != $amount) {
+                DB::table('order_discount')->where('id', $discount->pivot->id)->update(['applied' => $amount]);
+            }
             $this->productTotal -= $amount;
         } else {
-            $this->discountAppliedTotals[$discount->id] = $discount->amount;
-            $this->productTotal -= $discount->amount;
+            if ($discount->amount > $this->productTotal) {
+                DB::table('order_discount')->where('id', $discount->pivot->id)->update(['applied' => $this->productTotal]);
+                $this->productTotal = 0;
+            } else {
+                $this->productTotal -= $discount->amount;
+            }
         }
     }
 
@@ -169,12 +188,18 @@ class ShopOrderCalculator {
     private function applyLiquidDiscount(Discount $discount)
     {
         if($discount->type == 'percent') {
-            $amount = $this->liquidTotal * ($discount->amount / 100);
-            $this->discountAppliedTotals[$discount->id] = $amount;
+            $amount = number_format($this->liquidTotal * ($discount->amount / 100), 2);
+            if ($discount->pivot->applied != $amount) {
+                DB::table('order_discount')->where('id', $discount->pivot->id)->update(['applied' => $amount]);
+            }
             $this->liquidTotal -= $amount;
         } else {
-            $this->liquidTotal -= $discount->amount;
-            $this->discountAppliedTotals[$discount->id] = $discount->amount;
+            if ($discount->amount > $this->liquidTotal) {
+                DB::table('order_discount')->where('id', $discount->pivot->id)->update(['applied' => $this->liquidTotal]);
+                $this->liquidTotal = 0;
+            } else {
+                $this->liquidTotal -= $discount->amount;
+            }
         }
     }
 }

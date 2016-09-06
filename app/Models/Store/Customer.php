@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'phone',
         'name',
@@ -15,6 +21,10 @@ class Customer extends Model
         'points'
     ];
 
+    /**
+     * One To Many
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function orders()
     {
         return $this->hasMany('App\Models\Store\ShopOrder');

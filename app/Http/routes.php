@@ -81,4 +81,7 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders/{id?}/remove-discount/{did?}', 'Store\ShopOrderController@removeDiscount');
     Route::post('orders/{id?}/customer', 'Store\ShopOrderController@customer');
     Route::post('orders/{id?}/payment', 'Store\ShopOrderController@payment');
+    Route::get('orders/{id?}/receipt', 'Store\ShopOrderController@receipt');
+
+    Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');
 });

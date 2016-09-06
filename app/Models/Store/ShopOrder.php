@@ -45,7 +45,7 @@ class ShopOrder extends Model
 
     public function discounts()
     {
-        return $this->belongsToMany('App\Models\Store\Discount', 'order_discount')->withPivot('id');
+        return $this->belongsToMany('App\Models\Store\Discount', 'order_discount')->withPivot('id', 'applied');
     }
 
     public function payments()

@@ -8,6 +8,7 @@
 namespace App\Repositories\Store\ShopOrder;
 
 use App\Models\Auth\User;
+use App\Models\Store\Discount;
 use App\Models\Store\ShopOrder;
 use App\Models\Store\Customer;
 
@@ -24,9 +25,10 @@ interface ShopOrderRepositoryContract
     /**
      * Retrieves a single order by it's id.
      * @param int $id
+     * @param bool $eager If true load the entire object with all associated entities
      * @return mixed
      */
-    public function findById($id);
+    public function findById($id, $eager = false);
 
     /**
      * Retrieves all incomplete orders for the designated store
@@ -96,9 +98,16 @@ interface ShopOrderRepositoryContract
 
     /**
      * @param ShopOrder $order
-     * @param int $discount_id
+     * @param Discount $discount
      */
-    public function addDiscountToOrder(ShopOrder $order, $discount_id);
+    public function addDiscountToOrder(ShopOrder $order, Discount $discount);
+
+    /**
+     * If the discount is being added by redeeming reward points update the customers points
+     * @param ShopOrder $order
+     * @param Discount $discount
+     */
+    public function addRedeemedDiscount(ShopOrder $order, Discount $discount);
 
     /**
      * @param ShopOrder $order
@@ -112,4 +121,11 @@ interface ShopOrderRepositoryContract
      * @param Customer $customer
      */
     public function addCustomerToOrder(ShopOrder $order, Customer $customer);
+
+    /**
+     * @param ShopOrder $order
+     * @param array $data
+     * @return float $change Amount of change due (eg. Order->total = 10, Customer pays with $20, $change = 10)
+     */
+    public function addPaymentToOrder(ShopOrder $order, $data);
 }

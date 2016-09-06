@@ -19,6 +19,8 @@ class CreateDiscountsTable extends Migration
             $table->string('filter');
             $table->decimal('amount');
             $table->boolean('approval');
+            $table->boolean('redeemable');
+            $table->integer('value')->nullable();
             $table->timestamps();
         });
     }

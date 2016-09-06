@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name',
         'sku',
@@ -15,8 +21,14 @@ class Product extends Model
         'cost'
     ];
 
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 
+    /**
+     * @var array
+     */
     public $categoriesArray = array(
         'accessory' => 'Accessory',
         'battery' => 'Battery',
@@ -31,6 +43,10 @@ class Product extends Model
         'tax_exempt' => 'Tax Exempt'
     );
 
+    /**
+     * One to Many
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function productInstances() {
         return $this->hasMany('App\Models\Store\ProductInstance');
     }

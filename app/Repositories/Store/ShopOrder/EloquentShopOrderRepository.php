@@ -4,6 +4,7 @@ namespace App\Repositories\Store\ShopOrder;
 
 use App\Models\Auth\User;
 use App\Models\Store\Customer;
+use App\Models\Store\Discount;
 use App\Models\Store\Payment;
 use App\Models\Store\ShopOrder;
 use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
@@ -199,13 +200,34 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
 
     /**
      * @param ShopOrder $order
-     * @param int $discount_id
+     * @param Discount $discount
      */
-    public function addDiscountToOrder(ShopOrder $order, $discount_id)
+    public function addDiscountToOrder(ShopOrder $order, Discount $discount)
     {
-        $order->discounts()->attach($discount_id);
+        if ($discount->type == 'amount') {
+            $order->discounts()->attach($discount->id, ['applied' => $discount->amount]);
+        } else {
+            $order->discounts()->attach($discount->id);
+        }
         $order->calculator()->calculateTotal();
         flash('A discount has been successfully added to the order', 'success');
+    }
+
+    /**
+     * If the discount is being added by redeeming reward points update the customers points
+     * @param ShopOrder $order
+     * @param Discount $discount
+     */
+    public function addRedeemedDiscount(ShopOrder $order, Discount $discount)
+    {
+        $customer = $order->customer;
+        if ($customer->points >= $discount->value) {
+            $this->addDiscountToOrder($order, $discount);
+            $customer->points -= $discount->value;
+            $customer->save();
+        } else {
+            flash('Customer does not have enough points for that discount!', 'danger');
+        }
     }
 
     /**
@@ -231,13 +253,34 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
         flash('A customer has been successfully added to the order', 'success');
     }
 
+    /**
+     * Adds a payment to the order
+     * If the payment is cash it expects to have an amount
+     * If the payment is credit it sets the amount applied to the remaining balance of the order
+     * @param ShopOrder $order
+     * @param array $data
+     * @return float $change The amount of change due
+     */
     public function addPaymentToOrder(ShopOrder $order, $data)
     {
+        $change = 0;
+        $balance = $order->calculator()->getRemainingBalance();
+        if (isset($data['amount'])) {
+            if ($data['amount'] > $balance) {
+                $amount = $balance;
+                $change = $data['amount'] - $balance;
+            } else {
+                $amount = $data['amount'];
+            }
+        } else {
+            $amount = $balance;
+        }
         $payment = new Payment([
             'shop_order_id' => $order->id,
             'type' => $data['type'],
-            'amount' => isset($data['amount']) ? $data['amount'] : $order->calculator()->getRemainingBalance()
+            'amount' => $amount
         ]);
         $payment->save();
+        return $change;
     }
 }

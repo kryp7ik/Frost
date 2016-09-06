@@ -11,7 +11,7 @@
                         <button id="customer-phone" class="btn btn-raised btn-block btn-warning">Phone: {{ $order->customer->phone }}</button>
                         <form style="display:none" id="change-customer" class="form-inline" method="post" action="/orders/{{ $order->id }}/customer">
                             {{ csrf_field() }}
-                            <input name="phone" type="text" class="form-control" value="{{ $order->customer->phone }}" autocomplete="off"/>
+                            <input id="phone" name="phone" type="text" class="form-control" autocomplete="off"/>
                             <button type="submit" class="btn btn-success btn-raised">Change</button>
                             <button id="cancel-phone" class="btn btn-danger btn-raised">Cancel</button>
                         </form>
@@ -85,10 +85,12 @@
     @include('orders.partials.product-modal')
     @include('orders.partials.liquid-modal')
     @include('orders.partials.discount-modal')
+    @include('orders.partials.cash-modal')
     <script type="text/javascript">
         $('#customer-phone').on('click', function() {
             $('#customer-phone').hide();
             $('#change-customer').show();
+            $('#phone').focus();
         });
         $('#cancel-phone').on('click', function(e) {
             e.preventDefault();

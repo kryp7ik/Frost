@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class LiquidProduct extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'shop_order_id',
         'recipe_id',
@@ -20,10 +26,18 @@ class LiquidProduct extends Model
         'mixed'
     ];
 
+    /**
+     * Many to One
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function recipe() {
         return $this->belongsTo('App\Models\Store\Recipe');
     }
 
+    /**
+     * Many to One
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function shopOrder() {
         return $this->belongsTo('App\Models\Store\ShopOrder');
     }

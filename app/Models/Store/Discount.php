@@ -6,14 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = ['id'];
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name',
         'type',
         'filter',
         'amount',
         'approval',
+        'redeemable',
+        'value'
     ];
 
     /**
@@ -35,9 +43,13 @@ class Discount extends Model
         'liquid' => 'Liquids Only',
     );
 
+    /**
+     * Many To Many Relationship with incremental id in the pivot table and applied which is the dollar amount the discount applied
+     * @return $this
+     */
     public function orders()
     {
-        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_discount')->withPivot('id');
+        return $this->belongsToMany('App\Models\Store\ShopOrder', 'order_discount')->withPivot('id', 'applied');
     }
 
 }

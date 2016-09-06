@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Events\Event;
+use App\Models\Store\ShopOrder;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
@@ -11,13 +12,17 @@ class OrderCompleted extends Event
     use SerializesModels;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * @var ShopOrder
      */
-    public function __construct()
+    public $order;
+
+    /**
+     * OrderCompleted constructor.
+     * @param ShopOrder $order
+     */
+    public function __construct(ShopOrder $order)
     {
-        //
+        $this->order = $order;
     }
 
     /**
