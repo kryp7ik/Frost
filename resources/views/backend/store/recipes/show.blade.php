@@ -2,47 +2,43 @@
 @section('title', 'Recipe View')
 @section('content')
     <div class="row">
-
         <div class="container col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h2>
-                        Recipe Info
-
-                    </h2>
+                    <h2>Recipe Info</h2>
                 </div>
                 <table class="table table-hover text-center">
                     <tbody>
-                    <tr>
-                        <td><strong>ID:</strong></td>
-                        <td>{{ $recipe->id }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Name:</strong></td>
-                        <td>
-                            <a class="editable"
-                               id = "name"
-                               href="#"
-                               data-name ="name"
-                               pk="{{ $recipe->id }}"
-                               data-type="text"
-                               data-url="/admin/store/recipes/{{ $recipe->id }}/ajax"
-                               data-title="Recipe Name">{{ $recipe->name }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Active:</strong></td>
-                        <td>
-                            <form method="post" action="/admin/store/recipes/{{ $recipe->id }}/update">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="active" value="{{ ($recipe->active) ? '0' : '1' }}">
-                                <input
-                                        type="submit"
-                                        class="btn {{ ($recipe->active) ? 'btn-success' : 'btn-danger' }}"
-                                        value="{{ ($recipe->active) ? 'De-activate' : 'activate' }}">
-                            </form>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><strong>ID:</strong></td>
+                            <td>{{ $recipe->id }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Name:</strong></td>
+                            <td>
+                                <a class="editable"
+                                   id = "name"
+                                   href="#"
+                                   data-name ="name"
+                                   pk="{{ $recipe->id }}"
+                                   data-type="text"
+                                   data-url="/admin/store/recipes/{{ $recipe->id }}/ajax"
+                                   data-title="Recipe Name">{{ $recipe->name }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Active:</strong></td>
+                            <td>
+                                <form method="post" action="/admin/store/recipes/{{ $recipe->id }}/update">
+                                    {{ csrf_field() }}
+                                    <input type="hidden" name="active" value="{{ ($recipe->active) ? '0' : '1' }}">
+                                    <input
+                                            type="submit"
+                                            class="btn {{ ($recipe->active) ? 'btn-success' : 'btn-danger' }}"
+                                            value="{{ ($recipe->active) ? 'De-activate' : 'Activate' }}">
+                                </form>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -57,11 +53,6 @@
                         </button>
                     </h2>
                 </div>
-                @if (session('status'))
-                    <div class="alert alert-success">
-                        {{ session('status') }}
-                    </div>
-                @endif
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <table class="table table-hover display" id="table">
@@ -126,5 +117,8 @@
             </div>
         </div>
     </div>
-    @include('shared.editable')
+
 @endsection
+@push('scripts')
+@include('shared.editable')
+@endpush

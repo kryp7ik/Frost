@@ -10,7 +10,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     /**
      * Retrieves all active Product Instances that belong to the designated store
      * @param int $store The id of the store belonging to the current user
-     * @param bool $sorted If true returns a sorted array by category for usage in optgroups [$category][]['instance_id' => $id, 'name' => $instance->product->name]
+     * @param bool $sorted If true returns a sorted array by category for usage in optgroups
      * @return array
      */
     public function getActiveWhereStore($store, $sorted = false)
@@ -34,7 +34,8 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     {
         $sortedInstances = array();
         foreach ($instances as $instance){
-            $sortedInstances[$instance->product->categoriesArray[$instance->product->category]][] = array('instance_id' => $instance->id, 'name' => $instance->product->name);
+            $sortedInstances[$instance->product->categoriesArray[$instance->product->category]][] =
+                array('instance_id' => $instance->id, 'name' => $instance->product->name);
         }
         return $sortedInstances;
 
@@ -47,6 +48,19 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     public function findById($id)
     {
         return ProductInstance::where('id', $id)->firstOrFail();
+    }
+
+    /**
+     * Returns all products where the stock is equal to or lower than redline
+     * Optionally filter by a specific store default returns all.
+     * @param int $store
+     * @return mixed
+     */
+    public function getBelowRedline($store = 0)
+    {
+        $products = ProductInstance::where('stock', '<=', 'redline');
+        if ($store > 0) $products->where('store', $store);
+        return $products->get();
     }
 
     /**
@@ -90,6 +104,17 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
         }
         flash('Something went wrong while trying to update the product instance', 'danger');
         return $instance;
+    }
+
+    /**
+     * Adjust the stock quantity of a ProductInstance by a positive or negative value
+     * @param ProductInstance $product
+     * @param int $adjustment
+     */
+    public function updateStock(ProductInstance $product, $adjustment)
+    {
+        $product->stock += $adjustment;
+        $product->save();
     }
 
 }

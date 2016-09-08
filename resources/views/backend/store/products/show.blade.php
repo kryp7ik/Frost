@@ -2,11 +2,6 @@
 @section('title', 'Product View')
 @section('content')
     <div class="row">
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
         <div class="container col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -158,5 +153,9 @@
             </div>
         </div>
     </div>
-    @include('shared.editable')
+
 @endsection
+
+@push('scripts')
+@include('shared.editable')
+@endpush

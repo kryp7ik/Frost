@@ -13,11 +13,6 @@
                 </h2>
 
             </div>
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
             @foreach ($errors->all() as $error)
                 <p class="alert alert-danger">{{ $error }}</p>
             @endforeach
@@ -138,3 +133,14 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#table').DataTable( {
+            "paging": false,
+            "info" : false,
+            "order" : [[ 0, "asc" ]]
+        });
+    });
+</script>
+@endpush

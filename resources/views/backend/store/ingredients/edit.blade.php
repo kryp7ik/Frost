@@ -6,19 +6,11 @@
             <div class="panel-heading">
                 <h2>Edit Ingredient</h2>
             </div>
-            @foreach ($errors->all() as $error)
-                <p class="alert alert-danger">{{ $error }}</p>
-            @endforeach
             <div class="panel-body">
                 <form class="form-horizontal" method="post">
                     @foreach ($errors->all() as $error)
                         <p class="alert alert-danger">{{ $error }}</p>
                     @endforeach
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
                     <input type="hidden" name="_token" value="{!! csrf_token() !!}">
                     <fieldset>
 
@@ -38,7 +30,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-4 col-lg-offset-8">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+                                <a href="/admin/store/ingredients" class="btn btn-warning btn-raised">Cancel</a>
                             </div>
                         </div>
                     </fieldset>

@@ -36,24 +36,28 @@
             <td>{{ $liquid->recipe->name }} {{ ($liquid->extra) ? 'XTRA' : '' }}</td>
             <td>{{ $liquid->size }}ml</td>
             <td>{{ $liquid->nicotine }}mg</td>
-            <td>{{ $liquid->vg }}%</td>
-            <td>{{ $liquid->menthol }}</td>
+            <td>{{ config('store.vg_levels')[$liquid->vg] }}</td>
+            <td>{{ config('store.menthol_levels')[$liquid->menthol] }}</td>
             <td>${{ $liquid->getPrice() }}</td>
         </tr>
     @endforeach
-    <tr class="active">
-        <td><strong>Discounts</strong></td>
-        <td colspan="5"><strong>Name</strong></td>
-        <td><strong>Amount</strong></td>
-    </tr>
-    @foreach($order->discounts as $discount)
-        <tr class="danger">
-            <td><a href="/orders/{{ $order->id }}/remove-discount/{{ $discount->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
-            <td>{{ $discount->name }}</td>
-            <td colspan="4"></td>
-            <td><strong>-${{ $discount->pivot->applied }}</strong></td>
+    @if(count($order->discounts) > 0)
+        <tr class="active">
+            <td><strong>Discounts</strong></td>
+            <td colspan="5"><strong>Name</strong></td>
+            <td><strong>Amount</strong></td>
         </tr>
-    @endforeach
+        @foreach($order->discounts as $discount)
+            <tr class="danger">
+                <td><a href="/orders/{{ $order->id }}/remove-discount/{{ $discount->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+                <td>{{ $discount->name }}</td>
+                <td colspan="4"></td>
+                <td><strong>-${{ $discount->pivot->applied }}</strong></td>
+            </tr>
+        @endforeach
+    @endif
+
+
     <tr class="warning">
         <td colspan="6"><strong class="pull-right">Subtotal</strong></td>
         <td>${{ $order->subtotal }}</td>
@@ -66,6 +70,20 @@
         <td colspan="6"><strong class="pull-right">Total</strong></td>
         <td>${{ $order->total }}</td>
     </tr>
+    @if(count($order->payments) > 0)
+        <tr class="active">
+            <td><strong>Payments</strong></td>
+            <td colspan="5"><strong>Type</strong></td>
+            <td><strong>Amount</strong></td>
+        </tr>
+        @foreach($order->payments as $payment)
+            <tr class="success">
+                <td></td>
+                <td colspan="5">{{ ucfirst($payment->type) }}</td>
+                <td>${{ number_format($payment->amount,2) }}</td>
+            </tr>
+        @endforeach
+    @endif
     <tr class="danger">
         <td colspan="6"><strong class="pull-right">Remaining Balance</strong></td>
         <td>${{ $order->calculator()->getRemainingBalance() }}</td>

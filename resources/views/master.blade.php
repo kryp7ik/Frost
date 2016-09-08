@@ -4,7 +4,7 @@
     <head>
         <title> @yield('title') </title>
         @include('shared.css')
-        @include('shared.scripts')
+
     </head>
     <body>
         @include('shared.navbar')
@@ -14,6 +14,7 @@
             </div>
         </div>
         @include('flash::message')
+        @include('shared.scripts')
     <script type="text/javascript">
         $('div.alert').not('.alert-important').delay(3000).fadeOut(250);
     </script>

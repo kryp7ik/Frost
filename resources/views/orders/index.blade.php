@@ -6,46 +6,28 @@
             <div class="panel-heading">
                 <h2>All Orders</h2>
             </div>
-            @if (session('warning'))
-                <div class="alert alert-warning">
-                    {{ session('warning') }}
-                </div>
-            @endif
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading"><h3>Filters</h3></div>
                                 <div class="panel-body">
                                     <form method="post" class="form-horizontal">
                                         {{ csrf_field() }}
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="start" class="col-md-2 control-label">Date</label>
-                                                <div class="input-group col-md-10">
-                                                    <input type="text" name="start" class="form-control" id="datepicker" value="{{ $date }}"/>
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
-                                                </div>
+                                        <div class="form-group">
+                                            <label for="start" class="col-md-2 control-label">Date</label>
+                                            <div class="input-group col-md-10">
+                                                <input type="text" name="start" class="form-control" id="datepicker" value="{{ $date }}"/>
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 text-center">
-                                            <div class="form-group">
-                                                <label for="customer" class="control-label">Orders Without A Customer?</label>
-                                                <div class="togglebutton">
-                                                    <label>
-                                                        <input type="checkbox" id="customer" name="customer">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <input type="submit" class="btn btn-primary btn-raised pull-right" value="Apply"/>
-                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="panel panel-default">
                                 <div class="panel-heading"><h3>Order Lookup</h3></div>
                                 <div class="panel-body">
@@ -70,7 +52,7 @@
                     @else
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1">
-                            <table class="table table-hover display">
+                            <table class="table table-hover display" id="table">
                                 <thead>
                                     <th>ID</th>
                                     <th>Store</th>
@@ -92,8 +74,8 @@
                                             @endif
                                         </td>
                                         <td>${{ $order->total }}</td>
-                                        <td>{{ ($order->status) ? 'Completed' : 'Incomplete' }}</td>
-                                        <td>{{ $order->created_at }}</td>
+                                        <td>{{ ($order->complete) ? 'Completed' : 'Incomplete' }}</td>
+                                        <td>{{ date('m-d-Y h:ia', strtotime($order->created_at)) }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -104,13 +86,22 @@
                 </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $('#order-id').keyup(function() {
-                var orderId = this.value;
-            $('#lookup').attr('href', '/orders/' + orderId + '/show');
-        });
-        $(function () {
-
-        });
-    </script>
+    @push('scripts')
+        <script type="text/javascript">
+            $('#order-id').keyup(function() {
+                    var orderId = this.value;
+                $('#lookup').attr('href', '/orders/' + orderId + '/show');
+            });
+            $(document).ready(function() {
+                $('#table').DataTable( {
+                    "paging": false,
+                    "info" : false,
+                    "order" : [[ 0, "desc" ]]
+                });
+                $('#datepicker').datetimepicker({
+                    format: 'YYYY-MM-DD'
+                });
+            });
+        </script>
+    @endpush
 @endsection

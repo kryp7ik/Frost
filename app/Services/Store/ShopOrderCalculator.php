@@ -37,6 +37,7 @@ class ShopOrderCalculator {
     }
 
     /**
+     * Function is only called after a payment has been applied and if the remaining balance is zero completes the order
      * @return bool Completed?
      */
     public function checkComplete()
@@ -60,15 +61,17 @@ class ShopOrderCalculator {
         foreach ($this->order->payments as $payment) {
             $balance -= $payment->amount;
         }
-        return $balance;
+        return number_format($balance, 2);
     }
 
     /**
      * Calculates the order total & subtotal, sets the ShopOrder's attributes to those values and saves the ShopOrder
+     * If the order is complete do not recalc total in the event that a price had been changed since it's completion
      * @return ShopOrder
      */
     public function calculateTotal()
     {
+        if ($this->order->complete) return $this->order;
         $tax = config('store.tax');
         $this->calculateOrder();
         $this->order->subtotal = number_format($this->subTotal, 2);

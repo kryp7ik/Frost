@@ -26,6 +26,14 @@ interface ProductInstanceRepositoryContract
     public function findById($id);
 
     /**
+     * Returns all products where the stock is equal to or lower than redline
+     * Optionally filter by a specific store default returns all.
+     * @param int $store
+     * @return mixed
+     */
+    public function getBelowRedline($store = 0);
+
+    /**
      * @param int $store_id
      * @param array $data
      * @return ProductInstance|bool
@@ -38,4 +46,11 @@ interface ProductInstanceRepositoryContract
      * @return ProductInstance
      */
     public function update($id, $data);
+
+    /**
+     * Adjust the stock quantity of a ProductInstance by a positive or negative value
+     * @param ProductInstance $product
+     * @param int $adjustment
+     */
+    public function updateStock(ProductInstance $product, $adjustment);
 }

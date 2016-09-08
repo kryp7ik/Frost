@@ -141,6 +141,39 @@ class SampleDataSeeder extends Seeder
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
             ],
+            [
+                'name' => '30ml Discount',
+                'type' => 'amount',
+                'filter' => 'liquid',
+                'amount' => 11.49,
+                'approval' => 1,
+                'redeemable' => true,
+                'value' => 200,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
+            ],
+            [
+                'name' => '50ml Discount',
+                'type' => 'amount',
+                'filter' => 'liquid',
+                'amount' => 18.49,
+                'approval' => 1,
+                'redeemable' => true,
+                'value' => 300,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
+            ],
+            [
+                'name' => '100ml Discount',
+                'type' => 'amount',
+                'filter' => 'liquid',
+                'amount' => 34.49,
+                'approval' => 1,
+                'redeemable' => true,
+                'value' => 600,
+                'created_at' => new DateTime(),
+                'updated_at' => new DateTime()
+            ],
         ]);
 
     }

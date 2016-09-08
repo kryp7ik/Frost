@@ -2,11 +2,6 @@
 @section('title', 'Customer View')
 @section('content')
     <div class="row">
-        @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
         <div class="container col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -61,7 +56,20 @@
                     </tr>
                     <tr>
                         <td><strong>Points:</strong></td>
-                        <td>{{ $customer->points }}</td>
+                        <td>
+                            @if (Auth::user()->hasRole('manager'))
+                                <a class="editable"
+                                   id = "points"
+                                   href="#"
+                                   data-name ="points"
+                                   pk="{{ $customer->id }}"
+                                   data-type="text"
+                                   data-url="/customers/{{ $customer->id }}/ajax"
+                                   data-title="Points">{{ $customer->points }}</a>
+                            @else
+                                {{ $customer->points }}
+                            @endif
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -85,7 +93,7 @@
                             @foreach($customer->orders as $order)
                                 <tr>
                                     <td><a class="btn btn-xs btn-raised btn-info" href="/orders/{{ $order->id }}/show">{{ $order->id }}</a></td>
-                                    <td>{{ $order->updated_at }}</td>
+                                    <td>{{ date('m-d-Y h:ia', strtotime($order->created_at)) }}</td>
                                     <td>${{ $order->total }}</td>
                                     <td>{{ $order->store }}</td>
                                 </tr>
@@ -97,5 +105,17 @@
             </div>
         </div>
     </div>
-    @include('shared.editable')
+
 @endsection
+@push('scripts')
+@include('shared.editable')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#table').DataTable( {
+            "paging": false,
+            "info" : false,
+            "order" : [[ 0, "desc" ]]
+        });
+    });
+</script>
+@endpush

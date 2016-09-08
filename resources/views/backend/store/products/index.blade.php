@@ -10,11 +10,6 @@
                 </h2>
 
             </div>
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
             @if ($products->isEmpty())
                 <p> You currently do not have any products.</p>
             @else
@@ -44,3 +39,14 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#table').DataTable( {
+            "paging": false,
+            "info" : false,
+            "order" : [[ 0, "asc" ]]
+        });
+    });
+</script>
+@endpush

@@ -217,6 +217,7 @@ class ShopOrderController extends Controller
 
     /**
      * Adds a payment to the order and checks if the order has been paid in full
+     * If the order does not contain any products or liquids return back with warning
      * If the order is complete: fire event & redirect to the receipt view with the change due stored at $_SESSION['change']
      * @param int $id
      * @param Request $request
@@ -225,15 +226,23 @@ class ShopOrderController extends Controller
     public function payment($id, Request $request)
     {
         $order = $this->orders->findById($id);
+        if (count($order->liquidProducts) == 0 && count($order->productInstances) == 0){
+            flash('This order does not have any items, Add products or delete the order', 'danger');
+            return back();
+        }
         $change = $this->orders->addPaymentToOrder($order, $request->all());
         if($order->calculator()->checkComplete()) {
             event(new OrderCompleted($order));
-            return redirect("/orders/$order->id/receipt")->with('change', $change);
+            return redirect("/orders/$order->id/receipt")->with('change', number_format($change, 2));
         } else {
             return back();
         }
     }
 
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function receipt($id)
     {
         $order = $this->orders->findById($id);

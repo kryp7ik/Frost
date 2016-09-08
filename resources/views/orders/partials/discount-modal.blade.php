@@ -40,13 +40,15 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $('#discount-select').on('select2:select', function(e) {
-       if(e.params.data.element.parentElement.label == "Approval Required"){
-           $('#approval-group').show();
-           $('#pin').focus();
-       } else {
-           $('#approval-group').hide();
-       }
-    });
-</script>
+@push('scripts')
+    <script type="text/javascript">
+        $('#discount-select').on('select2:select', function(e) {
+           if(e.params.data.element.parentElement.label == "Approval Required"){
+               $('#approval-group').show();
+               $('#pin').focus();
+           } else {
+               $('#approval-group').hide();
+           }
+        });
+    </script>
+@endpush

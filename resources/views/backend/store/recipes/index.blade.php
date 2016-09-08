@@ -10,11 +10,6 @@
                     <a href="/admin/store/recipes/create" class="btn btn-success btn-lg btn-raised pull-right">New Recipe</a>
                 </h2>
             </div>
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
             @if ($recipes->isEmpty())
                 <p> You currently do not have any recipes.</p>
             @else
@@ -42,3 +37,14 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#table').DataTable( {
+            "paging": false,
+            "info" : false,
+            "order" : [[ 0, "asc" ]]
+        });
+    });
+</script>
+@endpush

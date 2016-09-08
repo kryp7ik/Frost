@@ -243,13 +243,21 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
 
     /**
      * Adds or updates the customer for the given order
+     * If customer is being added after the order is complete update customers points
      * @param ShopOrder $order
      * @param Customer $customer
      */
     public function addCustomerToOrder(ShopOrder $order, Customer $customer)
     {
-        $order->customer_id = $customer->id;
-        $order->save();
+        if($order->complete) {
+            $order->customer_id = $customer->id;
+            $order->save();
+            $customer->points += $order->calculator()->getPoints();
+            $customer->save();
+        } else {
+            $order->customer_id = $customer->id;
+            $order->save();
+        }
         flash('A customer has been successfully added to the order', 'success');
     }
 

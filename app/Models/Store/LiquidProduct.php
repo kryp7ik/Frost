@@ -47,7 +47,7 @@ class LiquidProduct extends Model
      * @return float $price
      */
     public function getPrice() {
-        $price = ($this->extra) ? config('store.liquid_prices')[$this->size] + 1 : config('store.liquid_prices')[$this->size];
+        $price = ($this->extra) ? config('store.bottle_prices')[$this->size] + 1 : config('store.bottle_prices')[$this->size];
         return $price;
     }
 }

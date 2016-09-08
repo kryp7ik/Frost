@@ -3,19 +3,25 @@
 namespace App\Listeners;
 
 use App\Events\OrderCompleted;
+use App\Services\Store\InventoryService;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpdateInventory
 {
+
     /**
-     * Create the event listener.
-     *
-     * @return void
+     * @var InventoryService
      */
-    public function __construct()
+    protected $inventoryService;
+
+    /**
+     * UpdateInventory constructor.
+     * @param InventoryService $inventoryService
+     */
+    public function __construct(InventoryService $inventoryService)
     {
-        //
+        $this->inventoryService = $inventoryService;
     }
 
     /**
@@ -26,6 +32,6 @@ class UpdateInventory
      */
     public function handle(OrderCompleted $event)
     {
-        //
+        $this->inventoryService->adjustInventoryForOrder($event->order);
     }
 }

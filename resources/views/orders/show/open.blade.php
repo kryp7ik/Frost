@@ -1,5 +1,5 @@
 @extends('master')
-@section('title', 'Create A New Order')
+@section('title', 'Order Details')
 @section('content')
     <div class="row">
         <!-- Left Column -->
@@ -64,7 +64,7 @@
             <div class="well">
                 <div class="row">
                     <div class="col-md-4">
-                        <button class="btn btn-success btn-lg btn-raised btn-block">Cash</button>
+                        <button class="btn btn-success btn-lg btn-raised btn-block" data-toggle="modal" data-target="#cash">Cash</button>
                     </div>
                     <div class="col-md-4 text-center">
                         <h3>
@@ -73,7 +73,11 @@
                         </h3>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-success btn-lg btn-raised btn-block">Credit</button>
+                        <form method="post" action="/orders/{{ $order->id }}/payment">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="type" value="credit" />
+                            <button type="submit" class="btn btn-success btn-lg btn-raised btn-block">Credit</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -86,16 +90,18 @@
     @include('orders.partials.liquid-modal')
     @include('orders.partials.discount-modal')
     @include('orders.partials.cash-modal')
-    <script type="text/javascript">
-        $('#customer-phone').on('click', function() {
-            $('#customer-phone').hide();
-            $('#change-customer').show();
-            $('#phone').focus();
-        });
-        $('#cancel-phone').on('click', function(e) {
-            e.preventDefault();
-            $('#customer-phone').show();
-            $('#change-customer').hide();
-        })
-    </script>
+    @push('scripts')
+        <script type="text/javascript">
+            $('#customer-phone').on('click', function() {
+                $('#customer-phone').hide();
+                $('#change-customer').show();
+                $('#phone').focus();
+            });
+            $('#cancel-phone').on('click', function(e) {
+                e.preventDefault();
+                $('#customer-phone').show();
+                $('#change-customer').hide();
+            })
+        </script>
+    @endpush
 @endsection
