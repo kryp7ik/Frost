@@ -4,6 +4,11 @@ namespace App\Models\Store;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Actions for this entity can be found in App\Http\Controllers\Admin\Store\ProductController
+ * Class Product
+ * @package App\Models\Store
+ */
 class Product extends Model
 {
     /**
@@ -25,23 +30,6 @@ class Product extends Model
      * @var bool
      */
     public $timestamps = false;
-
-    /**
-     * @var array
-     */
-    public $categoriesArray = array(
-        'accessory' => 'Accessory',
-        'battery' => 'Battery',
-        'tank' => 'Tank',
-        'rda' => 'RDA',
-        'regulated_mod' => 'Regulated Mod',
-        'mechanical_mod' => 'Mechanical Mod',
-        'liquid' => 'Liquid',
-        'coil' => 'Coil',
-        'drip_tip' => 'Drip Tip',
-        'beverage' => 'Beverage',
-        'tax_exempt' => 'Tax Exempt'
-    );
 
     /**
      * One to Many

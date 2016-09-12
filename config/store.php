@@ -66,7 +66,20 @@ return [
         28 => '28mg',
         29 => '29mg',
         30 => '30mg',
-    ]
+    ],
+
+    'product_categories' => [
+        'accessory' => 'Accessory',
+        'battery' => 'Battery',
+        'tank' => 'Tank',
+        'rda' => 'RDA',
+        'regulated_mod' => 'Regulated Mod',
+        'mechanical_mod' => 'Mechanical Mod',
+        'liquid' => 'Liquid',
+        'coil' => 'Coil',
+        'drip_tip' => 'Drip Tip',
+        'beverage' => 'Beverage',
+    ],
 
 
 ];

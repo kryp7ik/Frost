@@ -35,7 +35,7 @@
                         <label for="category" class="col-lg-2 control-label">Category</label>
                         <div class="col-lg-10">
                             <select class="form-control" name="category">
-                                @foreach($product->categoriesArray as $key => $value)
+                                @foreach(config('store.product_categories') as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>

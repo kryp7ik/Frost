@@ -124,6 +124,9 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
             foreach ($order->liquidProducts as $liquid) {
                 $liquid->delete();
             }
+            foreach ($order->payments as $payment) {
+                $payment->delete();
+            }
             $order->delete();
             flash('The order has been deleted successfully', 'success');
             return true;
@@ -290,5 +293,17 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
         ]);
         $payment->save();
         return $change;
+    }
+
+    /**
+     * Deletes a payment and sets the order to incomplete so the user can go back to the open-order view to fix the error
+     * @param int $payment_id
+     */
+    public function deletePayment($payment_id)
+    {
+        $payment = Payment::where('id', $payment_id)->firstOrFail();
+        $order = $this->findById($payment->shop_order_id);
+        $payment->delete();
+        $order->calculator()->checkComplete();
     }
 }

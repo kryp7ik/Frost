@@ -58,7 +58,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
      */
     public function getBelowRedline($store = 0)
     {
-        $products = ProductInstance::where('stock', '<=', 'redline');
+        $products = ProductInstance::where('stock', '<', 'redline');
         if ($store > 0) $products->where('store', $store);
         return $products->get();
     }

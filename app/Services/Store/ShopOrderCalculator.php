@@ -37,16 +37,28 @@ class ShopOrderCalculator {
     }
 
     /**
-     * Function is only called after a payment has been applied and if the remaining balance is zero completes the order
+     * Function is only called after a payment has been added or removed
+     * If the order has been fully paid for set the complete attribute to true
+     * If a payment was removed and the order is no longer paid in full but was previously complete, set to incomplete
+     * If there is a customer subtract the points they earned and after the order is completed again they will re-earn them
      * @return bool Completed?
      */
     public function checkComplete()
     {
         $this->order = $this->order->fresh(['payments']);
-        if ($this->getRemainingBalance() == 0){
+        if ($this->getRemainingBalance() == 0) {
             $this->order->complete = true;
             $this->order->save();
             return true;
+        } else {
+            if ($this->order->complete) {
+                $this->order->complete = false;
+                $this->order->save();
+                if ($this->order->customer) {
+                    $this->order->customer->points -= $this->getPoints();
+                    $this->order->customer->save();
+                }
+            }
         }
         return false;
     }

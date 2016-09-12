@@ -57,7 +57,7 @@
                         </tr>
                         <tr>
                             <td><strong>Category:</strong></td>
-                            <td>{{ $product->categoriesArray[$product->category] }}</td>
+                            <td>{{ config('store.product_categories')[$product->category] }}</td>
                         </tr>
                     </tbody>
                 </table>

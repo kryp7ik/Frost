@@ -4,6 +4,11 @@ namespace App\Models\Store;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Actions for this entity can be found in App\Http\Controllers\Admin\Store\IngredientController
+ * Class Ingredient
+ * @package App\Models\Store
+ */
 class Ingredient extends Model
 {
     /**

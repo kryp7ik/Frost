@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin\Store;
 
-use App\Models\Store\Product;
 use App\Repositories\Store\Product\ProductRepositoryContract;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use Illuminate\Http\Request;
@@ -35,6 +34,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Show all Products
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
@@ -44,6 +44,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Display one Product with all of it's instances
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -54,15 +55,16 @@ class ProductController extends Controller
     }
 
     /**
+     * Create a new product
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        $product = new Product();
-        return view('backend.store.products.create', compact('product'));
+        return view('backend.store.products.create');
     }
 
     /**
+     * Save the product
      * @param ProductFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -74,6 +76,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Edit a Product
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -84,6 +87,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Update a Product
      * @param int $id
      * @param ProductFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -95,6 +99,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Route used for "editable" fields which accepts a Product id and an attribute name ('name') and new value ('value')
      * @param int $id
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -109,6 +114,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Adds a ProdcutInstance to a Product
      * @param ProductInstanceFormRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -119,6 +125,7 @@ class ProductController extends Controller
     }
 
     /**
+     * Display the edit view for a ProductInstance
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -129,13 +136,25 @@ class ProductController extends Controller
     }
 
     /**
+     * Updates a ProductInstance
      * @param int $id
-     * @param ProductInstanceFormRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function updateInstance($id, ProductInstanceFormRequest $request)
+    public function updateInstance($id, Request $request)
     {
         $instance = $this->productInstances->update($id, $request->all());
         return redirect('/admin/store/products/' . $instance->product_id . '/show');
+    }
+
+    /**
+     * Displays an index of all ProductInstances that have a stock below the set redline
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function redline()
+    {
+        $store = (Auth::user()->hasRole('manager')) ? 0 : Auth::user()->store;
+        $productInstances = $this->productInstances->getBelowRedline($store);
+        return view('backend.store.products.redline', compact('productInstances'));
     }
 }

@@ -24,6 +24,9 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::post('users/{id?}/edit', 'UsersController@update');
 
     Route::get('store/products', 'Store\ProductController@index');
+    Route::get('store/products/redline', 'Store\ProductController@redline');
+
+
     Route::get('store/products/{id?}/show', 'Store\ProductController@show');
     Route::get('store/products/create', 'Store\ProductController@create');
     Route::post('store/products/create', 'Store\ProductController@store');
@@ -53,6 +56,8 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/discounts/{id?}/edit', 'Store\DiscountController@edit');
     Route::post('store/discounts/{id?}/edit', 'Store\DiscountController@update');
 
+
+
 });
 
 /**
@@ -80,7 +85,8 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::post('orders/{id?}/add-discount', 'Store\ShopOrderController@addDiscount');
     Route::get('orders/{id?}/remove-discount/{did?}', 'Store\ShopOrderController@removeDiscount');
     Route::post('orders/{id?}/customer', 'Store\ShopOrderController@customer');
-    Route::post('orders/{id?}/payment', 'Store\ShopOrderController@payment');
+    Route::post('orders/{id?}/payment', 'Store\ShopOrderController@addPayment');
+    Route::get('orders/payment/{id?}/delete', 'Store\ShopOrderController@deletePayment');
     Route::get('orders/{id?}/receipt', 'Store\ShopOrderController@receipt');
 
     Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');

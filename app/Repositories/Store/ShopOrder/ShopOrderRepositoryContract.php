@@ -128,4 +128,10 @@ interface ShopOrderRepositoryContract
      * @return float $change Amount of change due (eg. Order->total = 10, Customer pays with $20, $change = 10)
      */
     public function addPaymentToOrder(ShopOrder $order, $data);
+
+    /**
+     * Deletes a payment and sets the order to incomplete so the user can go back to the open-order view to fix the error
+     * @param int $payment_id
+     */
+    public function deletePayment($payment_id);
 }

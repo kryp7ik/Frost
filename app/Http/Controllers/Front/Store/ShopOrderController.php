@@ -223,7 +223,7 @@ class ShopOrderController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function payment($id, Request $request)
+    public function addPayment($id, Request $request)
     {
         $order = $this->orders->findById($id);
         if (count($order->liquidProducts) == 0 && count($order->productInstances) == 0){
@@ -237,6 +237,21 @@ class ShopOrderController extends Controller
         } else {
             return back();
         }
+    }
+
+    /**
+     * This action can only be accessed by users with the 'manager' role
+     * Deletes a payment applied to an order and sets the order to incomplete
+     * Returns user the the order.open view to complete the order or delete entirely
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deletePayment($id)
+    {
+        if (Auth::user()->hasRole('manager')) {
+            $this->orders->deletePayment($id);
+        } else flash('You don\'t have permission to remove a payment please talk to a manager', 'danger');
+        return back();
     }
 
     /**

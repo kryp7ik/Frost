@@ -1,35 +1,35 @@
 @extends('master')
-@section('title', 'All Products')
+@section('title', 'Redline Product Instances')
 @section('content')
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
-                    All Products
-                    <a href="/admin/store/products/create" class="btn btn-lg btn-raised btn-success pull-right">Add New Product</a>
-                    <a href="/admin/store/products/redline" class="btn btn-lg btn-raised btn-warning pull-right">Redline Products</a>
+                    Redline Product Instances
                 </h2>
 
             </div>
-            @if ($products->isEmpty())
-                <p> You currently do not have any products.</p>
+            @if ($productInstances->isEmpty())
+                <p> All product instances are currently above the redline.</p>
             @else
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <table class="table table-hover display" id="table">
                             <thead>
                                 <th>Name</th>
-                                <th>Cost</th>
-                                <th>Category</th>
+                                <th>Stock</th>
+                                <th>Redline</th>
+                                <th>Store</th>
                             </thead>
                             <tbody>
-                            @foreach($products as $product)
+                            @foreach($productInstances as $instance)
                                 <tr>
                                     <td>
-                                        <a href="{!! action('Admin\Store\ProductController@show', $product->id) !!}">{!! $product->name !!} </a>
+                                        <a href="{!! action('Admin\Store\ProductController@show', $instance->product->id) !!}">{!! $instance->product->name !!} </a>
                                     </td>
-                                    <td>${!! number_format($product->cost, 2) !!}</td>
-                                    <td>{{ config('store.product_categories')[$product->category] }}</td>
+                                    <td>{{ $instance->stock }}</td>
+                                    <td>{{ $instance->redline }}</td>
+                                    <td>{{ $instance->store }}</td>
                                 </tr>
                             @endforeach
                             </tbody>

@@ -5,6 +5,11 @@ namespace App\Models\Store;
 use App\Services\Store\ShopOrderCalculator;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Actions for this entity can be found in App\Http\Controllers\Front\Store\ShopOrderController
+ * Class ShopOrder
+ * @package App\Models\Store
+ */
 class ShopOrder extends Model
 {
     protected $guarded = ['id'];
