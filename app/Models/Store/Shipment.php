@@ -21,7 +21,7 @@ class Shipment extends Model
      * @var array
      */
     protected $fillable = [
-        'store'
+        'store',
     ];
 
     public function productInstances()

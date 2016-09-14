@@ -1,12 +1,14 @@
 @extends('master')
 @section('title', 'All Recipes')
 @section('content')
+    <style>
+        tr { cursor: pointer; cursor: hand; }
+    </style>
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
                     All Recipes
-                    <!-- Button trigger modal -->
                     <a href="/admin/store/recipes/create" class="btn btn-success btn-lg btn-raised pull-right">New Recipe</a>
                 </h2>
             </div>
@@ -23,8 +25,8 @@
                             </thead>
                             <tbody>
                             @foreach($recipes as $recipe)
-                                <tr>
-                                    <td><a href="/admin/store/recipes/{{ $recipe->id }}/show">{{ $recipe->name }}</a></td>
+                                <tr class="{{ ($recipe->active) ? 'success' : 'danger' }}" data-id="{{ $recipe->id }}">
+                                    <td>{{ $recipe->name }}</td>
                                     <td>{{ ($recipe->active) ? 'YES' : 'NO' }}</td>
                                     <td>{{ $recipe->created_at }}</td>
                                 </tr>
@@ -45,6 +47,10 @@
             "info" : false,
             "order" : [[ 0, "asc" ]]
         });
+    });
+    $('tbody').on('click', 'tr', function() {
+        var url = '/admin/store/recipes/' + $(this).attr('data-id') + '/show';
+        window.location.href = url;
     });
 </script>
 @endpush

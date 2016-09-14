@@ -19,14 +19,16 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('roles/create', 'RolesController@create');
     Route::post('roles/create', 'RolesController@store');
 
-    Route::get('users', ['as' => 'admin.user.index', 'uses' => 'UsersController@index']);
+    Route::get('users', 'UsersController@index');
+    Route::get('users/create', 'UsersController@create');
+    Route::post('users/create', 'UsersController@store');
     Route::get('users/{id?}/edit', 'UsersController@edit');
     Route::post('users/{id?}/edit', 'UsersController@update');
+    Route::get('users/{id?}/delete', 'UsersController@delete');
 
-    Route::get('store/products', 'Store\ProductController@index');
+    Route::get('store/products', 'Store\ProductController@home');
+    Route::get('store/products/index', 'Store\ProductController@index');
     Route::get('store/products/redline', 'Store\ProductController@redline');
-
-
     Route::get('store/products/{id?}/show', 'Store\ProductController@show');
     Route::get('store/products/create', 'Store\ProductController@create');
     Route::post('store/products/create', 'Store\ProductController@store');
@@ -56,7 +58,16 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/discounts/{id?}/edit', 'Store\DiscountController@edit');
     Route::post('store/discounts/{id?}/edit', 'Store\DiscountController@update');
 
+    Route::get('store/shipments', 'Store\ShipmentController@index');
+    Route::get('store/shipments/create', 'Store\ShipmentController@create');
+    Route::post('store/shipments/create', 'Store\ShipmentController@store');
+    Route::get('store/shipments/{id?}/show', 'Store\ShipmentController@show');
 
+    Route::get('store/transfers', 'Store\TransferController@index');
+    Route::get('store/transfers/create', 'Store\TransferController@create');
+    Route::post('store/transfers/create', 'Store\TransferController@store');
+    Route::get('store/transfers/{id?}/show', 'Store\TransferController@show');
+    Route::get('store/transfers/{id?}/receive', 'Store\TransferController@receive');
 
 });
 

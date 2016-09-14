@@ -17,12 +17,21 @@ class OrderCompleted extends Event
     public $order;
 
     /**
-     * OrderCompleted constructor.
-     * @param ShopOrder $order
+     * @var bool
      */
-    public function __construct(ShopOrder $order)
+    public $reverse;
+
+    /**
+     * OrderCompleted constructor.
+     * $reverse is set to true when an Order was complete but a payment was deleted causing the order to be open once again
+     * If the reverse parameter is set to true then listeners will add stock back to inventory and customers will lose their gained points
+     * @param ShopOrder $order
+     * @param bool $reverse
+     */
+    public function __construct(ShopOrder $order, $reverse = false)
     {
         $this->order = $order;
+        $this->reverse = $reverse;
     }
 
     /**

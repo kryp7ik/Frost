@@ -1,6 +1,9 @@
 @extends('master')
 @section('title', 'All Customers')
 @section('content')
+    <style>
+        tr { cursor: pointer; cursor: hand; }
+    </style>
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -26,8 +29,8 @@
                             </thead>
                             <tbody>
                             @foreach($customers as $customer)
-                                <tr>
-                                    <td><a href="customers/{{ $customer->id }}/show">{{ $customer->name }}</a></td>
+                                <tr data-id="{{ $customer->id }}">
+                                    <td>{{ $customer->name }}</td>
                                     <td>{{ $customer->phone }}</td>
                                     <td>{{ $customer->email }}</td>
                                 </tr>
@@ -36,6 +39,7 @@
                         </table>
                     </div>
                 </div>
+                {{ $customers->links() }}
             @endif
         </div>
     </div>
@@ -78,7 +82,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary" value="Save">
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>
@@ -92,6 +96,10 @@
                     "info" : false,
                     "order" : [[ 0, "desc" ]]
                 });
+            });
+            $('tbody').on('click', 'tr', function() {
+                var url = '/customers/' + $(this).attr('data-id') + '/show';
+                window.location.href = url;
             });
         </script>
     @endpush

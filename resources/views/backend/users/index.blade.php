@@ -4,13 +4,11 @@
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h2> All users </h2>
+                <h2>
+                    All users
+                    <a href="/admin/users/create" class="btn btn-raised btn-success pull-right">Create a new User</a>
+                </h2>
             </div>
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
             @if ($users->isEmpty())
                 <p> There is no user.</p>
             @else

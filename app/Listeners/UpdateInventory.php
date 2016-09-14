@@ -25,13 +25,18 @@ class UpdateInventory
     }
 
     /**
-     * Handle the event.
+     * If the order is completed subtract the ordered products from inventory
+     * If the reverse parameter is true then add the previously ordered products back to the inventory
      *
      * @param  OrderCompleted  $event
      * @return void
      */
     public function handle(OrderCompleted $event)
     {
-        $this->inventoryService->adjustInventoryForOrder($event->order);
+        if($event->reverse) {
+            $this->inventoryService->reverseAdjustInventoryForOrder($event->order);
+        } else {
+            $this->inventoryService->adjustInventoryForOrder($event->order);
+        }
     }
 }

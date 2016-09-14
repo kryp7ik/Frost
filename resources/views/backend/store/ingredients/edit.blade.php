@@ -30,8 +30,8 @@
                         </div>
                         <div class="form-group">
                             <div class="col-lg-4 col-lg-offset-8">
-                                <button type="submit" class="btn btn-primary btn-raised">Submit</button>
                                 <a href="/admin/store/ingredients" class="btn btn-warning btn-raised">Cancel</a>
+                                <button type="submit" class="btn btn-primary btn-raised">Submit</button>
                             </div>
                         </div>
                     </fieldset>

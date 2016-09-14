@@ -6,6 +6,12 @@ return [
 
     'manager_pin' => 133769,
 
+    'stores' => [
+        1 => 'Hudsonville',
+        2 => 'Wyoming',
+        3 => 'Coopersville'
+    ],
+
     'bottle_prices' => [
         '10' => 4.99,
         '30' => 11.99,

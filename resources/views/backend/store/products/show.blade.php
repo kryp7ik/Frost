@@ -87,7 +87,7 @@
                             </thead>
                             <tbody>
                                 @foreach($product->productInstances as $instance)
-                                    <tr>
+                                    <tr class="{{ ($instance->stock < $instance->redline) ? 'danger' : '' }}">
                                         <td>{{ $instance->store }}</td>
                                         <td>${{ $instance->price }}</td>
                                         <td>{{ $instance->stock }}</td>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary" value="Save Instance">
+                        <button type="submit" class="btn btn-primary">Save Instance</button>
                     </div>
                 </form>
             </div>

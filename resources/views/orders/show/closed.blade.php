@@ -21,7 +21,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Store</strong></td>
-                                <td>{{ $order->store }}</td>
+                                <td>{{ config('store.stores')[$order->store] }}</td>
                             </tr>
                             <tr>
                                 <td><strong>User</strong></td>

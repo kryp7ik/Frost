@@ -92,26 +92,26 @@
                         @foreach ($errors->all() as $error)
                             <p class="alert alert-danger">{{ $error }}</p>
                         @endforeach
-                        <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                        {{ csrf_field() }}
                             <input type="hidden" name="recipe" value="{{ $recipe->id }}">
-                            <div class="form-group">
-
-                                <label for="ingredient" class="col-lg-2 control-label">Ingredient</label>
-                                <div class="col-lg-10 input-group">
-                                    <select class="form-control" name="ingredient">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label for="ingredient" class="control-label">Ingredient</label>
+                                    <select style="width:250px" class="form-control" name="ingredient">
                                         @foreach($ingredients as $ingredient)
                                             <option value="{{ $ingredient->id }}">{{ $ingredient->name }}</option>
                                         @endforeach
                                     </select>
-                                    <label class="input-group-addon">Amount(%)</label>
-                                    <input type="text" class="form-control" id="amount" placeholder="10" name="amount">
-
+                                </div>
+                                <div class="form-group" style="margin-left:30px">
+                                    <label class="control-label">Amount(%)</label>
+                                    <input type="text" class="form-control" id="amount" placeholder="10" name="amount" style="width:100px">
                                 </div>
                             </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary" value="Save">
+                        <button type="submit" class="btn btn-primary">Add Ingredient</button>
                     </div>
                 </form>
             </div>

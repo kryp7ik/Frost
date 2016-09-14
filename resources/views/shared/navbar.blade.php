@@ -12,7 +12,7 @@
             <a class="navbar-brand" href="#">Frost POS 1.0</a>
         </div>
         <!-- Navbar Right -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div id="snow" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::check())
                     @if (Auth::user()->hasRole('manager'))
@@ -34,8 +34,8 @@
         </div>
     </div>
     <!-- Sidebar -->
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav nav">
+    <div id="sidebar-wrapper" >
+        <ul class="sidebar-nav nav" >
             @if (Auth::check())
                 @if (Auth::user()->hasRole('manager'))
                     <li>

@@ -34,8 +34,8 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     {
         $sortedInstances = array();
         foreach ($instances as $instance){
-            $sortedInstances[$instance->product->categoriesArray[$instance->product->category]][] =
-                array('instance_id' => $instance->id, 'name' => $instance->product->name);
+            $sortedInstances[config('store.product_categories')[$instance->product->category]][] =
+                array('instance_id' => $instance->id, 'name' => $instance->product->name, 'stock' => $instance->stock);
         }
         return $sortedInstances;
 
@@ -51,6 +51,22 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     }
 
     /**
+     * Find another Instance that falls under the same Product as the provided instance and belongs to the designated store
+     * @param ProductInstance $instance
+     * @param int $store
+     * @return ProductInstance $relatedInstance
+     */
+    public function findRelatedForStore(ProductInstance $instance, $store)
+    {
+        $relatedInstance = ProductInstance::where([
+            ['product_id', '=', $instance->product->id],
+            ['store', '=', $store],
+            ['active', '=', 1]
+        ])->first();
+        return $relatedInstance;
+    }
+
+    /**
      * Returns all products where the stock is equal to or lower than redline
      * Optionally filter by a specific store default returns all.
      * @param int $store
@@ -58,7 +74,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
      */
     public function getBelowRedline($store = 0)
     {
-        $products = ProductInstance::where('stock', '<', 'redline');
+        $products = ProductInstance::whereRaw('stock < redline');
         if ($store > 0) $products->where('store', $store);
         return $products->get();
     }

@@ -60,7 +60,7 @@
 
     <tr class="warning">
         <td colspan="6"><strong class="pull-right">Subtotal</strong></td>
-        <td>${{ $order->subtotal }}</td>
+        <td>${{ number_format($order->subtotal,2) }}</td>
     </tr>
     <tr class="info">
         <td colspan="6"><strong class="pull-right">Tax</strong></td>
@@ -68,7 +68,7 @@
     </tr>
     <tr class="success">
         <td colspan="6"><strong class="pull-right">Total</strong></td>
-        <td>${{ $order->total }}</td>
+        <td>${{ number_format($order->total,2) }}</td>
     </tr>
     @if(count($order->payments) > 0)
         <tr class="active">

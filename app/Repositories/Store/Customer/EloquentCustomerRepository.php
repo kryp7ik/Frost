@@ -8,11 +8,11 @@ class EloquentCustomerRepository implements CustomerRepositoryContract
 {
 
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return mixed
      */
     public function getAll()
     {
-        $customers = Customer::all();
+        $customers = Customer::paginate(50);
         return $customers;
     }
 

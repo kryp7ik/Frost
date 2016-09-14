@@ -289,7 +289,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
         $payment = new Payment([
             'shop_order_id' => $order->id,
             'type' => $data['type'],
-            'amount' => $amount
+            'amount' => str_replace(',', '', $amount)
         ]);
         $payment->save();
         return $change;

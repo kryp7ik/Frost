@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
     use Authenticatable, CanResetPassword;
-    use EntrustUserTrait;
+    use EntrustUserTrait {
+        EntrustUserTrait::restore insteadof SoftDeletes;
+    }
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -32,15 +36,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'password', 'remember_token',
     ];
 
-    public function saveRoles($roles)
-    {
-        if(!empty($roles)) {
-            $this->roles()->sync($roles);
-        } else {
-            $this->roles()->detach();
-        }
-    }
+    /**
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
+    /**
+     * OneToMany relation with App\Models\Store\ShopOrder
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function orders()
     {
         return $this->hasMany('App\Models\Store\ShopOrder');

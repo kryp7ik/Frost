@@ -40,7 +40,7 @@
                         </fieldset>
                     </div>
                     <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-2">
+                        <div class="col-lg-4 col-lg-offset-8">
                             <a href="/admin/store/recipes" class="btn btn-default">Cancel</a>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
@@ -49,31 +49,33 @@
             </form>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).on('click', '.btn-add', function(e)
-        {
-            e.preventDefault();
-            var controlForm = $('.cont'),
-                    currentEntry = $(this).parents('.cont fieldset:first');
-            $("select").select2("destroy");
-            var newEntry = $(currentEntry.clone()).appendTo(controlForm);
-            var currentCount = ($('.cont fieldset').length -1);
-            newEntry.find('select').attr('name', 'ingredients[' + currentCount + '][ingredient]');
-            newEntry.find('input').attr('name', 'ingredients[' + currentCount + '][amount]');
-            newEntry.find('input').val('');
-            controlForm.find('fieldset:not(:last) .btn-add')
-                    .removeClass('btn-add').addClass('btn-remove')
-                    .removeClass('btn-success').addClass('btn-danger')
-                    .html('<span class="glyphicon glyphicon-minus"></span>');
-            $("select").select2();
-        }).on('click', '.btn-remove', function(e)
-        {
-            $(this).parents('fieldset:first').remove();
-            e.preventDefault();
-            return false;
-        });
-        $('body').on('DOMNodeInserted', 'select', function () {
-            $("select").select2();
-        });
-    </script>
+    @push('scripts')
+        <script type="text/javascript">
+            $(document).on('click', '.btn-add', function(e)
+            {
+                e.preventDefault();
+                var controlForm = $('.cont'),
+                        currentEntry = $(this).parents('.cont fieldset:first');
+                $("select").select2("destroy");
+                var newEntry = $(currentEntry.clone()).appendTo(controlForm);
+                var currentCount = ($('.cont fieldset').length -1);
+                newEntry.find('select').attr('name', 'ingredients[' + currentCount + '][ingredient]');
+                newEntry.find('input').attr('name', 'ingredients[' + currentCount + '][amount]');
+                newEntry.find('input').val('');
+                controlForm.find('fieldset:not(:last) .btn-add')
+                        .removeClass('btn-add').addClass('btn-remove')
+                        .removeClass('btn-success').addClass('btn-danger')
+                        .html('<span class="glyphicon glyphicon-minus"></span>');
+                $("select").select2();
+            }).on('click', '.btn-remove', function(e)
+            {
+                $(this).parents('fieldset:first').remove();
+                e.preventDefault();
+                return false;
+            });
+            $('body').on('DOMNodeInserted', 'select', function () {
+                $("select").select2();
+            });
+        </script>
+    @endpush
 @endsection

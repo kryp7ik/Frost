@@ -1,6 +1,9 @@
 @extends('master')
 @section('title', 'All Ingredients')
 @section('content')
+    <style>
+        tr { cursor: pointer; cursor: hand; }
+    </style>
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -25,8 +28,8 @@
                             </thead>
                             <tbody>
                             @foreach($ingredients as $ingredient)
-                                <tr>
-                                    <td><a href="/admin/store/ingredients/{{ $ingredient->id }}/edit">{{ $ingredient->name }}</a></td>
+                                <tr data-id="{{ $ingredient->id }}">
+                                    <td>{{ $ingredient->name }}</td>
                                     <td>{{ $ingredient->vendor }}</td>
                                 </tr>
                             @endforeach
@@ -69,7 +72,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit" class="btn btn-primary" value="Save">
+                        <button type="submit" class="btn btn-primary">Create</button>
                     </div>
                 </form>
             </div>
@@ -84,6 +87,10 @@
             "info" : false,
             "order" : [[ 0, "asc" ]]
         });
+    });
+    $('tbody').on('click', 'tr', function() {
+        var url = '/admin/store/ingredients/' + $(this).attr('data-id') + '/edit';
+        window.location.href = url;
     });
 </script>
 @endpush

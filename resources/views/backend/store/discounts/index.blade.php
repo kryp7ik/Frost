@@ -1,6 +1,9 @@
 @extends('master')
 @section('title', 'All Discounts')
 @section('content')
+    <style>
+        tr { cursor: pointer; cursor: hand; }
+    </style>
     <div class="container col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -33,8 +36,8 @@
                             </thead>
                             <tbody>
                             @foreach($discounts as $discount)
-                                <tr>
-                                    <td><a href="/admin/store/discounts/{{ $discount->id }}/edit">{{ $discount->name }}</a></td>
+                                <tr data-id="{{ $discount->id }}">
+                                    <td>{{ $discount->name }}</td>
                                     <td>{{ ucfirst($discount->type) }}</td>
                                     <td>{{ ucfirst($discount->filter) }}</td>
                                     <td>{{ $discount->amount }}</td>
@@ -141,6 +144,10 @@
             "info" : false,
             "order" : [[ 0, "asc" ]]
         });
+    });
+    $('tbody').on('click', 'tr', function() {
+        var url = '/admin/store/discounts/' + $(this).attr('data-id') + '/edit';
+        window.location.href = url;
     });
 </script>
 @endpush

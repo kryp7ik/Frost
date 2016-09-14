@@ -34,6 +34,14 @@ interface ProductInstanceRepositoryContract
     public function getBelowRedline($store = 0);
 
     /**
+     * Find another Instance that falls under the same Product as the provided instance and belongs to the designated store
+     * @param ProductInstance $instance
+     * @param int $store
+     * @return ProductInstance $relatedInstance
+     */
+    public function findRelatedForStore(ProductInstance $instance, $store);
+
+    /**
      * @param int $store_id
      * @param array $data
      * @return ProductInstance|bool

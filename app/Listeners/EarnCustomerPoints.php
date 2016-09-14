@@ -11,6 +11,7 @@ class EarnCustomerPoints
 
     /**
      * Upon order completion if there is a customer attached earn their reward points
+     * If the reverse parameter of the event is true subtract the points the customer previously earned
      *
      * @param  OrderCompleted  $event
      * @return void
@@ -19,7 +20,11 @@ class EarnCustomerPoints
     {
         if ($event->order->customer) {
             $customer = $event->order->customer;
-            $customer->points += $event->order->calculator()->getPoints();
+            if ($event->reverse) {
+                $customer->points -= $event->order->calculator()->getPoints();
+            } else {
+                $customer->points += $event->order->calculator()->getPoints();
+            }
             $customer->save();
         }
     }

@@ -1,15 +1,16 @@
 @extends('master')
 @section('title', 'All Products')
 @section('content')
+    <style>
+        tr { cursor: pointer; cursor: hand; }
+    </style>
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
                     All Products
                     <a href="/admin/store/products/create" class="btn btn-lg btn-raised btn-success pull-right">Add New Product</a>
-                    <a href="/admin/store/products/redline" class="btn btn-lg btn-raised btn-warning pull-right">Redline Products</a>
                 </h2>
-
             </div>
             @if ($products->isEmpty())
                 <p> You currently do not have any products.</p>
@@ -24,10 +25,8 @@
                             </thead>
                             <tbody>
                             @foreach($products as $product)
-                                <tr>
-                                    <td>
-                                        <a href="{!! action('Admin\Store\ProductController@show', $product->id) !!}">{!! $product->name !!} </a>
-                                    </td>
+                                <tr data-id="{{ $product->id }}">
+                                    <td>{{ $product->name }}</td>
                                     <td>${!! number_format($product->cost, 2) !!}</td>
                                     <td>{{ config('store.product_categories')[$product->category] }}</td>
                                 </tr>
@@ -48,6 +47,10 @@
             "info" : false,
             "order" : [[ 0, "asc" ]]
         });
+    });
+    $('tbody').on('click', 'tr', function() {
+        var url = '/admin/store/products/' + $(this).attr('data-id') + '/show';
+        window.location.href = url;
     });
 </script>
 @endpush

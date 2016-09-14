@@ -65,7 +65,7 @@
                                 @foreach($orders as $order)
                                     <tr>
                                         <td><a href="orders/{{ $order->id }}/show" class="btn btn-sm btn-raised btn-info">{{ $order->id }}</a></td>
-                                        <td>{{ $order->store }}</td>
+                                        <td>{{ config('store.stores')[$order->store] }}</td>
                                         <td>
                                             @if($order->customer)
                                                 <a href="/customers/{{ $order->customer->id }}/show">{{ $order->customer->phone }}</a>

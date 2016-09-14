@@ -2,9 +2,11 @@
 
 namespace App\Services\Store;
 
+use App\Events\OrderCompleted;
 use App\Models\Store\Discount;
 use App\Models\Store\ShopOrder;
 use Illuminate\Support\Facades\DB;
+use App\Services\Store\InventoryService;
 
 class ShopOrderCalculator {
 
@@ -40,7 +42,8 @@ class ShopOrderCalculator {
      * Function is only called after a payment has been added or removed
      * If the order has been fully paid for set the complete attribute to true
      * If a payment was removed and the order is no longer paid in full but was previously complete, set to incomplete
-     * If there is a customer subtract the points they earned and after the order is completed again they will re-earn them
+     * and fire the OrderCompleted event with the reverse parameter set to true which causes the products to be added
+     * back into inventory and subtracts the points that the customer had earned from this order
      * @return bool Completed?
      */
     public function checkComplete()
@@ -54,13 +57,10 @@ class ShopOrderCalculator {
             if ($this->order->complete) {
                 $this->order->complete = false;
                 $this->order->save();
-                if ($this->order->customer) {
-                    $this->order->customer->points -= $this->getPoints();
-                    $this->order->customer->save();
-                }
+                event(new OrderCompleted($this->order, true));
             }
+            return false;
         }
-        return false;
     }
 
     /**
@@ -86,7 +86,7 @@ class ShopOrderCalculator {
         if ($this->order->complete) return $this->order;
         $tax = config('store.tax');
         $this->calculateOrder();
-        $this->order->subtotal = number_format($this->subTotal, 2);
+        $this->order->subtotal = str_replace(',','', number_format($this->subTotal, 2));
         $this->order->total = $this->subTotal * (1 + $tax);
         $this->order->save();
         return $this->order;

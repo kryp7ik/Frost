@@ -17,12 +17,18 @@ class RepositoryServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the application services.
+     * Register the application repositories.
      *
      * @return void
      */
     public function register()
     {
+
+        $this->app->bind(
+            \App\Repositories\Auth\UserRepositoryContract::class,
+            \App\Repositories\Auth\EloquentUserRepository::class
+        );
+
         $this->app->bind(
             \App\Repositories\Store\Customer\CustomerRepositoryContract::class,
             \App\Repositories\Store\Customer\EloquentCustomerRepository::class
@@ -61,6 +67,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             \App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract::class,
             \App\Repositories\Store\ShopOrder\EloquentShopOrderRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\Store\Shipment\ShipmentRepositoryContract::class,
+            \App\Repositories\Store\Shipment\EloquentShipmentRepository::class
+        );
+
+        $this->app->bind(
+            \App\Repositories\Store\Transfer\TransferRepositoryContract::class,
+            \App\Repositories\Store\Transfer\EloquentTransferRepository::class
         );
     }
 }

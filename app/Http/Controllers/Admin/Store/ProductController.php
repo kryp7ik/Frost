@@ -34,6 +34,15 @@ class ProductController extends Controller
     }
 
     /**
+     * Returns a Product Management dashboard style view
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function home()
+    {
+        return view('backend.store.products.home');
+    }
+
+    /**
      * Show all Products
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
