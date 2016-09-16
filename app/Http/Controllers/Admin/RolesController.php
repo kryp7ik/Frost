@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RoleFormRequest;
+use App\Http\Requests\Auth\RoleFormRequest;
 use App\Models\Auth\Role;
 
 class RolesController extends Controller

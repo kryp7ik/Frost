@@ -25,6 +25,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('users/{id?}/edit', 'UsersController@edit');
     Route::post('users/{id?}/edit', 'UsersController@update');
     Route::get('users/{id?}/delete', 'UsersController@delete');
+    Route::get('users/{id?}/restore', 'UsersController@restore');
 
     Route::get('store/products', 'Store\ProductController@home');
     Route::get('store/products/index', 'Store\ProductController@index');

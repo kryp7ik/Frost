@@ -53,4 +53,10 @@ interface UserRepositoryContract
      * @param bool $force
      */
     public function delete($user_id, $force = false);
+
+    /**
+     * Restores a User that had been soft deleted
+     * @param int $user_id
+     */
+    public function restore($user_id);
 }

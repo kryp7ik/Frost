@@ -61,10 +61,14 @@
                         <div class="form-group">
                             <div class="col-lg-8 col-lg-offset-4">
                                 <a href="/admin/users" class="btn btn-raised btn-default">Cancel</a>
-                                <button type="button" class="btn btn-raised btn-danger" data-toggle="modal" data-target="#modal">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                    Delete User
-                                </button>
+                                @if($user->trashed())
+                                    <a href="/admin/users/{{ $user->id }}/restore" class="btn btn-raised btn-success">Restore User</a>
+                                @else
+                                    <button type="button" class="btn btn-raised btn-danger" data-toggle="modal" data-target="#modal">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        Delete User
+                                    </button>
+                                @endif
                                 <button type="submit" class="btn btn-primary btn-raised">Submit</button>
                             </div>
                         </div>

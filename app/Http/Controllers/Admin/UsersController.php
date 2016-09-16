@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
-use App\Models\Auth\User;
 use App\Repositories\Auth\UserRepositoryContract;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\UserEditFormRequest;
+use App\Http\Requests\Auth\UserFormRequest;
 
 class UsersController extends Controller
 {
@@ -18,9 +17,13 @@ class UsersController extends Controller
         $this->userRepo = $userRepo;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userRepo->getAll();
+        if ($request->input('trashed') == 'true') {
+            $users = $this->userRepo->getAll(true);
+        } else {
+            $users = $this->userRepo->getAll();
+        }
         return view('backend.users.index', compact('users'));
     }
 
@@ -30,9 +33,10 @@ class UsersController extends Controller
         return view('backend.users.create', compact('roles'));
     }
 
-    public function store()
+    public function store(UserFormRequest $request)
     {
-
+        $this->userRepo->create($request->all());
+        return redirect('/admin/users');
     }
 
     public function edit($id)
@@ -43,9 +47,21 @@ class UsersController extends Controller
         return view('backend.users.edit', compact('user', 'roles', 'selectedRoles'));
     }
 
-    public function update($id, UserEditFormRequest $request)
+    public function update($id, UserFormRequest $request)
     {
-        $user = $this->userRepo->update($id, $request->all());
-        return back();
+        $this->userRepo->update($id, $request->all());
+        return redirect('/admin/users');
+    }
+
+    public function delete($id)
+    {
+        $this->userRepo->delete($id);
+        return redirect('/admin/users');
+    }
+
+    public function restore($id)
+    {
+        $this->userRepo->restore($id);
+        return redirect('/admin/users');
     }
 }

@@ -17,7 +17,7 @@ class EloquentUserRepository implements UserRepositoryContract
     public function getAll($trashed = false)
     {
         if ($trashed) {
-            $users = User::all()->withTrashed();
+            $users = User::withTrashed()->get();
         } else {
             $users = User::all();
         }
@@ -70,14 +70,11 @@ class EloquentUserRepository implements UserRepositoryContract
         if ($data['password'] != '') {
             $user->password = Hash::make($data['password']);
         }
-        if ($user->save()) {
-            $this->syncRoles($user, $data['role']);
-            flash('The user has been successfully updated', 'success');
-            return $user;
-        } else {
-            flash('Something went wrong while trying to update the user', 'danger');
-            return false;
-        }
+        $user->save();
+        $this->syncRoles($user, $data['role']);
+        flash('The user has been successfully updated', 'success');
+        return $user;
+
     }
 
     /**
@@ -109,7 +106,19 @@ class EloquentUserRepository implements UserRepositoryContract
             $user->delete();
             flash('The user has been soft deleted', 'success');
         }
+    }
 
+    /**
+     * Restores a User that had been soft deleted
+     * @param int $user_id
+     */
+    public function restore($user_id)
+    {
+        $user = $this->findById($user_id);
+        if ($user) {
+            $user->restore();
+            flash('The user has been restored', 'success');
+        }
     }
 
 }
