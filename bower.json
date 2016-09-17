@@ -1,0 +1,10 @@
+{
+  "name": "Frost POS",
+  "dependencies": {
+    "bootstrap-material-design": "^4.0.2",
+    "select2": "^4.0.3",
+    "datatables": "^1.10.12",
+    "bootstrap-datetimepicker": "^0.0.11",
+    "moment": "^2.15.0"
+  }
+}

@@ -9,9 +9,6 @@
             <form method="post" action="/orders/{{ $order->id }}/add-discount">
                 <input type="hidden" name="redeem" value="true" />
                 <div class="modal-body">
-                    @foreach ($errors->all() as $error)
-                        <p class="alert alert-danger">{{ $error }}</p>
-                    @endforeach
                     {{ csrf_field() }}
                         <div class="form-group">
                             <div class="input-group">

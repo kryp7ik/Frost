@@ -4,9 +4,6 @@
     <div class="container col-md-6 col-md-offset-3">
         <div class="well well bs-component">
             <form class="form-horizontal" method="post" id="user-form">
-                @foreach ($errors->all() as $error)
-                    <p class="alert alert-danger">{{ $error }}</p>
-                @endforeach
                     {!! csrf_field() !!}
                     <fieldset>
                         <legend>Edit user</legend>

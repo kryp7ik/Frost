@@ -16,9 +16,6 @@
                 </h2>
 
             </div>
-            @foreach ($errors->all() as $error)
-                <p class="alert alert-danger">{{ $error }}</p>
-            @endforeach
             @if ($discounts->isEmpty())
                 <h3> You currently do not have any discounts.</h3>
             @else

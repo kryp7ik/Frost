@@ -89,9 +89,6 @@
                 </div>
                 <form method="post" action="/admin/store/recipes/add">
                     <div class="modal-body">
-                        @foreach ($errors->all() as $error)
-                            <p class="alert alert-danger">{{ $error }}</p>
-                        @endforeach
                         {{ csrf_field() }}
                             <input type="hidden" name="recipe" value="{{ $recipe->id }}">
                             <div class="form-inline">

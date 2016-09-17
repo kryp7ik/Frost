@@ -3,8 +3,9 @@
 <html lang="en">
     <head>
         <title> @yield('title') </title>
-        @include('shared.css')
-
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="/css/all.css" rel="stylesheet" />
     </head>
     <body>
         @include('shared.navbar')
@@ -13,10 +14,11 @@
                 @yield('content')
             </div>
         </div>
+        @foreach ($errors->all() as $error)
+            <p class="alert alert-danger">{{ $error }}</p>
+        @endforeach
         @include('flash::message')
-        @include('shared.scripts')
-    <script type="text/javascript">
-        $('div.alert').not('.alert-important').delay(3000).fadeOut(250);
-    </script>
+        <script src="/js/all.js"></script>
+        @stack('scripts')
     </body>
 </html>

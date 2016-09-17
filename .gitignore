@@ -5,3 +5,4 @@ bootstrap/cache/
 composer.lock
 phpunit.xml
 vendor/
+node_modules/

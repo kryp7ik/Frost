@@ -8,9 +8,6 @@
             </div>
             <div class="panel-body">
                 <form class="form-horizontal" method="post">
-                    @foreach ($errors->all() as $error)
-                        <p class="alert alert-danger">{{ $error }}</p>
-                    @endforeach
                     {!! csrf_field() !!}
                     <fieldset>
                         <div class="form-group">

@@ -35,7 +35,7 @@ class IngredientController extends Controller
      * @param IngredientFormRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public  function store(IngredientFormRequest $request)
+    public function store(IngredientFormRequest $request)
     {
         $this->ingredients->create($request->all());
         return redirect('/admin/store/ingredients');

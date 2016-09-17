@@ -6,9 +6,6 @@
             <div class="panel-heading">
                 <h2>Edit Discount</h2>
             </div>
-            @foreach ($errors->all() as $error)
-                <p class="alert alert-danger">{{ $error }}</p>
-            @endforeach
             <form method="post" action="/admin/store/discounts/{{ $discount->id }}/edit">
                 <div class="panel-body">
                     <input type="hidden" name="_token" value="{!! csrf_token() !!}">

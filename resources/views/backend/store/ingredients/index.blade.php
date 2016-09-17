@@ -51,9 +51,6 @@
                 </div>
                 <form method="post" action="/admin/store/ingredients/create">
                     <div class="modal-body">
-                        @foreach ($errors->all() as $error)
-                            <p class="alert alert-danger">{{ $error }}</p>
-                        @endforeach
                         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
                         <div class="form-group">
                             <label for="name" class="col-lg-2 control-label">Name</label>

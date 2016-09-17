@@ -8,9 +8,6 @@
             </div>
             <div class="panel-body">
                 <form method="post">
-                    @foreach ($errors->all() as $error)
-                        <p class="alert alert-danger">{{ $error }}</p>
-                    @endforeach
                         {!! csrf_field() !!}
                         @include('orders.partials.product-fieldset')
                         @include('orders.partials.liquid-fieldset')

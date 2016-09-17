@@ -115,11 +115,7 @@
                 <form method="post" action="/admin/store/products/instance">
                     <input type="hidden" name="product" value="{{ $product->id }}" />
                     <div class="modal-body">
-                            @foreach ($errors->all() as $error)
-                                <p class="alert alert-danger">{{ $error }}</p>
-                            @endforeach
                             {{ csrf_field() }}
-
                             <div class="form-group">
                                 <label for="price" class="col-lg-2 control-label">Price</label>
                                 <div class="col-lg-10 input-group">

@@ -1,0 +1,21 @@
+.alert {
+  border: 0 none;
+  border-radius: 10px !important;
+  bottom: 0 !important;
+  position: fixed !important;
+  right: 20px !important;
+  width: 300px !important;
+  z-index: 9 !important;
+}
+
+.liquid-form-group {
+  padding-left: 10px;
+}
+
+.popover, .tooltip-inner {
+  background: rgba(255, 255, 255, 0.9) none repeat scroll 0 0 !important;
+}
+
+.popover-title {
+  background-color: #636363 !important;
+}

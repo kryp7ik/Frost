@@ -8,9 +8,6 @@
             </div>
             <div class="panel-body">
                 <form method="post" id="transfer-form">
-                    @foreach ($errors->all() as $error)
-                        <p class="alert alert-danger">{{ $error }}</p>
-                    @endforeach
                     <div class="row">
                         <div class="col-md-4 form-inline">
                             <label for="from" class="control-label">From Store</label>
