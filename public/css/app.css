@@ -1,0 +1,38 @@
+/** COLORS **/
+.panel-purple > .panel-heading {
+  background-color: #8b1898; }
+
+.panel-purple:hover > .panel-heading {
+  background-color: #ce37df; }
+
+.panel-orange > .panel-heading {
+  background-color: #ff5722; }
+
+.panel-orange:hover > .panel-heading {
+  background-color: #ffa588; }
+
+.panel-teal > .panel-heading {
+  background-color: #438496; }
+
+.panel-teal:hover > .panel-heading {
+  background-color: #7bb4c4; }
+
+.panel-light-blue > .panel-heading {
+  background-color: #03a9f4; }
+
+.panel-light-blue:hover > .panel-heading {
+  background-color: #60ccfd; }
+
+.panel-dark-blue > .panel-heading {
+  background-color: #151b3f; }
+
+.panel-dark-blue:hover > .panel-heading {
+  background-color: #2f3c8c; }
+
+.panel-light-green > .panel-heading {
+  background-color: #4caf50; }
+
+.panel-light-green:hover > .panel-heading {
+  background-color: #92cf94; }
+
+/*# sourceMappingURL=app.css.map */

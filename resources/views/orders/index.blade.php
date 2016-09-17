@@ -31,14 +31,16 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading"><h3>Order Lookup</h3></div>
                                 <div class="panel-body">
+                                    <div class="form-inline">
                                     <div class="form-group">
                                         <label for="order-id" class="col-md-2 control-label">Order </label>
-                                        <div class="input-group col-md-10">
+                                        <div class="input-group col-md-6">
                                             <span class="input-group-addon">#</span>
                                             <input type="text" class="form-control" id="order-id" />
                                         </div>
+                                        <a href="#" id="lookup" class="btn btn-raised btn-primary pull-right">Lookup</a>
                                     </div>
-                                    <a href="#" id="lookup" class="btn btn-raised btn-primary pull-right">Lookup</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

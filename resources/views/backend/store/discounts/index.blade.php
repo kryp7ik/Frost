@@ -1,9 +1,6 @@
 @extends('master')
 @section('title', 'All Discounts')
 @section('content')
-    <style>
-        tr { cursor: pointer; cursor: hand; }
-    </style>
     <div class="container col-md-12">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -21,7 +18,7 @@
             @else
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
-                        <table class="table table-hover display" id="table">
+                        <table class="table table-hover display clickable" id="table">
                             <thead>
                                 <th>Name</th>
                                 <th>Type</th>

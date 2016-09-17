@@ -1,0 +1,42 @@
+.panel-purple > .panel-heading {
+  background-color: $purple;
+}
+.panel-purple:hover > .panel-heading {
+  background-color: lighten($purple, $panel-lighten);
+}
+
+.panel-orange > .panel-heading {
+  background-color: $orange;
+}
+.panel-orange:hover > .panel-heading {
+  background-color: lighten($orange, $panel-lighten);
+}
+
+.panel-teal > .panel-heading {
+  background-color: $teal;
+}
+.panel-teal:hover > .panel-heading {
+  background-color: lighten($teal, $panel-lighten);
+}
+
+.panel-light-blue > .panel-heading {
+  background-color: $light-blue;
+}
+.panel-light-blue:hover > .panel-heading {
+  background-color: lighten($light-blue, $panel-lighten);
+}
+
+.panel-dark-blue > .panel-heading {
+  background-color: $dark-blue;
+}
+.panel-dark-blue:hover > .panel-heading {
+  background-color: lighten($dark-blue, $panel-lighten);
+}
+
+.panel-light-green > .panel-heading {
+  background-color: $light-green;
+}
+.panel-light-green:hover > .panel-heading {
+  background-color: lighten($light-green, $panel-lighten);
+}
+

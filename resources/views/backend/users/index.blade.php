@@ -1,9 +1,6 @@
 @extends('master')
 @section('title', 'All users')
 @section('content')
-    <style>
-        tr { cursor: pointer; cursor: hand; }
-    </style>
     <div class="container col-md-10 col-md-offset-1">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -18,7 +15,7 @@
             @if ($users->isEmpty())
                 <p> There is no user.</p>
             @else
-                <table class="table table-hover">
+                <table class="table table-hover clickable">
                     <thead>
                     <tr>
                         <th>ID</th>

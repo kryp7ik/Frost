@@ -41,28 +41,7 @@
                     <li>
                         <a href="/admin"><span class="glyphicon glyphicon-home"></span> Dashboard</a>
                     </li>
-                    <li>
-                        <a href="/admin/store/products"><span class="glyphicon glyphicon-tags"></span> Products</a>
-                    </li>
-                    <li>
-                        <a href="/admin/store/ingredients"><span class="glyphicon glyphicon-cutlery"></span> Ingredients</a>
-                    </li>
-                    <li>
-                        <a href="/admin/store/recipes"><span class="glyphicon glyphicon-tint"></span> Recipes</a>
-                    </li>
-                    <li>
-                        <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
-                    </li>
-                    <li>
-                        <a href="/admin/store/discounts"><span class="glyphicon glyphicon-usd"></span> Discounts</a>
-                    </li>
-                    <li>
-                        <a href="/orders"><span class="glyphicon glyphicon-th-list"></span> All Orders</a>
-                    </li>
-                    <li>
-                        <a href="/orders/create"><span class="glyphicon glyphicon-ok"></span> New Order</a>
-                    </li>
-                @else
+                @endif
                     <li>
                         <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
                     </li>
@@ -77,7 +56,7 @@
                             <a href="/orders/{{ $order->id }}/show"><span class="text-info">Suspended {{ $order->total }}</span></a>
                         </li>
                     @endforeach
-                @endif
+
 
             @endif
         </ul>

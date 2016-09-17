@@ -19,18 +19,18 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
+    mix.sass("app.scss");
     mix.styles([
-        "vendor/bootstrap.min.css",
-        "vendor/bootstrap-editable.css",
-        "vendor/bootstrap-material-design.css",
-        "vendor/ripples.css",
-        "vendor/select2.min.css",
-        "vendor/datatables.min.css",
-        "vendor/bootstrap-datetimepicker.min.css",
+        "libs/bootstrap.min.css",
+        "libs/bootstrap-editable.css",
+        "libs/bootstrap-material-design.css",
+        "libs/ripples.css",
+        "libs/select2.min.css",
+        "libs/datatables.min.css",
+        "libs/bootstrap-datetimepicker.min.css",
         "partials/sidebar.css",
         "partials/snow.css",
-        "partials/mods.css",
-        "partials/big-buttons.css"
+        "partials/mods.css"
     ])
 
     mix.scripts([

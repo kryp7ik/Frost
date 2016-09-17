@@ -19,3 +19,12 @@
 .popover-title {
   background-color: #636363 !important;
 }
+
+.clickable > tbody > tr {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.xl-font {
+  font-size: 5em;
+}

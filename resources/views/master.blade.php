@@ -6,11 +6,17 @@
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
         <link href="/css/all.css" rel="stylesheet" />
+        <link href="/css/app.css" rel="stylesheet" />
     </head>
     <body>
         @include('shared.navbar')
         <div id="wrapper">
             <div id="page-content-wrapper">
+                @if (Auth::check())
+                    @if (Auth::user()->hasRole('manager'))
+                        @include('shared.dashboard-links')
+                    @endif
+                @endif
                 @yield('content')
             </div>
         </div>
