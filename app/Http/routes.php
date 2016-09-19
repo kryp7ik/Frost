@@ -70,6 +70,9 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/transfers/{id?}/show', 'Store\TransferController@show');
     Route::get('store/transfers/{id?}/receive', 'Store\TransferController@receive');
 
+    Route::get('store/inventory/create', 'Store\InventoryController@create');
+    Route::post('store/inventory/create', 'Store\InventoryController@process');
+
 });
 
 /**
@@ -102,4 +105,5 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders/{id?}/receipt', 'Store\ShopOrderController@receipt');
 
     Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');
+    Route::get('pdf/inventory', 'PdfController@inventory');
 });

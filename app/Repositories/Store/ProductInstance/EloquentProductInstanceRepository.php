@@ -123,13 +123,18 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     }
 
     /**
-     * Adjust the stock quantity of a ProductInstance by a positive or negative value
+     * Adjust the stock of a ProductInstance by a positive or negative value or if $replace is true completely change the stock
      * @param ProductInstance $product
      * @param int $adjustment
+     * @param bool $replace
      */
-    public function updateStock(ProductInstance $product, $adjustment)
+    public function adjustStock(ProductInstance $product, $adjustment, $replace = false)
     {
-        $product->stock += $adjustment;
+        if ($replace) {
+            $product->stock = $adjustment;
+        } else {
+            $product->stock += $adjustment;
+        }
         $product->save();
     }
 

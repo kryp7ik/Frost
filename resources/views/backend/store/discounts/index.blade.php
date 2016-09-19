@@ -34,7 +34,7 @@
                                     <td>{{ $discount->name }}</td>
                                     <td>{{ ucfirst($discount->type) }}</td>
                                     <td>{{ ucfirst($discount->filter) }}</td>
-                                    <td>{{ $discount->amount }}</td>
+                                    <td>{{ ($discount->type == 'percent') ? $discount->amount . '%' : '$' . $discount->amount }}</td>
                                     <td>{{ ($discount->approval) ? 'Required' : 'Not Required' }}</td>
                                     <td>{{ ($discount->redeemable) ? 'Yes' : 'No' }}</td>
                                     <td>{{ $discount->value }}</td>

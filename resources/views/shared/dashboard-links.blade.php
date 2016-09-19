@@ -85,7 +85,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-3">
-                            <span class="xl-font glyphicon glyphicon-cutlery"></span>
+                            <span class="xl-font glyphicon glyphicon-user"></span>
                         </div>
                         <div class="col-xs-9 text-right">
                             <h2>Users</h2>

@@ -31,36 +31,54 @@
             </div>
         </a>
     </div>
-    <div class="col-md-3">
-        <a href="/admin/store/shipments">
-            <div class="panel panel-light-green">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <span class="xl-font glyphicon glyphicon-globe"></span>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <h2>Shipments</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-3">
-        <a href="/admin/store/transfers">
-            <div class="panel panel-dark-blue">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <span class="xl-font glyphicon glyphicon-home"></span>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <h2>Transfers</h2>
+    <div class="col-md-6">
+        <div class="col-md-4">
+            <a href="/admin/store/shipments">
+                <div class="panel panel-light-green">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span class="xl-font glyphicon glyphicon-globe"></span>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <h2>Shipments</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/admin/store/transfers">
+                <div class="panel panel-dark-blue">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span class="xl-font glyphicon glyphicon-transfer"></span>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <h2>Transfers</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/admin/store/inventory/create">
+                <div class="panel panel-teal">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span class="xl-font glyphicon glyphicon-flash"></span>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <h2>Inventory</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>

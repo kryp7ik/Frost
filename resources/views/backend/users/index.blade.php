@@ -15,36 +15,40 @@
             @if ($users->isEmpty())
                 <p> There is no user.</p>
             @else
-                <table class="table table-hover clickable">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Store #</th>
-                        <th>Joined at</th>
-                        @if (app('request')->input('trashed'))
-                            <th>Deleted at</th>
-                        @endif
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($users as $user)
-                        <tr class="{{ ($user->trashed()) ? 'danger' : '' }}" data-id="{{ $user->id }}">
-                            <td>{!! $user->id !!}</td>
-                            <td>
-                                <a href="{!! action('Admin\UsersController@edit', $user->id) !!}">{!! $user->name !!} </a>
-                            </td>
-                            <td>{!! $user->email !!}</td>
-                            <td>{!! $user->store !!}</td>
-                            <td>{!! $user->created_at !!}</td>
-                            @if (app('request')->input('trashed'))
-                                <td>{{ $user->deleted_at }}</td>
-                            @endif
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <table class="table table-hover clickable">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Store #</th>
+                                <th>Joined at</th>
+                                @if (app('request')->input('trashed'))
+                                    <th>Deleted at</th>
+                                @endif
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($users as $user)
+                                <tr class="{{ ($user->trashed()) ? 'danger' : '' }}" data-id="{{ $user->id }}">
+                                    <td>{!! $user->id !!}</td>
+                                    <td>
+                                        <a href="{!! action('Admin\UsersController@edit', $user->id) !!}">{!! $user->name !!} </a>
+                                    </td>
+                                    <td>{!! $user->email !!}</td>
+                                    <td>{!! $user->store !!}</td>
+                                    <td>{!! $user->created_at !!}</td>
+                                    @if (app('request')->input('trashed'))
+                                        <td>{{ $user->deleted_at }}</td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             @endif
         </div>
     </div>

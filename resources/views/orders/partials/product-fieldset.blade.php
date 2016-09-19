@@ -12,6 +12,7 @@
                         </optgroup>
                     @endforeach
                 </select>
+                <label class="input-group-addon">Expected: <span class="expected"></span></label>
                 <label class="input-group-addon">Quantity</label>
                 <input type="text" class="form-control p-quantity" name="products[0][quantity]" placeholder="0" autocomplete="off">
                 <span class="input-group-btn">

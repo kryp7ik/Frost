@@ -7,6 +7,7 @@ use App\Models\Store\Shipment;
 use App\Models\Store\ShopOrder;
 use App\Models\Store\Transfer;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
+use Illuminate\Support\Facades\Auth;
 
 class InventoryService {
 
@@ -32,7 +33,7 @@ class InventoryService {
     public function adjustInventoryForOrder(ShopOrder $order)
     {
         foreach ($order->productInstances as $instance) {
-            $this->productRepo->updateStock($instance, -($instance->pivot->quantity));
+            $this->productRepo->adjustStock($instance, -($instance->pivot->quantity));
         }
     }
 
@@ -44,7 +45,7 @@ class InventoryService {
     public function reverseAdjustInventoryForOrder(ShopOrder $order)
     {
         foreach ($order->productInstances as $instance) {
-            $this->productRepo->updateStock($instance, $instance->pivot->quantity);
+            $this->productRepo->adjustStock($instance, $instance->pivot->quantity);
         }
     }
 
@@ -55,8 +56,9 @@ class InventoryService {
     public function adjustInventoryForShipment(Shipment $shipment)
     {
         foreach ($shipment->productInstances as $instance) {
-            $this->productRepo->updateStock($instance, $instance->pivot->quantity);
+            $this->productRepo->adjustStock($instance, $instance->pivot->quantity);
         }
+        flash('Your inventory has been updated successfully', 'success');
     }
 
     /**
@@ -69,14 +71,36 @@ class InventoryService {
         foreach ($transfer->productInstances as $instance) {
             $related = $this->productRepo->findRelatedForStore($instance, $transfer->to_store);
             if ($related instanceof ProductInstance) {
-                $this->productRepo->updateStock($related, $instance->pivot->quantity);
-                $this->productRepo->updateStock($instance, -($instance->pivot->quantity));
+                $this->productRepo->adjustStock($related, $instance->pivot->quantity);
+                $this->productRepo->adjustStock($instance, -($instance->pivot->quantity));
             } else {
                 flash('Could not find the product instance for the receiving store.  Please ensure you have an instance
-                for all the products that belongs to your store and is active', 'danger');
+                for all the products in the transfer and that they belong to your store and are active', 'danger');
                 return false;
             }
         }
+        flash('Your inventory has been updated successfully', 'success');
         return true;
+    }
+
+    /**
+     * Updates the stock of each ProductInstance in the $data array and returns an array of discrepancies
+     * @param array $data POST data from the Inventory Count form
+     * @return array $alertStack An array of ProductInstances where the count entered does not equal the expected stock
+     */
+    public function processInventoryCount($data)
+    {
+        $alertStack['store'] = config('store.stores')[Auth::user()->store];
+        $alertStack['products'] = [];
+        foreach ($data['products'] as $fieldsetData) {
+            if ($fieldsetData['instance'] == 0) continue;
+            $instance = $this->productRepo->findById($fieldsetData['instance']);
+            if($instance->stock != $fieldsetData['quantity']){
+                $alertStack['products'][] = ['name' => $instance->product->name, 'expected' => $instance->stock, 'actual' => $fieldsetData['quantity']];
+                $this->productRepo->adjustStock($instance, $fieldsetData['quantity'], true);
+            }
+        }
+        flash('Your inventory has been updated successfully', 'success');
+        return $alertStack;
     }
 }
