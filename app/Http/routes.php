@@ -106,4 +106,6 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
 
     Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');
     Route::get('pdf/inventory', 'PdfController@inventory');
+
+    Route::get('schedule', 'Store\ScheduleController@home');
 });

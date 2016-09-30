@@ -7,6 +7,8 @@
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
         <link href="/css/all.css" rel="stylesheet" />
         <link href="/css/app.css" rel="stylesheet" />
+        @stack('css')
+
     </head>
     <body>
         @include('shared.navbar')
