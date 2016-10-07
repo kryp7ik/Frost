@@ -49,4 +49,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany('App\Models\Store\ShopOrder');
     }
+
+    /**
+     * OneToMany relation with App\Models\Store\Shifts
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function shifts()
+    {
+        return $this->hasmany('App\Models\Store\Shifts');
+    }
 }

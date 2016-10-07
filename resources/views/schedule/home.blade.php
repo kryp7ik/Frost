@@ -6,9 +6,12 @@
 
         <div id='external-events'>
             <div id='external-events-listing'>
+                @foreach($users as $user)
+                    <div class="fc-event" data-duration="04:30" store="" color="blue" user="{{ $user->id }}">{{ $user->name }}</div>
+                @endforeach
                 <h4>Draggable Events</h4>
-                <div class='fc-event' data-duration="03:00">My Event 1</div>
-                <div class='fc-event'>My Event 2</div>
+                <div class='fc-event' store="1" color="blue" user="1">My Event 1</div>
+                <div class='fc-event' store="2" color="green">My Event 2</div>
                 <div class='fc-event'>My Event 3</div>
                 <div class='fc-event'>My Event 4</div>
                 <div class='fc-event'>My Event 5</div>
@@ -98,7 +101,10 @@
 
             $(this).data('event', {
                 title: $.trim($(this).text()),
-                stick: true
+                stick: true,
+                store: $(this).attr('store'),
+                color: $(this).attr('color'),
+                user: $(this).attr('user'),
             });
 
             $(this).draggable({
@@ -116,7 +122,6 @@
         var calendar = $('#calendar').fullCalendar({
             height: 700,
             allDaySlot: false,
-            //defaultDate: '2016-10-01',
             header: {
                 left: 'prev,next today',
                 center: 'title',
@@ -128,32 +133,26 @@
             editable: true,
             droppable: true,
             dragRevertDuration: 0,
-            drop: function(date) {
-                // Add event to database where start is the date passed in this function
-                // set end date to 2 hours later than the start
-                // return the db ID and set to object
-                alert("drop()" + date.format());
-            },
-            eventDragStop: function( event, jsEvent, ui, view ) {
-                makeEventsDraggable();
+            events: '/shift',
+            eventReceive: function(event) {
+                console.log(event);
+
             },
             eventResize: function( event, delta, revertFunc, jsEvent, ui, view ) {
                 // Resize only changes the end time so update db accordingly
                 makeEventsDraggable();
-                event.id = 2;
-                event.categoryname = "Test Attribute";
-                alert("eventResize() " + event.end);
-
+            },
+            eventDrop: function(event, delta, revertFunc) {
+                // Event drop could potentially change start and end times so update both in the db
+            },
+            eventDragStop: function( event, jsEvent, ui, view ) {
+                makeEventsDraggable();
             },
             viewRender: function() {
                 makeEventsDraggable();
             },
             eventDragStart:function( event, jsEvent, ui, view ) {
                 dragged = [ calendar, event ];
-            },
-            eventDrop: function(event, delta, revertFunc) {
-                // Event drop could potentially change start and end times so update both in the db
-                alert("eventDrop()" + event.id);
             },
             eventRender: function(event, element) {
                 element.append('This is a test');

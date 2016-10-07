@@ -78,5 +78,10 @@ class RepositoryServiceProvider extends ServiceProvider
             \App\Repositories\Store\Transfer\TransferRepositoryContract::class,
             \App\Repositories\Store\Transfer\EloquentTransferRepository::class
         );
+
+        $this->app->bind(
+            \App\Repositories\Store\Shift\ShiftRepositoryContract::class,
+            \App\Repositories\Store\Shift\EloquentShiftRepository::class
+        );
     }
 }
