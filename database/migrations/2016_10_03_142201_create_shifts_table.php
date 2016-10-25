@@ -16,10 +16,10 @@ class CreateShiftsTable extends Migration
             $table->increments('id')->unsigned()->index();
             $table->integer('user_id')->unsigned();
             $table->integer('store')->unsigned();
-            $table->integer('start')->unsigned();
-            $table->integer('end')->unsigned();
-            $table->integer('in')->unsigned();
-            $table->integer('out')->unsigned();
+            $table->string('start');
+            $table->string('end');
+            $table->string('in');
+            $table->string('out');
         });
     }
 

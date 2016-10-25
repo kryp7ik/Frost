@@ -18,7 +18,7 @@ class ShiftController extends Controller
 
     public function index(Request $request)
     {
-        $shifts = ['this' => 'is', 'a' => 'test'];
+        $shifts = $this->shiftRepo->getAll($request->input('start'), $request->input('end'), true);
         return response()->json($shifts);
     }
 
@@ -29,8 +29,8 @@ class ShiftController extends Controller
 
     public function store(Request $request)
     {
-        //$shift = $this->shiftRepo->create($request->all());
-        return response()->json($request->all());
+        $shift = $this->shiftRepo->create($request->all());
+        return response()->json($shift);
     }
 
     public function show()
@@ -43,9 +43,10 @@ class ShiftController extends Controller
 
     }
 
-    public function update()
+    public function update($id, Request $request)
     {
-
+        $shift = $this->shiftRepo->update($id, $request->all());
+        return response()->json($shift);
     }
 
     public function destroy()

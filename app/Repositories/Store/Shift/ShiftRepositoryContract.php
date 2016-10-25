@@ -14,9 +14,10 @@ interface ShiftRepositoryContract
      * Returns all Shifts within a given date range
      * @param string $startDate
      * @param string $endDate
+     * @param bool $array if true return custom array of objects
      * @return mixed
      */
-    public function getAll($startDate, $endDate);
+    public function getAll($startDate, $endDate, $array = false);
 
     /**
      * Returns a single Shift by it's id

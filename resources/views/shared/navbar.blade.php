@@ -39,7 +39,7 @@
             @if (Auth::check())
                 @if (Auth::user()->hasRole('manager'))
                     <li>
-                        <a href="/admin"><span class="glyphicon glyphicon-home"></span> Dashboard</a>
+                        <a href="/schedule"><span class="glyphicon glyphicon-calendar"></span> Schedule</a>
                     </li>
                 @endif
                     <li>

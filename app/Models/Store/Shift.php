@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shift extends Model
 {
+
     /**
      * @var array
      */
@@ -19,7 +20,8 @@ class Shift extends Model
         'start',
         'end',
         'in',
-        'out'
+        'out',
+        'user_id'
     ];
 
     /**
