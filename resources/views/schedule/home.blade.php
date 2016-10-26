@@ -44,6 +44,7 @@
                     <span class="pull-right" id="shift"></span>
                 </h3>
                 <form class="form-horizontal" method="post">
+                    <input id="shiftid" type="hidden" value="0" />
                     <div class="form-group">
                         <label for="in" class="col-lg-2 control-label">Clock In</label>
                         <div class="col-lg-10">

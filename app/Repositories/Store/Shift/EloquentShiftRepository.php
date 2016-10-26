@@ -75,12 +75,27 @@ class EloquentShiftRepository implements ShiftRepositoryContract
     {
         $shift = $this->findById($id);
         if($shift instanceof Shift) {
-            $start = new \DateTime($shift->start);
             $shift->start = (isset($data['start'])) ? $data['start'] : $shift->start;
             $shift->end = (isset($data['end'])) ? $data['end'] : $shift->end;
-            $shift->in = (isset($data['in'])) ? $start->format('Y-m-d\T') . $data['in'] : $shift->in;
-            $shift->out = (isset($data['out'])) ? $data['out'] : $shift->out;
+            $start = new \DateTime($shift->start);
+            if (isset($data['in'])) {
+                $in = new \DateTime($start->format('Y-m-d\T') . ' ' . $data['in']);
+                $shift->in = $in->format('Y-m-d\TH:i:s');
+            }
+            if (isset($data['out'])) {
+                $out = new \DateTime($start->format('Y-m-d\T') . ' ' . $data['out']);
+                $shift->out = $out->format('Y-m-d\TH:i:s');
+            }
             $shift->save();
         }
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete($id)
+    {
+        $shift = $this->findById($id);
+        $shift->delete();
     }
 }

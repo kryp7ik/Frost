@@ -149,6 +149,7 @@ $(document).ready(function() {
                 if(event.out != 0) {
                     $('#out').attr('value', moment(event.out).format('hh:mma'));
                 }
+                $('#shiftid').attr('value', event.id);
                 $('#del').attr('href', '/shift/' + event.id + '/delete');
                 $("#event-actions").fadeIn();
             });
@@ -159,7 +160,7 @@ $(document).ready(function() {
     $('#save').on('click', function(e) {
         e.preventDefault();
         $.ajax({
-            url: "/shift/" + event.id,
+            url: "/shift/" + $('#shiftid').val(),
             type: "PUT",
             dataType: "json",
             data: {
@@ -168,6 +169,7 @@ $(document).ready(function() {
             }
         }).done(function( json ) {
             calendar.fullCalendar('refetchEvents');
+            console.log(json);
         });
     });
 
