@@ -6,21 +6,48 @@ function makeEventsDraggable() {
     });
 }
 
+/* Calculates the clocked in hours for each employee for the given day or week and displays it
+------------------------------------------------------------------------------------------------ */
+function getClockedHours(eventArray) {
+    var totalClocked = {};
+    $.each(eventArray, function(key,value) {
+        if (value.in != 0 && value.out !=0) {
+            var clocked = (moment(value.out).format('X') - moment(value.in).format('X')) / 60 / 60;
+            if (value.user.name in totalClocked) {
+                totalClocked[value.user.name] += clocked;
+            } else {
+                totalClocked[value.user.name] = clocked;
+            }
+        }
+    });
+    $('#clocked').html('');
+    $.each(totalClocked, function(key, value) {
+        $('#clocked').append('<li>' + key + ' : ' + $.number(value,2) + '</li>');
+    });
+}
+
+/* Setup CSRF token for ajax requests
+----------------------------------------- */
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
     }
 });
 
-var popTemplate = [
-    '<div class="popover" style="max-width:600px;" >',
-    '<div class="arrow"></div>',
-    '<div class="popover-header">',
-    '<button id="closepopover" type="button" class="close" aria-hidden="true">&times;</button>',
-    '<h3 class="popover-title"></h3>',
-    '</div>',
-    '<div class="popover-content"></div>',
-    '</div>'].join('');
+/* Checks if the logged in user is a manager in order to grant edit permissions
+------------------------------------------------------------------------------- */
+var userCanEdit = function() {
+    var manager = null;
+    $.ajax({
+        async: false,
+        url: '/user/status',
+        type: 'GET',
+        success: function (data) {
+            manager = data.manager
+        }
+    });
+    return manager;
+}();
 
 $(document).ready(function() {
     var dragged = null;
@@ -64,8 +91,6 @@ $(document).ready(function() {
         });
     });
 
-
-
     /* initialize the calendar
      -----------------------------------------------------------------*/
     var calendar = $('#calendar').fullCalendar({
@@ -80,10 +105,19 @@ $(document).ready(function() {
         defaultView: 'agendaDay',
         minTime: '09:00:00',
         maxTime: '22:00:00',
-        editable: true,
-        droppable: true,
+        editable: userCanEdit,
+        droppable: userCanEdit,
         dragRevertDuration: 0,
-        events: '/shift',
+        events: {
+            url: '/shift',
+            type: 'GET',
+            error: function() {
+
+            },
+            success: function (data) {
+                getClockedHours(data);
+            },
+        },
         eventReceive: function(event) {
             $.ajax({
                 url: "/shift",
@@ -140,23 +174,37 @@ $(document).ready(function() {
             if(event.out != 0) {
                 element.append('<br/>Out: ' + moment(event.out).format('hh:mma'));
             }
-            element.bind('click', function () {
-                $("#name").html(event.title + ' - ' + $("#store-select").find("option[value='" + event.storeid + "']").text());
-                $('#shift').html(moment(event.start).format('dddd MMMM D hh:mma') + ' - ' + moment(event.end).format('hh:mma'));
-                if(event.in != 0) {
-                    $('#in').attr('value', moment(event.in).format('hh:mma'));
-                }
-                if(event.out != 0) {
-                    $('#out').attr('value', moment(event.out).format('hh:mma'));
-                }
-                $('#shiftid').attr('value', event.id);
-                $('#del').attr('href', '/shift/' + event.id + '/delete');
-                $("#event-actions").fadeIn();
-            });
+            if (userCanEdit) {
+                element.bind('click', function () {
+                    $("#name").html(event.title + ' - ' + $("#store-select").find("option[value='" + event.storeid + "']").text());
+                    $('#shift').html(moment(event.start).format('dddd MMMM D hh:mma') + ' - ' + moment(event.end).format('hh:mma'));
+                    if (event.in != 0) {
+                        $('#in').attr('value', moment(event.in).format('hh:mma'));
+                    }
+                    if (event.out != 0) {
+                        $('#out').attr('value', moment(event.out).format('hh:mma'));
+                    }
+                    $('#shiftid').attr('value', event.id);
+                    $('#del').attr('href', '/shift/' + event.id);
+                    $("#event-actions").fadeIn();
+                });
+            }
 
         }
     });
 
+    /* Bind the save, delete & Clock In/out buttons to ajax request
+     ------------------------------------------------------- */
+    $('#del').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('href'),
+            type: 'DELETE',
+            dataType: "json",
+        }).done(function() {
+            calendar.fullCalendar('refetchEvents');
+        })
+    });
     $('#save').on('click', function(e) {
         e.preventDefault();
         $.ajax({
@@ -170,6 +218,18 @@ $(document).ready(function() {
         }).done(function( json ) {
             calendar.fullCalendar('refetchEvents');
             console.log(json);
+        });
+    });
+
+    $('#clock').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/shift/clock",
+            type: 'GET',
+            dataType: 'json',
+        }).done(function(json) {
+            calendar.fullCalendar('refetchEvents');
+            $('#clock-status').html(json);
         });
     });
 

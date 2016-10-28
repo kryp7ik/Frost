@@ -37,11 +37,10 @@
     <div id="sidebar-wrapper" >
         <ul class="sidebar-nav nav" >
             @if (Auth::check())
-                @if (Auth::user()->hasRole('manager'))
+
                     <li>
                         <a href="/schedule"><span class="glyphicon glyphicon-calendar"></span> Schedule</a>
                     </li>
-                @endif
                     <li>
                         <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
                     </li>

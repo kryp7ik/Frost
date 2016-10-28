@@ -27,6 +27,22 @@ interface ShiftRepositoryContract
     public function findById($id);
 
     /**
+     * Finds a shift for the designated user where the start time is sometime during the current day
+     * @param int $userId
+     * @return mixed Shift|bool
+     */
+    public function findForTodayByUser($userId);
+
+    /**
+     * Finds the shift for the designated user that is scheduled for the current day
+     * If $shift->in is not set clocks the user in
+     * If $shift->out is not set clocks the user out
+     * @param $userId
+     * @return string status to be returned for ajax request
+     */
+    public function clock($userId);
+
+    /**
      * Creates a new Shift
      * @param array $data
      * @return \App\Models\Store\Shift
@@ -39,4 +55,11 @@ interface ShiftRepositoryContract
      * @param array $data
      */
     public function update($id, $data);
+
+    /**
+     * Delete a Shift
+     * @param int $id
+     */
+    public function delete($id);
+
 }

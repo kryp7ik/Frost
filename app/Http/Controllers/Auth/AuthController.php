@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Auth\User;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -68,5 +69,13 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function userStatus() {
+        if (Auth::user()->hasRole('manager')) {
+            return response()->json(['manager' => true]);
+        } else {
+            return response()->json(['manager' => false]);
+        }
     }
 }

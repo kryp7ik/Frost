@@ -8,6 +8,7 @@
 Route::get('users/logout', 'Auth\AuthController@getLogout');
 Route::get('users/login', 'Auth\AuthController@getLogin');
 Route::post('users/login', 'Auth\AuthController@postLogin');
+Route::get('user/status', 'Auth\AjaxController@status');
 
 /**
  * Route group for 'Admin' users only (/admin/*)
@@ -108,5 +109,6 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('pdf/inventory', 'PdfController@inventory');
 
     Route::get('schedule', 'Store\ScheduleController@home');
-    Route::resource('shift', 'Store\ShiftController');
+    Route::get('shift/clock', 'Store\ShiftController@clock');
+    Route::resource('shift', 'Store\ShiftController', ['except' => ['create', 'show', 'edit'] ]);
 });

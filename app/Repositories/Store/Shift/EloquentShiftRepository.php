@@ -48,6 +48,47 @@ class EloquentShiftRepository implements ShiftRepositoryContract
     }
 
     /**
+     * Finds a shift for the designated user where the start time is sometime during the current day
+     * @param int $userId
+     * @return mixed Shift|bool
+     */
+    public function findForTodayByUser($userId)
+    {
+        $today = new \DateTime();
+        $shift = Shift::whereBetween('start', [$today->format('Y-m-d') . 'T00:00:00', $today->format('Y-m-d') . 'T23:59:59'])
+            ->where('user_id', '=', $userId)
+            ->first();
+        return ($shift instanceof Shift) ? $shift : false;
+    }
+
+    /**
+     * Finds the shift for the designated user that is scheduled for the current day
+     * If $shift->in is not set clocks the user in
+     * If $shift->out is not set clocks the user out
+     * @param $userId
+     * @return string status to be returned for ajax request
+     */
+    public function clock($userId)
+    {
+        $shift = $this->findForTodayByUser($userId);
+        if ($shift) {
+            $time = new \DateTime();
+            if ($shift->in == null) {
+                $shift->in = $time->format('Y-m-d\TH:i:s');
+                $shift->save();
+                return 'Clocked in successfully';
+            } elseif ($shift->out == null) {
+                $shift->out = $time->format('Y-m-d\TH:i:s');
+                $shift->save();
+                return 'Clocked out successfully';
+            } else {
+                return 'The shift has already been clocked in and out';
+            }
+        }
+        return 'Could not find a shift scheduled for you today.';
+    }
+
+    /**
      * Creates a new Shift
      * @param array $data
      * @return Shift
@@ -91,6 +132,7 @@ class EloquentShiftRepository implements ShiftRepositoryContract
     }
 
     /**
+     * Delete a Shift
      * @param int $id
      */
     public function delete($id)
