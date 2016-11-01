@@ -10,6 +10,7 @@
                         <a href="/admin/users?trashed=true" class="btn btn-raised btn-info pull-right">View Deleted Users</a>
                     @endif
                     <a href="/admin/users/create" class="btn btn-raised btn-success pull-right">Create a new User</a>
+                    <a href="/admin/roles" class="btn btn-raised btn-warning pull-right">Manage Roles</a>
                 </h2>
             </div>
             @if ($users->isEmpty())
@@ -23,7 +24,6 @@
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Store #</th>
                                 <th>Joined at</th>
                                 @if (app('request')->input('trashed'))
                                     <th>Deleted at</th>
@@ -38,7 +38,6 @@
                                         <a href="{!! action('Admin\UsersController@edit', $user->id) !!}">{!! $user->name !!} </a>
                                     </td>
                                     <td>{!! $user->email !!}</td>
-                                    <td>{!! $user->store !!}</td>
                                     <td>{!! $user->created_at !!}</td>
                                     @if (app('request')->input('trashed'))
                                         <td>{{ $user->deleted_at }}</td>

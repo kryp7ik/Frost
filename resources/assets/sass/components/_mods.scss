@@ -1,3 +1,17 @@
+.navbar {
+  z-index: 9999;
+  position: fixed !important;
+  width: 100% !important;
+}
+
+.modal-dialog {
+  margin: 80px auto !important;
+}
+
+#page-content-wrapper {
+  padding-top:80px;
+}
+
 .alert {
   border: 0 none;
   border-radius: 10px !important;

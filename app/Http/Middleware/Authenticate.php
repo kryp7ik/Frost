@@ -24,7 +24,13 @@ class Authenticate
 
             return redirect()->guest('users/login');
         }
+        if(Auth::user()->store) {
+            return $next($request);
+        } else {
+            flash('You are not scheduled to work today!  Please talk to a manager and have them create a shift for you', 'danger');
+            return redirect('/warning');
+        }
 
-        return $next($request);
+
     }
 }

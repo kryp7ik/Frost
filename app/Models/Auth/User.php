@@ -2,12 +2,14 @@
 
 namespace App\Models\Auth;
 
+use App\Repositories\Store\Shift\ShiftRepositoryContract;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\App;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
@@ -57,5 +59,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function shifts()
     {
         return $this->hasmany('App\Models\Store\Shifts');
+    }
+
+    /**
+     * Retrieves the users 'store' attribute based upon the location of the shift they are currently clocked in at except
+     * in the case of admin's who can manually set which store they want to be acting as.
+     * @param $value
+     * @return int|bool
+     */
+    public function getStoreAttribute($value)
+    {
+        if ($this->hasRole('admin')) return $value;
+        $shiftRepo = App::make('App\Repositories\Store\Shift\ShiftRepositoryContract');
+        $shift = $shiftRepo->findForTodayByUser($this->id);
+        if($shift) {
+            return $shift->store;
+        } else {
+            return false;
+        }
     }
 }

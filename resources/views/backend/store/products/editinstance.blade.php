@@ -10,22 +10,16 @@
                 <form class="form-horizontal" method="post">
                     {!! csrf_field() !!}
                     <fieldset>
-                        <div class="form-group">
-                            <label for="price" class="col-lg-2 control-label">Price</label>
-                            <div class="col-lg-10 input-group">
-                                <span class="input-group-addon">$</span>
-                                <input type="text" class="form-control" id="price" name="price" value="{!! $instance->price !!}">
-                                <span class="help-block">The retail price of this product at your store.</span>
+                        @if(Auth::user()->hasRole('admin'))
+                            <div class="form-group">
+                                <label for="stock" class="col-lg-2 control-label">Stock</label>
+                                <div class="col-lg-10 input-group">
+                                    <span class="input-group-addon">#</span>
+                                    <input type="text" class="form-control" id="stock" name="stock" value="{!! $instance->stock !!}">
+                                    <span class="help-block">The current number of stock in your stores inventory.</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="stock" class="col-lg-2 control-label">Stock</label>
-                            <div class="col-lg-10 input-group">
-                                <span class="input-group-addon">#</span>
-                                <input type="text" class="form-control" id="stock" name="stock" value="{!! $instance->stock !!}">
-                                <span class="help-block">The current number of stock in your stores inventory.</span>
-                            </div>
-                        </div>
+                        @endif
                         <div class="form-group">
                             <label for="redline" class="col-lg-2 control-label">Red Line</label>
                             <div class="col-lg-10 input-group">

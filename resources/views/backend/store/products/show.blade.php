@@ -88,7 +88,7 @@
                             <tbody>
                                 @foreach($product->productInstances as $instance)
                                     <tr class="{{ ($instance->stock < $instance->redline) ? 'danger' : '' }}">
-                                        <td>{{ $instance->store }}</td>
+                                        <td>{{ config('store.stores')[$instance->store] }}</td>
                                         <td>${{ $instance->price }}</td>
                                         <td>{{ $instance->stock }}</td>
                                         <td>{{ $instance->redline }}</td>

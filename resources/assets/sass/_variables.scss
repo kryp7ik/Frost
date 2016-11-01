@@ -1,9 +1,31 @@
-/** COLORS **/
+/** Sidebar Variables **/
+$sidebarWidth: 200px;
+$sidebarButtonBgColor: #999999;
+$sidebarButtonTextColor: #999999;
+$sidebarButtonBgHoverColor: rgba(255,255,255,0.2);
+$sidebarButtonTextHoverColor: #FFF;
+$sidebarTextDecoration: none;
 
+/** aSidebar (admin Sidebar) Variables **/
+$aSidebarWidth: 50px;
+$aSidebarButtonTextColor: #FFF;
+$aSidebarButtonTextHoverColor: #FFF;
+$aSidebarTextDecoration: none;
+$aSidebarButtonBgHoverColors: (1: red, 2: blue, 3: green);
+$aSidebarButtonBgColors: (1: pink, 2: lightblue, 3: lightgreen);
+
+
+/** Panel-Click Variables **/
+$panel-lighten: 20%;
+
+
+/** COLORS **/
 $orange: #ff5722;
 $teal: #438496;
 $light-blue: #03a9f4;
 $dark-blue: #151b3f;
 $light-green: #4caf50;
 $purple: #8b1898;
-$panel-lighten: 20%;
+
+
+

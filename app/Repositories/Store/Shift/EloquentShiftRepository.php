@@ -119,11 +119,11 @@ class EloquentShiftRepository implements ShiftRepositoryContract
             $shift->start = (isset($data['start'])) ? $data['start'] : $shift->start;
             $shift->end = (isset($data['end'])) ? $data['end'] : $shift->end;
             $start = new \DateTime($shift->start);
-            if (isset($data['in'])) {
+            if (isset($data['in']) && strlen($data['in']) > 4) {
                 $in = new \DateTime($start->format('Y-m-d\T') . ' ' . $data['in']);
                 $shift->in = $in->format('Y-m-d\TH:i:s');
             }
-            if (isset($data['out'])) {
+            if (isset($data['out']) && strlen($data['out']) > 4) {
                 $out = new \DateTime($start->format('Y-m-d\T') . ' ' . $data['out']);
                 $shift->out = $out->format('Y-m-d\TH:i:s');
             }

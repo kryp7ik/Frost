@@ -28,10 +28,11 @@ elixir(function(mix) {
         "libs/select2.min.css",
         "libs/datatables.min.css",
         "libs/bootstrap-datetimepicker.min.css",
-        "partials/sidebar.css",
-        "partials/snow.css",
-        "partials/mods.css"
-    ])
+        "partials/snow.css"
+
+    ]);
+
+    mix.copy('node_modules/chart.js/dist/Chart.min.js', 'public/js/chart.min.js');
 
     mix.scripts([
         'jquery.min.js',

@@ -15,11 +15,22 @@
         <div id="snow" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::check())
-                    @if (Auth::user()->hasRole('manager'))
-                        <li><a href="/admin">Dashboard</a></li>
-                    @endif
-                @endif
-                @if (Auth::check())
+                    <li>
+                        @if(Auth::user()->hasRole('admin'))
+                                    <a href="/admin/users/{{ Auth::user()->id }}/edit">
+                                @else
+                                    <a href="#" >
+                                @endif
+
+                            @if(Auth::user()->store)
+                                Active Store:
+                                {{ config('store.stores')[Auth::user()->store] }}
+                            @else
+                                You are not clocked in!
+                            @endif
+                        </a>
+                    </li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->email }} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -33,32 +44,58 @@
             </ul>
         </div>
     </div>
-    <!-- Sidebar -->
-    <div id="sidebar-wrapper" >
-        <ul class="sidebar-nav nav" >
-            @if (Auth::check())
+    @if (Auth::check())
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" >
+            <ul class="sidebar-nav nav" >
+                <li>
+                    <a href="/schedule"><span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+                </li>
+                <li>
+                    <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
+                </li>
+                <li>
+                    <a href="/orders"><span class="glyphicon glyphicon-th-list"></span> All Orders</a>
+                </li>
+                <li>
+                    <a href="/orders/create"><span class="glyphicon glyphicon-ok"></span> New Order</a>
+                </li>
+                @foreach($suspended->getSuspendedOrders() as $order)
+                    <li>
+                        <a href="/orders/{{ $order->id }}/show"><span class="text-info">Suspended {{ $order->total }}</span></a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
+        <!-- asidebar (Admin Sidebar) -->
+        @if(Auth::user()->hasRole('admin'))
+            <div id="asidebar-wrapper">
+                <ul class="asidebar-nav">
                     <li>
-                        <a href="/schedule"><span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+                        <a href="/admin/store/recipes">
+                            <span class="glyphicon glyphicon-tint"></span>
+                        </a>
                     </li>
                     <li>
-                        <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
+                        <a href="/admin/store/recipes">
+                            <span class="glyphicon glyphicon-tint"></span>
+                        </a>
                     </li>
                     <li>
-                        <a href="/orders"><span class="glyphicon glyphicon-th-list"></span> All Orders</a>
+                        <a href="/admin/store/recipes">
+                            <span class="glyphicon glyphicon-tint"></span>
+                        </a>
                     </li>
                     <li>
-                        <a href="/orders/create"><span class="glyphicon glyphicon-ok"></span> New Order</a>
+                        <a href="/admin/store/recipes">
+                            <span class="glyphicon glyphicon-tint"></span>
+                        </a>
                     </li>
-                    @foreach($suspended->getSuspendedOrders() as $order)
-                        <li>
-                            <a href="/orders/{{ $order->id }}/show"><span class="text-info">Suspended {{ $order->total }}</span></a>
-                        </li>
-                    @endforeach
-
-
-            @endif
-        </ul>
-    </div>
-    <!-- /#sidebar-wrapper -->
+                </ul>
+            </div>
+        @endif
+        <!-- /asidebar -->
+    @endif
 </nav>

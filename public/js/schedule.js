@@ -176,7 +176,8 @@ $(document).ready(function() {
             }
             if (userCanEdit) {
                 element.bind('click', function () {
-                    $("#name").html(event.title + ' - ' + $("#store-select").find("option[value='" + event.storeid + "']").text());
+                    $("#name").html(event.title);
+                    $('#estore').html($("#store-select").find("option[value='" + event.storeid + "']").text());
                     $('#shift').html(moment(event.start).format('dddd MMMM D hh:mma') + ' - ' + moment(event.end).format('hh:mma'));
                     if (event.in != 0) {
                         $('#in').attr('value', moment(event.in).format('hh:mma'));

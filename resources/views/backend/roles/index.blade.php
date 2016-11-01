@@ -2,9 +2,12 @@
 @section('title', 'All roles')
 @section('content')
     <div class="container col-md-8 col-md-offset-2">
-        <div class="panel panel-default">
+        <div class="panel panel-info">
             <div class="panel-heading">
-                <h2> All roles </h2>
+                <h2> All roles
+                    <a href="/admin/roles/create" class="btn btn-raised btn-success pull-right">Create Role</a>
+                </h2>
+
             </div>
             @if (session('status'))
                 <div class="alert alert-success">

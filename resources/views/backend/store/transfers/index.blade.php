@@ -44,7 +44,7 @@
         $('#table').DataTable( {
             "paging": false,
             "info" : false,
-            "order" : [[ 1, "desc" ]]
+            "order" : [[ 0, "desc" ]]
         });
     });
     $('tbody').on('click', 'tr', function() {

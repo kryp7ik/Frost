@@ -47,35 +47,44 @@
 
 
 
-    <div id="event-actions">
+    <div id="event-actions" class="col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
                 Edit Shift
             </div>
             <div class="panel-body">
-                <h3>
-                    <span id="name"></span>
-                    <span class="pull-right" id="shift"></span>
-                </h3>
-                <form class="form-horizontal" method="post">
-                    <input id="shiftid" type="hidden" value="0" />
-                    <div class="form-group">
-                        <label for="in" class="col-lg-2 control-label">Clock In</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" type="text" id="in">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Employee: <span id="name"></span></h4>
+                        <h4>Store: <span id="estore"></span></h4>
+                        <h4>Date: <span id="shift"></span></h4>
+                    </div>
+                    <div class="col-md-5">
+                        <form class="form-horizontal" method="post">
+                            <input id="shiftid" type="hidden" value="0" />
+                            <div class="form-group">
+                                <label for="in" class="col-lg-2 control-label">Clock In</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" type="text" id="in">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="in" class="col-lg-2 control-label">Clock Out</label>
+                                <div class="col-lg-10">
+                                    <input class="form-control" type="text" id="out">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right">
+                            <a id="del" href="" class="btn btn-danger btn-raised">Delete Shift</a>
+                            <button id="save" class="btn btn-success btn-raised">Save</button>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="in" class="col-lg-2 control-label">Clock Out</label>
-                        <div class="col-lg-10">
-                            <input class="form-control" type="text" id="out">
-                        </div>
-                    </div>
-                </form>
-
-                <div class="pull-right">
-                    <a id="del" href="" class="btn btn-danger btn-raised">Delete Shift</a>
-                    <button id="save" class="btn btn-success btn-raised">Save</button>
                 </div>
             </div>
         </div>

@@ -110,9 +110,9 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     public function update($id, $data)
     {
         $instance = $this->findById($id);
-        $instance->price = number_format($data['price'], 2);
-        $instance->stock = $data['stock'];
-        $instance->redline = $data['redline'];
+        $instance->price = (isset($data['price'])) ? number_format($data['price'], 2) : $instance->price;
+        $instance->stock = (isset($data['stock'])) ? $data['stock'] : $instance->stock;
+        $instance->redline = (isset($data['redline'])) ? $data['redline'] : $instance->redline;
         $instance->active = (isset($data['active'])) ? true : false;
         if($instance->save()) {
             flash('The product instance has been updated successfully', 'success');

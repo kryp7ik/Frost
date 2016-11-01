@@ -19,10 +19,10 @@ body {
 #sidebar-wrapper {
   z-index: 1000;
   position: fixed;
-  left: 250px;
+  left: $sidebarWidth;
   width: 0;
   height: 100%;
-  margin-left: -250px;
+  margin-left: -$sidebarWidth;
   overflow-y: auto;
   background: #000;
   -webkit-transition: all 0.5s ease;
@@ -32,7 +32,7 @@ body {
 }
 
 #wrapper.toggled #sidebar-wrapper {
-  width: 250px;
+  width: $sidebarWidth;
 }
 
 #page-content-wrapper {
@@ -43,7 +43,7 @@ body {
 
 #wrapper.toggled #page-content-wrapper {
   position: absolute;
-  margin-right: -250px;
+  margin-right: -$sidebarWidth;
 }
 
 /* Sidebar Styles */
@@ -51,7 +51,7 @@ body {
 .sidebar-nav {
   position: absolute;
   top: 0;
-  width: 250px;
+  width: $sidebarWidth;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -64,14 +64,14 @@ body {
 
 .sidebar-nav li a {
   display: block;
-  text-decoration: none;
-  color: #999999;
+  text-decoration: $sidebarTextDecoration;
+  color: $sidebarButtonTextColor;
 }
 
 .sidebar-nav li a:hover {
   text-decoration: none;
-  color: #fff;
-  background: rgba(255,255,255,0.2);
+  color: $sidebarButtonTextHoverColor;
+  background: $sidebarButtonBgHoverColor;
 }
 
 .sidebar-nav li a:active,
@@ -86,11 +86,11 @@ body {
 }
 
 .sidebar-nav > .sidebar-brand a {
-  color: #999999;
+  color: $sidebarButtonBgColor;
 }
 
 .sidebar-nav > .sidebar-brand a:hover {
-  color: #fff;
+  color: $sidebarButtonTextHoverColor;
   background: none;
 }
 
@@ -104,7 +104,7 @@ body {
   }
 
   #sidebar-wrapper {
-    width: 250px;
+    width: $sidebarWidth;
   }
 
   #wrapper.toggled #sidebar-wrapper {

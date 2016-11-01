@@ -28,9 +28,9 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function getAll($startDate = null, $endDate = null)
     {
         if ($startDate) {
-            if (!$endDate) $endDate = $startDate . ' 23:59:59';
-            $startDate .= ' 00:00:00';
-            return ShopOrder::whereBetween('created_at', [$startDate, $endDate])->get();
+            $endDate = ($endDate) ? new \DateTime($endDate) : new \DateTime($startDate);
+            $startDate = new \DateTime($startDate);
+            return ShopOrder::whereBetween('created_at', [$startDate->format('Y-m-d') . ' 00:00:00', $endDate->format('Y-m-d') . ' 23:59:59'])->get();
         }
         return ShopOrder::all();
     }
@@ -72,11 +72,11 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     public function getByStore($store_id, $startDate = null, $endDate = null)
     {
         if ($startDate) {
-            if (!$endDate) $endDate = $startDate . ' 23:59:59';
-            $startDate .= ' 00:00:00';
+            $endDate = ($endDate) ? new \DateTime($endDate) : new \DateTime($startDate);
+            $startDate = new \DateTime($startDate);
             return ShopOrder::
                 where('store',$store_id)
-                ->whereBetween('created_at', [$startDate, $endDate])->get();
+                ->whereBetween('created_at', [$startDate->format('Y-m-d') . ' 00:00:00', $endDate->format('Y-m-d') . ' 23:59:59'])->get();
         } else {
             return ShopOrder::where('store', $store_id)->get();
         }

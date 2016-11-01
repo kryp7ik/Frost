@@ -9,9 +9,12 @@ Route::get('users/logout', 'Auth\AuthController@getLogout');
 Route::get('users/login', 'Auth\AuthController@getLogin');
 Route::post('users/login', 'Auth\AuthController@postLogin');
 Route::get('user/status', 'Auth\AjaxController@status');
+Route::get('warning', 'Front\Store\ScheduleController@warning');
+Route::get('schedule', 'Front\Store\ScheduleController@home');
+
 
 /**
- * Route group for 'Admin' users only (/admin/*)
+ * Route group for 'manager' users only (/admin/*)
  */
 Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'manager'), function() {
     Route::get('/', 'PagesController@home');
@@ -74,6 +77,8 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/inventory/create', 'Store\InventoryController@create');
     Route::post('store/inventory/create', 'Store\InventoryController@process');
 
+    Route::get('store/report/sales', 'Store\ReportController@sales');
+
 });
 
 /**
@@ -108,7 +113,6 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');
     Route::get('pdf/inventory', 'PdfController@inventory');
 
-    Route::get('schedule', 'Store\ScheduleController@home');
-    Route::get('shift/clock', 'Store\ShiftController@clock');
+    Route::get('shift/clock', 'Front\Store\ShiftController@clock');
     Route::resource('shift', 'Store\ShiftController', ['except' => ['create', 'show', 'edit'] ]);
 });
