@@ -11,9 +11,8 @@ $aSidebarWidth: 50px;
 $aSidebarButtonTextColor: #FFF;
 $aSidebarButtonTextHoverColor: #FFF;
 $aSidebarTextDecoration: none;
-$aSidebarButtonBgHoverColors: (1: red, 2: blue, 3: green);
-$aSidebarButtonBgColors: (1: pink, 2: lightblue, 3: lightgreen);
-
+$aSidebarButtonBgHoverColors: (1: rgba(187, 27, 46, 0.5), 2: rgba(187, 56, 27, 0.5), 3: rgba(141, 39, 176, 0.5), 4: rgba(50, 39, 176, 0.5),
+  5: rgba(39, 130, 176, 0.5), 6: rgba(39, 150, 74, 0.5), 7: rgba(255, 159, 64, 0.5), 8: rgba(153, 102, 255, 0.5), 9: rgba(187, 56, 27, 0.5), 10: rgba(75, 192, 192, 0.5));
 
 /** Panel-Click Variables **/
 $panel-lighten: 20%;

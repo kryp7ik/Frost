@@ -27,7 +27,6 @@ class Manager
                     flash('You are not scheduled to work today!  Please talk to an administrator and have them create a shift for you', 'danger');
                     return redirect('/warning');
                 }
-                return $next($request);
             } else {
                 return redirect('/')->with('warning', 'You do not have permission to visit that page!');
             }

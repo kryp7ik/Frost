@@ -10,6 +10,7 @@
     "bootstrap-sass": "^3.3.0"
   },
   "dependencies": {
-    "chart.js": "^2.3.0"
+    "chart.js": "^2.3.0",
+    "ioredis": "^2.4.0"
   }
 }

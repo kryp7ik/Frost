@@ -14,11 +14,6 @@
         @include('shared.navbar')
         <div id="wrapper">
             <div id="page-content-wrapper">
-                @if (Auth::check())
-                    @if (Auth::user()->hasRole('manager'))
-                        @include('shared.dashboard-links')
-                    @endif
-                @endif
                 @yield('content')
             </div>
         </div>

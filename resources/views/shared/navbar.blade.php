@@ -70,27 +70,67 @@
         <!-- /#sidebar-wrapper -->
 
         <!-- asidebar (Admin Sidebar) -->
-        @if(Auth::user()->hasRole('admin'))
+        @if(Auth::user()->hasRole('manager'))
             <div id="asidebar-wrapper">
                 <ul class="asidebar-nav">
                     <li>
-                        <a href="/admin/store/recipes">
-                            <span class="glyphicon glyphicon-tint"></span>
+                        <a href="/admin/store/products/index">
+                            <i class="glyphicon glyphicon-tag"></i>
+                            <span class="nav-text">Products</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/store/products/redline">
+                            <i class="glyphicon glyphicon-alert"></i>
+                            <span class="nav-text">Redline</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/store/shipments">
+                            <i class="glyphicon glyphicon-globe"></i>
+                            <span class="nav-text">Shipments</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/store/transfers">
+                            <i class="glyphicon glyphicon-transfer"></i>
+                            <span class="nav-text">Transfers</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/store/inventory/create">
+                            <i class="glyphicon glyphicon-flash"></i>
+                            <span class="nav-text">Inventory</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/store/discounts">
+                            <i class="glyphicon glyphicon-usd"></i>
+                            <span class="nav-text">Discounts</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/recipes">
-                            <span class="glyphicon glyphicon-tint"></span>
+                            <i class="glyphicon glyphicon-tint"></i>
+                            <span class="nav-text">Recipes</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/store/recipes">
-                            <span class="glyphicon glyphicon-tint"></span>
+                        <a href="/admin/store/report/sales">
+                            <i class="glyphicon glyphicon-signal"></i>
+                            <span class="nav-text">Reports</span>
                         </a>
                     </li>
                     <li>
-                        <a href="/admin/store/recipes">
-                            <span class="glyphicon glyphicon-tint"></span>
+                        <a href="/admin/store/touch">
+                            <i class="glyphicon glyphicon-hand-up"></i>
+                            <span class="nav-text">Touch</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/users">
+                            <i class="glyphicon glyphicon-user"></i>
+                            <span class="nav-text">Users</span>
                         </a>
                     </li>
                 </ul>

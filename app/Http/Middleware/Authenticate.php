@@ -24,6 +24,7 @@ class Authenticate
 
             return redirect()->guest('users/login');
         }
+        return $next($request);
         if(Auth::user()->store) {
             return $next($request);
         } else {

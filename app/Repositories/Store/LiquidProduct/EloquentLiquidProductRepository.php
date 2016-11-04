@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Store\LiquidProduct;
 
+use App\Events\LiquidProductCreated;
+use App\Events\LiquidProductDeleted;
 use App\Models\Store\LiquidProduct;
 
 class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
@@ -52,7 +54,11 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             'extra' => (isset($data['extra'])) ? true : false,
             'mixed' => false
         ]);
-        return $liquidProduct->save();
+        if ($liquidProduct->save()) {
+            event(new LiquidProductCreated($liquidProduct));
+            return $liquidProduct;
+        } else return false;
+
     }
 
     /**
@@ -76,8 +82,11 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
      */
     public function delete($id) {
         $liquid = $this->findById($id);
-        $liquid->delete();
-        flash('The Liquid Product has been successfully deleted', 'success');
+        if ($liquid) {
+            event(new LiquidProductDeleted($liquid));
+            $liquid->delete();
+            flash('The Liquid Product has been successfully deleted', 'success');
+        }
     }
 
 }

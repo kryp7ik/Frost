@@ -12,6 +12,14 @@ Route::get('user/status', 'Auth\AjaxController@status');
 Route::get('warning', 'Front\Store\ScheduleController@warning');
 Route::get('schedule', 'Front\Store\ScheduleController@home');
 
+Route::get('test', function () {
+
+    event(new \App\Events\UserSignedUp(Request::query('name')));
+    return view('test');
+
+
+});
+
 
 /**
  * Route group for 'manager' users only (/admin/*)
@@ -79,6 +87,8 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
 
     Route::get('store/report/sales', 'Store\ReportController@sales');
 
+    Route::get('store/touch', 'Store\TouchController@touch');
+
 });
 
 /**
@@ -113,6 +123,6 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');
     Route::get('pdf/inventory', 'PdfController@inventory');
 
-    Route::get('shift/clock', 'Front\Store\ShiftController@clock');
+    Route::get('shift/clock', 'Store\ShiftController@clock');
     Route::resource('shift', 'Store\ShiftController', ['except' => ['create', 'show', 'edit'] ]);
 });
