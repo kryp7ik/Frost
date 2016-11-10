@@ -88,6 +88,8 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::get('store/report/sales', 'Store\ReportController@sales');
 
     Route::get('store/touch', 'Store\TouchController@touch');
+    Route::get('store/touch/get-liquids', 'Store\TouchController@getLiquids');
+    Route::post('store/touch/complete', 'Store\TouchController@complete');
 
 });
 

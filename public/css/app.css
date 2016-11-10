@@ -266,4 +266,10 @@ body {
 .asidebar-nav li:nth-child(10) a:hover {
   background-color: rgba(75, 192, 192, 0.5); }
 
+.complete {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  height: 100px; }
+
 /*# sourceMappingURL=app.css.map */

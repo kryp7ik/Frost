@@ -17,13 +17,34 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
     /**
      * Returns all LiquidProducts that belong to the designated store and have not been mixed (completed)
      * @param int $store_id
+     * @param bool $mutate If true sort results in a new array to use on touch screen
      * @return mixed
      */
-    public function getIncompleteWhereStore($store_id)
+    public function getIncompleteWhereStore($store_id, $mutate = false)
     {
-        return LiquidProduct::
-                    where('store', $store_id)
-                    ->where('mixed', 0)->get();
+        $liquids = LiquidProduct::
+        where('store', $store_id)
+            ->where('mixed', 0)->get();
+        if($mutate) {
+            $sorted = [];
+            foreach ($liquids as $liquid) {
+                $sorted[] = [
+                    'id' => $liquid->id,
+                    'recipe_id' => $liquid->recipe->id,
+                    'recipe' => $liquid->recipe->name,
+                    'store' => $liquid->store,
+                    'size' => $liquid->size,
+                    'shop_order_id' => $liquid->shopOrder->id,
+                    'nicotine' => $liquid->nicotine,
+                    'extra' => $liquid->extra,
+                    'menthol' => $liquid->menthol,
+                    'vg' => $liquid->vg,
+                ];
+            }
+            return $sorted;
+        } else {
+            return $liquids;
+        }
     }
     /**
      * @param int $id
@@ -35,10 +56,12 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
     }
 
     /**
+     * Saves a new LiquidProduct to the database.
+     * Returns the model on success or false on fail
      * @param int $shop_order_id
      * @param int $store_id
      * @param array $data
-     * @return bool
+     * @return LiquidProduct|bool
      */
     public function create($shop_order_id, $store_id, $data)
     {

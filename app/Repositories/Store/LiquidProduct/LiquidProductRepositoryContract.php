@@ -16,9 +16,10 @@ interface LiquidProductRepositoryContract
     /**
      * Returns all LiquidProducts that belong to the designated store and have not been mixed (completed)
      * @param int $store_id
+     * @param bool $mutate If true sort results in a new array to use on touch screen
      * @return mixed
      */
-    public function getIncompleteWhereStore($store_id);
+    public function getIncompleteWhereStore($store_id, $mutate = false);
 
     /**
      * @param int $id
@@ -27,10 +28,12 @@ interface LiquidProductRepositoryContract
     public function findById($id);
 
     /**
+     * Saves a new LiquidProduct to the database.
+     * Returns the model on success or false on fail
      * @param int $shop_order_id
      * @param int $store_id
      * @param array $data
-     * @return bool
+     * @return LiquidProduct|boolean
      */
     public function create($shop_order_id, $store_id, $data);
 
