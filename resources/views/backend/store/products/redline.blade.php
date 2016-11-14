@@ -28,7 +28,7 @@
                             @foreach($productInstances as $instance)
                                 <tr data-id="{{ $instance->product->id }}">
                                     <td>{{ $instance->product->name }}</td>
-                                    <td>{{ $instance->store }}</td>
+                                    <td>{{ config('store.stores')[$instance->store] }}</td>
                                     <td>{{ $instance->stock }}</td>
                                     <td>{{ $instance->redline }}</td>
                                 </tr>

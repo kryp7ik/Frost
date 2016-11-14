@@ -12,8 +12,8 @@
                         <form style="display:none" id="change-customer" class="form-inline" method="post" action="/orders/{{ $order->id }}/customer">
                             {{ csrf_field() }}
                             <input id="phone" name="phone" type="text" class="form-control" autocomplete="off"/>
-                            <button type="submit" class="btn btn-success btn-raised">Change</button>
-                            <button id="cancel-phone" class="btn btn-danger btn-raised">Cancel</button>
+                            <button type="submit" class="btn btn-success btn-raised btn-sm">Change Customer</button>
+                            <button id="cancel-phone" class="btn btn-danger btn-raised btn-sm">Cancel</button>
                         </form>
                     </div>
                     <button class="btn btn-block btn-warning btn-raised" data-toggle="modal" data-target="#redeem">Points: {{ $order->customer->points }}</button>
@@ -101,7 +101,7 @@
                 e.preventDefault();
                 $('#customer-phone').show();
                 $('#change-customer').hide();
-            })
+            });
         </script>
     @endpush
 @endsection

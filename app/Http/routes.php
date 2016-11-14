@@ -12,15 +12,6 @@ Route::get('user/status', 'Auth\AjaxController@status');
 Route::get('warning', 'Front\Store\ScheduleController@warning');
 Route::get('schedule', 'Front\Store\ScheduleController@home');
 
-Route::get('test', function () {
-
-    event(new \App\Events\UserSignedUp(Request::query('name')));
-    return view('test');
-
-
-});
-
-
 /**
  * Route group for 'manager' users only (/admin/*)
  */

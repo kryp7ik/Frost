@@ -21,7 +21,9 @@
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
+                                                <button type="submit" class="btn btn-raised btn-success">Apply</button>
                                             </div>
+
                                         </div>
                                     </form>
                                 </div>
