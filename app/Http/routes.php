@@ -1,6 +1,15 @@
 <?php
 
 /**
+ * @todo
+ * Schedule - Duplicate week
+ * Customer display last liquid and coil bought on order screen
+ * E-mail receipt
+ * Duplicate liquid from order screen
+ * Custom discounts on the fly
+ */
+
+/**
  * Public routes (no authentication required)
  */
 //Route::get('users/register', 'Auth\AuthController@getRegister');
