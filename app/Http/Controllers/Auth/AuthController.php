@@ -25,11 +25,11 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
-     * Where to redirect users after login / registration.
+     * Redirect user to the /schedule page so they can clock in
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/schedule';
 
     /**
      * Create a new authentication controller instance.
@@ -71,11 +71,4 @@ class AuthController extends Controller
         ]);
     }
 
-    public function userStatus() {
-        if (Auth::user()->hasRole('manager')) {
-            return response()->json(['manager' => true]);
-        } else {
-            return response()->json(['manager' => false]);
-        }
-    }
 }

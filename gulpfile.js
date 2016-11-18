@@ -8,14 +8,6 @@ var elixir = require('laravel-elixir');
  | Elixir provides a clean, fluent API for defining some basic Gulp tasks
  | for your Laravel application. By default, we are compiling the Sass
  | file for our application, as well as publishing vendor resources.
- |
- mix.copy('vendor/bower_components/jquery/dist/jquery.js', 'resources/assets/js/jquery.js');
- mix.copy('vendor/bower_components/bootstrap-sass/assets/javascripts/bootstrap.js', 'resources/assets/js/bootstrap.js');
- mix.copy('vendor/bower_components/select2/dist/js/select2.js', 'resources/assets/js/select2.js');
- mix.copy('vendor/bower_components/datatables/media/js/dataTables.bootstrap.js', 'resources/assets/js/datatables.js');
- mix.copy('vendor/bower_components/moment/moment.js', 'resources/assets/js/moment.js');
- mix.copy('vendor/bower_components/bootstrap-material-design/dist/bootstrap-material-design.umd.js', 'resources/assets/js/materials.js');
- mix.copy('vendor/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', 'resources/assets/js/datetimepicker.js');
  */
 
 elixir(function(mix) {

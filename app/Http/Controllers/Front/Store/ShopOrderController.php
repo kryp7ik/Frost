@@ -6,6 +6,7 @@ use App\Events\OrderCompleted;
 use App\Jobs\SendReceiptEmail;
 use App\Repositories\Store\Customer\CustomerRepositoryContract;
 use App\Repositories\Store\Discount\DiscountRepositoryContract;
+use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use App\Repositories\Store\Recipe\RecipeRepositoryContract;
 use App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract;
@@ -132,7 +133,7 @@ class ShopOrderController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param int $id ShopOrder id
      * @param int $pid the id of the row in the pivot table
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -143,7 +144,7 @@ class ShopOrderController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param int $id ShopOrder id
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -154,14 +155,33 @@ class ShopOrderController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $lid
+     * @param int $id the ShopOrder id
+     * @param int $lid the LiquidProduct id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function removeLiquid($id, $lid)
     {
         $this->orders->removeLiquidFromOrder($this->orders->findById($id), $lid);
         return back();
+    }
+
+    /**
+     * Finds the last LiquidProduct that the customer who belongs to the specified ShopOrder ordered
+     * @param int $id ShopOrder id
+     * @param LiquidProductRepositoryContract $liquidRepo
+     * @param RecipeRepositoryContract $recipeRepo
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function lastLiquid($id, LiquidProductRepositoryContract $liquidRepo, RecipeRepositoryContract $recipeRepo)
+    {
+        $order = $this->orders->findById($id);
+        if ($order->customer) {
+            $liquid = $liquidRepo->findCustomersLastLiquid($order->customer->id, $recipeRepo);
+            if ($liquid) {
+                return response()->json($liquid);
+            }
+        }
+        return response()->json('fail');
     }
 
     /**
@@ -256,6 +276,7 @@ class ShopOrderController extends Controller
     }
 
     /**
+     * Displays the order summary and receipt options after an order has been completed
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -266,7 +287,8 @@ class ShopOrderController extends Controller
     }
 
     /**
-     * Accepts post or query parameter 'order' containing the order id
+     * Called via AJAX
+     * Accepts post request containing an 'order' attribute where the value is the order id
      * Fires the SendReceiptEmail Event which e-mails a receipt to the customer for the specified order
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -276,7 +298,7 @@ class ShopOrderController extends Controller
         if ($request->get('order')) {
             $order = $this->orders->findById($request->get('order'));
             if ($order) {
-                event(new SendReceiptEmail($order));
+                $this->dispatch(new SendReceiptEmail($order));
                 return response()->json(['status' => 'success']);
             }
         }

@@ -1,13 +1,13 @@
 <table class="table">
     <tr class="active">
-        <td><strong>Products</strong></td>
+        <td width="10%"><strong>Products</strong></td>
         <td colspan="4"><strong>Name</strong></td>
         <td><strong>Quantity</strong></td>
         <td><strong>Price</strong></td>
     </tr>
     @foreach($order->productInstances as $instance)
         <tr>
-            <td><a href="/orders/{{ $order->id }}/remove-product/{{ $instance->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+            <td><a href="/orders/{{ $order->id }}/remove-product/{{ $instance->pivot->id }}" class="btn btn-sm btn-danger" style="margin:0px">x</a></td>
             <td colspan="4">{{ $instance->product->name }}</td>
             <td>
                 <a href="/orders/{{ $order->id }}/quantity-update?pid={{ $instance->pivot->id }}&inc=minus">
@@ -32,7 +32,7 @@
     </tr>
     @foreach($order->liquidProducts as $liquid)
         <tr>
-            <td><a href="/orders/{{ $order->id }}/remove-liquid/{{ $liquid->id }}" class="btn btn-sm btn-danger" style="margin:0px">Remove</a></td>
+            <td><a href="/orders/{{ $order->id }}/remove-liquid/{{ $liquid->id }}" class="btn btn-sm btn-danger" style="margin:0px">x</a></td>
             <td>{{ $liquid->recipe->name }} {{ ($liquid->extra) ? 'XTRA' : '' }}</td>
             <td>{{ $liquid->size }}ml</td>
             <td>{{ $liquid->nicotine }}mg</td>

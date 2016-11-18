@@ -7,6 +7,7 @@
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
         <link href="/css/all.css" rel="stylesheet" />
         <link href="/css/app.css" rel="stylesheet" />
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
         @stack('css')
 
     </head>

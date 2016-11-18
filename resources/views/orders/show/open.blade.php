@@ -56,7 +56,7 @@
                     <span class="glyphicon glyphicon-cutlery"></span>
                 </a>
             </div>
-        </div><!-- END Left Column -->
+        </div><!-- ./ Left Column -->
 
         <!-- Right Column -->
         <div class="col-md-8">
@@ -84,6 +84,7 @@
         </div>
 
     </div>
+    <input type="hidden" id="order-id" value="{{ $order->id }}" />
 
     @include('orders.partials.redeem-modal')
     @include('orders.partials.product-modal')
@@ -101,6 +102,26 @@
                 e.preventDefault();
                 $('#customer-phone').show();
                 $('#change-customer').hide();
+            });
+            $('#cash').on('shown.bs.modal', function () {
+                $('#amount').focus();
+            });
+            $('#liquid').on('show.bs.modal', function () {
+                var lastLiquidUrl = '/orders/' + $('#order-id').val() + '/last-liquid';
+                $.getJSON(lastLiquidUrl, function(liquid) {
+                    if (liquid != 'fail') {
+                        $('#last-liquid').show();
+                        if (liquid.extra == 1) {
+                            $('#lflavor').html(liquid.recipe + ' Extra');
+                        } else {
+                            $('#lflavor').html(liquid.recipe);
+                        }
+                        $('#lsize').html(liquid.size + 'ml');
+                        $('#lnicotine').html(liquid.nicotine + 'mg');
+                        $('#lmenthol').html(liquid.menthol);
+                        $('#lvg').html(liquid.vg);
+                    }
+                });
             });
         </script>
     @endpush

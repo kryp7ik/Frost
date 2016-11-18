@@ -4,7 +4,6 @@
  * @todo
  * Schedule - Duplicate week
  * Customer display last liquid and coil bought on order screen
- * E-mail receipt
  * Duplicate liquid from order screen
  * Custom discounts on the fly
  */
@@ -115,12 +114,14 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders/{id?}/remove-product/{pid?}', 'Store\ShopOrderController@removeProduct');
     Route::post('orders/{id?}/add-liquid', 'Store\ShopOrderController@addLiquid');
     Route::get('orders/{id?}/remove-liquid/{lid?}', 'Store\ShopOrderController@removeLiquid');
+    Route::get('orders/{id?}/last-liquid', 'Store\ShopOrderController@lastLiquid');
     Route::post('orders/{id?}/add-discount', 'Store\ShopOrderController@addDiscount');
     Route::get('orders/{id?}/remove-discount/{did?}', 'Store\ShopOrderController@removeDiscount');
     Route::post('orders/{id?}/customer', 'Store\ShopOrderController@customer');
     Route::post('orders/{id?}/payment', 'Store\ShopOrderController@addPayment');
     Route::get('orders/payment/{id?}/delete', 'Store\ShopOrderController@deletePayment');
     Route::get('orders/{id?}/receipt', 'Store\ShopOrderController@receipt');
+    Route::post('orders/email-receipt', 'Store\ShopOrderController@emailReceipt');
 
     Route::get('pdf/order/{id?}/receipt', 'PdfController@orderReceipt');
     Route::get('pdf/inventory', 'PdfController@inventory');

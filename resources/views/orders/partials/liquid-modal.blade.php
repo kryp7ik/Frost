@@ -4,11 +4,32 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Add Another Liquid To The Order</h4>
+                <h4 class="modal-title" id="myModalLabel">Add A Liquid To The Order</h4>
             </div>
             <form method="post" action="/orders/{{ $order->id }}/add-liquid">
                 {{ csrf_field() }}
                 <div class="modal-body">
+                    <div id="last-liquid" class="well-sm" style="display:none">
+                        <h4>Customers Last Liquid Order</h4>
+                        <table class="table">
+                            <thead>
+                                <th>Size</th>
+                                <th>Flavor</th>
+                                <th>Nicotine</th>
+                                <th>Menthol</th>
+                                <th>VG</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="lsize"></td>
+                                    <td id="lflavor"></td>
+                                    <td id="lnicotine"></td>
+                                    <td id="lmenthol"></td>
+                                    <td id="lvg"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <fieldset class="form-inline">
                         <div class="form-group liquid-form-group">
                             <label for="size">Size</label>

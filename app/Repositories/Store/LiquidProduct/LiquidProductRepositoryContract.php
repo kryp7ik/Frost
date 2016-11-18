@@ -8,6 +8,7 @@
 namespace App\Repositories\Store\LiquidProduct;
 
 use App\Models\Store\LiquidProduct;
+use App\Repositories\Store\Recipe\RecipeRepositoryContract;
 
 interface LiquidProductRepositoryContract
 {
@@ -26,6 +27,14 @@ interface LiquidProductRepositoryContract
      * @return LiquidProduct|boolean
      */
     public function findById($id);
+
+    /**
+     * Returns the relevant information for the last LiquidProduct ordered for the given customer id or false if one was not found
+     * @param int $customer_id
+     * @param RecipeRepositoryContract $recipeRepo
+     * @return array|bool
+     */
+    public function findCustomersLastLiquid($customer_id, RecipeRepositoryContract $recipeRepo);
 
     /**
      * Saves a new LiquidProduct to the database.

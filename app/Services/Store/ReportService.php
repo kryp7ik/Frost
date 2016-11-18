@@ -6,13 +6,28 @@ use App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract;
 
 class ReportService {
 
+    /**
+     * @var ShopOrderRepositoryContract
+     */
     protected $orderRepo;
 
+    /**
+     * ReportService constructor.
+     * @param ShopOrderRepositoryContract $orderRepo
+     */
     public function __construct(ShopOrderRepositoryContract $orderRepo)
     {
         $this->orderRepo = $orderRepo;
     }
 
+    /**
+     * Optionally accepts a store and date range to find all orders within the given parameters
+     * Parses through all orders to return a sorted array of all relevant sales data
+     * @param null|int $store
+     * @param null|string $startDate
+     * @param null|string $endDate
+     * @return array
+     */
     public function generateSalesReport($store = null, $startDate = null, $endDate = null)
     {
         $start = ($startDate) ? new \DateTime($startDate) : new \DateTime();
@@ -26,6 +41,11 @@ class ReportService {
         return $reportData;
     }
 
+    /**
+     * Parses through the orders array and returns the report data
+     * @param array $orders The array of ShopOrders
+     * @return array $data
+     */
     private function parseOrdersForSalesReport($orders)
     {
         $data = $this->getSalesReportDataArray();
@@ -42,6 +62,12 @@ class ReportService {
             }
             foreach ($order->productInstances as $productInstance) {
                 $data['productCost'] += $productInstance->product->cost * $productInstance->pivot->quantity;
+                $data['productSales'] += $productInstance->price * $productInstance->pivot->quantity;
+            }
+            foreach ($order->liquidProducts as $liquid) {
+                $data['liquidSales'] += $liquid->getPrice();
+                $data['liquids'][$liquid->size] = (isset($data['liquids'][$liquid->size])) ? $data['liquids'][$liquid->size] + 1: 1;
+                $data['totalMl'] += $liquid->size;
             }
             foreach ($order->discounts as $discount) {
                 $data['discounts'] += $discount->pivot->applied;
@@ -52,11 +78,21 @@ class ReportService {
         return $data;
     }
 
+    /**
+     * Returns the data array template for sales report
+     * @return array
+     */
     private function getSalesReportDataArray() {
         return [
             'gross' => 0,
             'net' => 0,
             'productCost' => 0,
+            'productSales' => 0,
+            'liquidSales' => 0,
+            'totalMl' => 0,
+            'liquids' => [
+
+            ],
             'subtotal' => 0,
             'cash' => 0,
             'credit' => 0,
