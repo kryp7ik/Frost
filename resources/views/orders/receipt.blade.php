@@ -24,7 +24,7 @@
                         @if($order->customer)
                             @if($order->customer->email)
                                 <div class="col-md-4">
-                                    <a href="/mail/order/{{ $order->id }}/receipt" class="btn btn-raised btn-info btn-block">E-mail Receipt</a>
+                                    <a id="email" href="/mail/order/{{ $order->id }}/receipt" class="btn btn-raised btn-info btn-block">E-mail Receipt</a>
                                 </div>
                             @endif
                         @endif
@@ -73,7 +73,12 @@
                 e.preventDefault();
                 $('#customer-phone').show();
                 $('#change-customer').hide();
-            })
+            });
+            $('#email').on('click', function() {
+                $.post('/orders/email-receipt',{ 'order' : {{ $order->id  }} }, function() {
+
+                });
+            });
         </script>
     @endpush
 @endsection

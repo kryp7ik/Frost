@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front\Store;
 
 use App\Events\OrderCompleted;
+use App\Jobs\SendReceiptEmail;
 use App\Repositories\Store\Customer\CustomerRepositoryContract;
 use App\Repositories\Store\Discount\DiscountRepositoryContract;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
@@ -262,5 +263,23 @@ class ShopOrderController extends Controller
     {
         $order = $this->orders->findById($id);
         return view('orders.receipt', compact('order'));
+    }
+
+    /**
+     * Accepts post or query parameter 'order' containing the order id
+     * Fires the SendReceiptEmail Event which e-mails a receipt to the customer for the specified order
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function emailReceipt(Request $request)
+    {
+        if ($request->get('order')) {
+            $order = $this->orders->findById($request->get('order'));
+            if ($order) {
+                event(new SendReceiptEmail($order));
+                return response()->json(['status' => 'success']);
+            }
+        }
+        return response()->json(['status' => 'fail']);
     }
 }

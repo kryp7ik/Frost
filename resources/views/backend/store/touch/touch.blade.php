@@ -55,7 +55,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
                 }
             });
-            var socket = io('127.0.0.1:3000');
+            var socket = io('node.frostpos.com:3000');
 
             var app = new Vue({
                 el: '#app',
