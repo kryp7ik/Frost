@@ -65,22 +65,27 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
      */
     public function findCustomersLastLiquid($customer_id, RecipeRepositoryContract $recipeRepo)
     {
-        $liquid = DB::table('shop_orders')
+        $liquids = DB::table('shop_orders')
             ->join('liquid_products', 'shop_orders.id', '=', 'liquid_products.shop_order_id')
             ->where('shop_orders.customer_id', '=', $customer_id)
             ->select('liquid_products.*')
             ->orderBy('liquid_products.id', 'desc')
-            ->first();
-        if ($liquid) {
-            $recipe = $recipeRepo->findById($liquid->recipe_id);
-            return [
-                'recipe' => $recipe->name,
-                'size' => $liquid->size,
-                'nicotine' => $liquid->nicotine,
-                'menthol' => config('store.menthol_levels')[$liquid->menthol],
-                'vg' => config('store.vg_levels')[$liquid->vg],
-                'extra' => $liquid->extra
-            ];
+            ->limit(3)
+            ->get();
+        if ($liquids) {
+            $liquidsArray = [];
+            foreach ($liquids as $liquid) {
+                $recipe = $recipeRepo->findById($liquid->recipe_id);
+                $liquidsArray[] = [
+                    'recipe' => $recipe->name,
+                    'size' => $liquid->size,
+                    'nicotine' => $liquid->nicotine,
+                    'menthol' => config('store.menthol_levels')[$liquid->menthol],
+                    'vg' => config('store.vg_levels')[$liquid->vg],
+                    'extra' => $liquid->extra
+                ];
+            }
+            return $liquidsArray;
         } else {
             return false;
         }

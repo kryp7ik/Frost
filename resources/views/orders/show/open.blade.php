@@ -1,7 +1,7 @@
 @extends('master')
 @section('title', 'Order Details')
 @section('content')
-    <div class="row">
+    <div class="row" id="app">
         <!-- Left Column -->
         <div class="col-md-4">
             <div class="well">
@@ -91,8 +91,44 @@
     @include('orders.partials.liquid-modal')
     @include('orders.partials.discount-modal')
     @include('orders.partials.cash-modal')
+    @include('orders.partials.vue-liquid-fieldset')
     @push('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
         <script type="text/javascript">
+
+            Vue.component('vue-liquid-fieldset', {
+                template: '#liquid-fieldset-template',
+                props: ['fsindex']
+            });
+            var app = new Vue({
+                el: '#app',
+
+                data: {
+                    liquids: [],
+                    fieldsets: [],
+                    fieldsetCount: 0,
+                },
+
+                methods: {
+
+                    addFieldset: function () {
+                        this.fieldsets.push({ });
+                    },
+
+                    getLastThreeLiquids: function() {
+                        var lastLiquidUrl = '/orders/' + $('#order-id').val() + '/last-liquid';
+                        $.getJSON(lastLiquidUrl, function(lastLiquids) {
+                            liquids = lastLiquids;
+                        }.bind(this));
+
+                    }
+                },
+
+                ready: function() {
+                    this.getLastThreeLiquids();
+                }
+            });
+            var lastLiquid = [];
             $('#customer-phone').on('click', function() {
                 $('#customer-phone').hide();
                 $('#change-customer').show();
@@ -106,10 +142,11 @@
             $('#cash').on('shown.bs.modal', function () {
                 $('#amount').focus();
             });
-            $('#liquid').on('show.bs.modal', function () {
+/*            $('#liquid').on('show.bs.modal', function () {
                 var lastLiquidUrl = '/orders/' + $('#order-id').val() + '/last-liquid';
                 $.getJSON(lastLiquidUrl, function(liquid) {
                     if (liquid != 'fail') {
+                        lastLiquid = liquid;
                         $('#last-liquid').show();
                         if (liquid.extra == 1) {
                             $('#lflavor').html(liquid.recipe + ' Extra');
@@ -121,8 +158,8 @@
                         $('#lmenthol').html(liquid.menthol);
                         $('#lvg').html(liquid.vg);
                     }
-                });
-            });
+                }); // .bind(this)
+            });*/
         </script>
     @endpush
 @endsection

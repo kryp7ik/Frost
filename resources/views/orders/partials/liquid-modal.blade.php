@@ -13,6 +13,7 @@
                         <h4>Customers Last Liquid Order</h4>
                         <table class="table">
                             <thead>
+                                <th>Re-Order</th>
                                 <th>Size</th>
                                 <th>Flavor</th>
                                 <th>Nicotine</th>
@@ -20,13 +21,15 @@
                                 <th>VG</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td id="lsize"></td>
-                                    <td id="lflavor"></td>
-                                    <td id="lnicotine"></td>
-                                    <td id="lmenthol"></td>
-                                    <td id="lvg"></td>
+                                <tr v-for="liquid in liquids">
+                                    <td></td>
+                                    <td>@{{ liquid.size }}ml</td>
+                                    <td>@{{ liquid.recipe }}</td>
+                                    <td>@{{ liquid.nicotine }}</td>
+                                    <td>@{{ liquid.menthol }}</td>
+                                    <td>@{{ liquid.vg }}</td>
                                 </tr>
+
                             </tbody>
                         </table>
                     </div>
