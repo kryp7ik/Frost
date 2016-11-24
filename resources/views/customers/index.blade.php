@@ -6,16 +6,12 @@
             <div class="panel-heading">
                 <h2>
                     All Customers
-                    <!-- Button trigger modal -->
                     <button type="button" class="btn btn-success btn-lg btn-raised pull-right" data-toggle="modal" data-target="#modal">
                         New Customer
                     </button>
                 </h2>
-
             </div>
-            @if ($customers->isEmpty())
-                <p> You currently do not have any customers.</p>
-            @else
+
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <table class="table table-hover display clickable" id="table">
@@ -25,19 +21,12 @@
                                 <th>E-mail</th>
                             </thead>
                             <tbody>
-                            @foreach($customers as $customer)
-                                <tr data-id="{{ $customer->id }}">
-                                    <td>{{ $customer->name }}</td>
-                                    <td>{{ $customer->phone }}</td>
-                                    <td>{{ $customer->email }}</td>
-                                </tr>
-                            @endforeach
+
                             </tbody>
                         </table>
                     </div>
                 </div>
-                {{ $customers->links() }}
-            @endif
+
         </div>
     </div>
 
@@ -87,13 +76,20 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#table').DataTable( {
-                    "paging": false,
-                    "info" : false,
-                    "order" : [[ 0, "desc" ]]
+                    info: false,
+                    order: [[ 0, "asc" ]],
+                    processing: true,
+                    serverSide: true,
+                    ajax: '/customers/data-tables',
+                    columns: [
+                        { data: 'name', name: 'name' },
+                        { data: 'phone', name: 'phone'},
+                        { data: 'email', name: 'email'}
+                    ]
                 });
             });
             $('tbody').on('click', 'tr', function() {
-                var url = '/customers/' + $(this).attr('data-id') + '/show';
+                var url = '/customers/' + $(this).attr('id') + '/show';
                 window.location.href = url;
             });
         </script>

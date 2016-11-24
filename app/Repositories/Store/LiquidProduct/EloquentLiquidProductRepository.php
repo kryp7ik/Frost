@@ -117,7 +117,19 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             event(new LiquidProductCreated($liquidProduct));
             return $liquidProduct;
         } else return false;
+    }
 
+    /**
+     * Creates multiple LiquidProducts from an array of POST data
+     * @param int $shop_order_id
+     * @param int $store_id
+     * @param array $data
+     */
+    public function createMultiple($shop_order_id, $store_id, $data)
+    {
+        foreach ($data['liquids'] as $liquidData) {
+            $this->create($shop_order_id, $store_id, $liquidData);
+        }
     }
 
     /**

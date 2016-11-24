@@ -99,6 +99,7 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('/', 'PagesController@home');
 
     Route::get('customers', 'Store\CustomerController@index');
+    Route::get('customers/data-tables', 'Store\CustomerController@dataTables');
     Route::post('customers/create', 'Store\CustomerController@store');
     Route::get('customers/{id?}/show', 'Store\CustomerController@show');
     Route::post('customers/{id?}/ajax', 'Store\CustomerController@ajaxUpdate');

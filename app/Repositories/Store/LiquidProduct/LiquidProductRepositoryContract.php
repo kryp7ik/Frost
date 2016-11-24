@@ -47,6 +47,14 @@ interface LiquidProductRepositoryContract
     public function create($shop_order_id, $store_id, $data);
 
     /**
+     * Creates multiple LiquidProducts from an array of POST data
+     * @param int $shop_order_id
+     * @param int $store_id
+     * @param array $data
+     */
+    public function createMultiple($shop_order_id, $store_id, $data);
+
+    /**
      * @param int $id
      * @param string $field_name
      * @param mixed $value

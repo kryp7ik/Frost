@@ -95,12 +95,8 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
             'user_id' => $user->id,
         ]);
         if($order->save()) {
-            foreach ($data['liquids'] as $liquid){
-                $this->liquidProductsRepository->create($order->id, $user->store, $liquid);
-            }
-            foreach ($data['products'] as $product) {
-                $this->addProductToOrder($order, $product);
-            }
+            $this->liquidProductsRepository->createMultiple($order->id, $user->store, $data);
+            $this->addProductsToOrder($order, $data);
             $order->calculator()->calculateTotal();
             flash('The order has been created successfully', 'success');
             return $order;
@@ -134,15 +130,17 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     }
 
     /**
-     * Attaches a single ProductInstance to an order with the quantity in the join table
+     * Attaches one or more ProductInstance to an order with the quantity in the join table
      * @param ShopOrder $order
      * @param array $data
      * @return boolean
      */
-    public function addProductToOrder(ShopOrder $order, $data)
+    public function addProductsToOrder(ShopOrder $order, $data)
     {
-        if ($data['quantity'] == 0) return false;
-        $order->productInstances()->attach([$data['instance'] => ['quantity' => $data['quantity']]]);
+        foreach ($data['products'] as $productData) {
+            if ($productData['quantity'] == 0) return false;
+            $order->productInstances()->attach([$productData['instance'] => ['quantity' => $productData['quantity']]]);
+        }
         $order->save();
         $order->calculator()->calculateTotal();
         flash('A product has been successfully added to the order', 'success');
@@ -180,17 +178,19 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     }
 
     /**
+     * Adds one or more LiquidProducts to an order
      * @param ShopOrder $order
      * @param array $data
      */
-    public function addLiquidToOrder(ShopOrder $order, $data)
+    public function addLiquidsToOrder(ShopOrder $order, $data)
     {
-        $this->liquidProductsRepository->create($order->id, $order->store, $data);
+        $this->liquidProductsRepository->createMultiple($order->id, $order->store, $data);
         $order->calculator()->calculateTotal();
         flash('A liquid has been successfully added to the order', 'success');
     }
 
     /**
+     * Removes one LiquidProduct from the order
      * @param ShopOrder $order the order being modified
      * @param int $liquid_id The id of the LiquidProduct to be deleted
      */

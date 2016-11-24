@@ -12,7 +12,7 @@ class EloquentCustomerRepository implements CustomerRepositoryContract
      */
     public function getAll()
     {
-        $customers = Customer::paginate(50);
+        $customers = Customer::paginate(1);
         return $customers;
     }
 

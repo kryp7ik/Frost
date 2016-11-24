@@ -1,5 +1,7 @@
 var elixir = require('laravel-elixir');
 
+/* require('laravel-elixir-vueify');
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -37,5 +39,7 @@ elixir(function(mix) {
         'ripples.min.js',
         'custom.js'
     ]);
-    /* mix.browserSync({ proxy: 'http://frost.com' }); */
+
+    /* mix.browserify('main.js');
+     mix.browserSync({ proxy: 'http://frost.com' }); */
 });

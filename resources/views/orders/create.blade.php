@@ -37,9 +37,12 @@
                 newEntry.find('.l-size').attr('name', 'liquids[' + currentCount + '][size]');
                 newEntry.find('.l-select').attr('name', 'liquids[' + currentCount + '][recipe]');
                 newEntry.find('.l-nicotine').attr('name', 'liquids[' + currentCount + '][nicotine]');
+                newEntry.find('.l-nicotine').val(currentEntry.find('.l-nicotine').val());
                 newEntry.find('.l-extra').attr('name', 'liquids[' + currentCount + '][extra]');
                 newEntry.find('.l-menthol').attr('name', 'liquids[' + currentCount + '][menthol]');
+                newEntry.find('.l-menthol').val(currentEntry.find('.l-menthol').val());
                 newEntry.find('.l-vg').attr('name', 'liquids[' + currentCount + '][vg]');
+                newEntry.find('.l-vg').val(currentEntry.find('.l-vg').val());
                 controlForm.find('fieldset:not(:last) .liquid-add')
                         .removeClass('liquid-add').addClass('liquid-remove')
                         .removeClass('btn-success').addClass('btn-danger')

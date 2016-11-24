@@ -120,7 +120,7 @@ class ShopOrderController extends Controller
      */
     public function addProduct($id, Request $request)
     {
-        $this->orders->addProductToOrder($this->orders->findById($id), $request->all());
+        $this->orders->addProductsToOrder($this->orders->findById($id), $request->all());
         return back();
     }
 
@@ -150,7 +150,7 @@ class ShopOrderController extends Controller
      */
     public function addLiquid($id, Request $request)
     {
-        $this->orders->addLiquidToOrder($this->orders->findById($id), $request->all());
+        $this->orders->addLiquidsToOrder($this->orders->findById($id), $request->all());
         return back();
     }
 

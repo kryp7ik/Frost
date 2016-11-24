@@ -62,12 +62,12 @@ interface ShopOrderRepositoryContract
     public function delete($order_id);
 
     /**
-     * Attaches a single ProductInstance to an order with the quantity in the join table
+     * Attaches one or more ProductInstance to an order with the quantity in the join table
      * @param ShopOrder $order
      * @param array $data
      * @return bool
      */
-    public function addProductToOrder(ShopOrder $order, $data);
+    public function addProductsToOrder(ShopOrder $order, $data);
 
     /**
      * Updates the quantity of the given product.
@@ -85,12 +85,14 @@ interface ShopOrderRepositoryContract
     public function removeProductFromOrder(ShopOrder $order, $product_id);
 
     /**
+     * Adds one or more LiquidProducts to an order
      * @param ShopOrder $order
      * @param array $data
      */
-    public function addLiquidToOrder(ShopOrder $order, $data);
+    public function addLiquidsToOrder(ShopOrder $order, $data);
 
     /**
+     * Removes one LiquidProduct from the order
      * @param ShopOrder $order the order being modified
      * @param int $liquid_id The id of the LiquidProduct to be deleted
      */

@@ -162,6 +162,7 @@ return [
         Laracasts\Flash\FlashServiceProvider::class,
         App\Providers\RepositoryServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
 
     ],
 

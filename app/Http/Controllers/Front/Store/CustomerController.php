@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Front\Store;
 
+use App\Models\Store\Customer;
 use App\Repositories\Store\Customer\CustomerRepositoryContract;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\CustomerFormRequest;
+use Yajra\Datatables\Datatables;
 
 class CustomerController extends Controller
 {
@@ -29,8 +31,16 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $customers = $this->customers->getAll();
-        return view('customers.index', compact('customers'));
+        return view('customers.index');
+    }
+
+    /**
+     * Used for ajax calls from dataTables to retrieve Customers
+     * @return mixed
+     */
+    public function dataTables()
+    {
+        return Datatables::of(Customer::query())->setRowId(function($customer) { return $customer->id; })->make(true);
     }
 
     /**
