@@ -32,9 +32,28 @@ interface LiquidProductRepositoryContract
      * Returns the relevant information for the last LiquidProduct ordered for the given customer id or false if one was not found
      * @param int $customer_id
      * @param RecipeRepositoryContract $recipeRepo
+     * @param int $limit The amount of results to limit t
      * @return array|bool
      */
-    public function findCustomersLastLiquid($customer_id, RecipeRepositoryContract $recipeRepo);
+    public function findCustomersLastLiquid($customer_id, RecipeRepositoryContract $recipeRepo, $limit);
+
+    /**
+     * Retrieves the last LiquidProduct(s) that were completed (mixed) for the designated store
+     * Optionally return a formatted array for a json response
+     * @param int $store_id
+     * @param int $limit Number of results to limit
+     * @param bool $mutate if true return formatted array for json response
+     * @return array
+     */
+    public function getRecentlyCompletedWhereStore($store_id, $limit = 5, $mutate = true );
+
+    /**
+     * Set's the designated LiquidProducts 'mixed' attribute back to false
+     * Returns true on success or false on fail
+     * @param int $liquidProduct_id
+     * @return bool
+     */
+    public function unMixLiquidProduct($liquidProduct_id);
 
     /**
      * Saves a new LiquidProduct to the database.

@@ -4,18 +4,10 @@
     <head>
         <title>FrostPOS: Touch</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <style>
-            .complete {
-                position:absolute;
-                width:100%;
-                bottom:0px;
-                height:100px
-            }
-        </style>
+        <link rel="stylesheet" href="/css/touch.css"/>
     </head>
     <body>
         @include('shared.touch-navbar')
-
         <div id="app">
             <table class="table table-striped">
                 <thead>
@@ -41,6 +33,21 @@
                     </tr>
                 </tbody>
             </table>
+
+
+            <button id="mixed-toggle" v-on:click="recentlyCompleted()" class="btn btn-info">
+                Recently Completed
+            </button>
+            <div id="mixed" v-show="show" transition="slide-up" >
+                <table class="table table-hover">
+                    <tr v-for="liq in recent">
+                        <td><button v-on:click="unmix( liq.id )" class="btn btn-success">Un-Mix</button></td>
+                        <td>@{{ liq.size }}ml</td>
+                        <td>@{{ liq.recipe }}</td>
+                        <td>@{{ liq.nicotine }}mg</td>
+                    </tr>
+                </table>
+            </div>
             <button v-on:click="completeAll" class="btn btn-success complete">Complete All</button>
         </div>
 
@@ -48,20 +55,21 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.5.1/socket.io.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
         <script>
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
                 }
             });
-            var socket = io('node.frostpos.com:3000');
+            var socket = io("{{ config('store.socket_url') }}");
 
             var app = new Vue({
                 el: '#app',
 
                 data: {
                     liquids: [],
+                    show: false,
+                    recent: [],
                     iceMultipliers: {
                         0:0,
                         1:0.04,
@@ -94,7 +102,7 @@
                         }.bind(this));
                     },
                     completeOrder: function(id) {
-                        $.post('/admin/store/touch/complete', {'id': id}, function() {
+                        $.post('/admin/store/touch/complete', {id : id}, function() {
                             this.refreshLiquids();
                         }.bind(this));
                     },
@@ -107,6 +115,18 @@
                             this.refreshLiquids();
                         }.bind(this));
                     },
+                    recentlyCompleted: function() {
+                        this.show = !this.show;
+                        if(this.show) {
+                            $.getJSON('/admin/store/touch/get-mixed', function(liquidList) {
+                                this.recent = liquidList;
+                            }.bind(this));
+                        }
+                    },
+                    unmix: function(id) {
+                        $.getJSON('/admin/store/touch/unmix/' + id);
+                        this.recentlyCompleted();
+                    }
 
                 },
 

@@ -65,7 +65,7 @@
                 <div class="well">
                     <div class="row">
                         <div class="col-md-4">
-                            <button class="btn btn-success btn-lg btn-raised btn-block" data-toggle="modal" data-target="#cash">Cash</button>
+                            <button class="btn btn-success btn-lg btn-raised btn-block" data-toggle="modal" data-target="#cash" style="height:88px">Cash</button>
                         </div>
                         <div class="col-md-4 text-center">
                             <h3>
@@ -77,7 +77,7 @@
                             <form method="post" action="/orders/{{ $order->id }}/payment">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="type" value="credit" />
-                                <button type="submit" class="btn btn-success btn-lg btn-raised btn-block">Credit</button>
+                                <button type="submit" class="btn btn-success btn-lg btn-raised btn-block" style="height:88px">Credit</button>
                             </form>
                         </div>
                     </div>

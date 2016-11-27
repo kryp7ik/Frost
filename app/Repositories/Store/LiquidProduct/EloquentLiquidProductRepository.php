@@ -25,7 +25,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
     public function getIncompleteWhereStore($store_id, $mutate = false)
     {
         $liquids = LiquidProduct::
-        where('store', $store_id)
+            where('store', $store_id)
             ->where('mixed', 0)->get();
         if($mutate) {
             $sorted = [];
@@ -48,6 +48,58 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             return $liquids;
         }
     }
+
+
+    /**
+     * Retrieves the last LiquidProduct(s) that were completed (mixed) for the designated store
+     * Optionally return a formatted array for a json response
+     * @param int $store_id
+     * @param int $limit Number of results to limit
+     * @param bool $mutate if true return formatted array for json response
+     * @return array
+     */
+    public function getRecentlyCompletedWhereStore($store_id, $limit = 5, $mutate = true )
+    {
+        $liquids = LiquidProduct::
+        where('store', $store_id)
+            ->where('mixed', 1)
+            ->orderBy('updated_at', 'desc')
+            ->limit($limit)
+            ->get();
+        if($mutate) {
+            $sorted = [];
+            foreach ($liquids as $liquid) {
+                $sorted[] = [
+                    'id' => $liquid->id,
+                    'recipe' => $liquid->recipe->name,
+                    'size' => $liquid->size,
+                    'nicotine' => $liquid->nicotine,
+                ];
+            }
+            return $sorted;
+        } else {
+            return $liquids;
+        }
+    }
+
+    /**
+     * Set's the designated LiquidProducts 'mixed' attribute back to false & fires event which broadcasts the liquid to socket.io
+     * Returns true on success or false on fail
+     * @param int $liquidProduct_id
+     * @return bool
+     */
+    public function unMixLiquidProduct($liquidProduct_id)
+    {
+        $liquid = $this->findById($liquidProduct_id);
+        if ($liquid) {
+            $liquid->mixed = false;
+            $liquid->save();
+            event(new LiquidProductCreated($liquid));
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param int $id
      * @return LiquidProduct|boolean
@@ -58,19 +110,20 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
     }
 
     /**
-     * Returns the relevant information for the last LiquidProduct ordered for the given customer id or false if one was not found
+     * Returns the relevant information for the last LiquidProduct(s) ordered for the given customer id or false if one was not found
      * @param int $customer_id
      * @param RecipeRepositoryContract $recipeRepo
+     * @param int $limit The amount of results to limit to
      * @return array|bool
      */
-    public function findCustomersLastLiquid($customer_id, RecipeRepositoryContract $recipeRepo)
+    public function findCustomersLastLiquid($customer_id, RecipeRepositoryContract $recipeRepo, $limit = 3)
     {
         $liquids = DB::table('shop_orders')
             ->join('liquid_products', 'shop_orders.id', '=', 'liquid_products.shop_order_id')
             ->where('shop_orders.customer_id', '=', $customer_id)
             ->select('liquid_products.*')
             ->orderBy('liquid_products.id', 'desc')
-            ->limit(3)
+            ->limit($limit)
             ->get();
         if ($liquids) {
             $liquidsArray = [];

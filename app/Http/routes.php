@@ -3,7 +3,6 @@
 /**
  * @todo
  * Schedule - Duplicate week
- * Customer display last liquid and coil bought on order screen
  * Duplicate liquid from order screen
  * Custom discounts on the fly
  */
@@ -88,7 +87,9 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
 
     Route::get('store/touch', 'Store\TouchController@touch');
     Route::get('store/touch/get-liquids', 'Store\TouchController@getLiquids');
+    Route::get('store/touch/get-mixed', 'Store\TouchController@getMixed');
     Route::post('store/touch/complete', 'Store\TouchController@complete');
+    Route::get('store/touch/unmix/{id?}', 'Store\TouchController@unmix');
 
 });
 

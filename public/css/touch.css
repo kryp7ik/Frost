@@ -1,0 +1,46 @@
+.complete {
+    position:absolute;
+    width:70%;
+    bottom:0px;
+    right:0px;
+    height:100px
+}
+
+#mixed-toggle {
+    position: absolute;
+    width: 30%;
+    bottom: 0px;
+    left:0px;
+    height: 100px;
+    z-index:999;
+}
+
+#mixed {
+    position: absolute;
+    background: lightgray;
+    border-radius:5px;
+    z-index:1;
+    bottom:100px;
+    left:0px;
+    width:30%;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.slide-up-transition {
+    height:250px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.slide-up-enter {
+    height: 0px;
+}
+
+.slide-up-leave {
+    height: 0px;
+}

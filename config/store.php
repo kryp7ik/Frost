@@ -2,6 +2,8 @@
 
 return [
 
+    'socket_url' => '127.0.0.1:3000',
+
     'tax' => 0.06,
 
     'manager_pin' => 133769,
