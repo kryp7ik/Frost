@@ -204,6 +204,7 @@ $(document).ready(function() {
             dataType: "json",
         }).done(function() {
             calendar.fullCalendar('refetchEvents');
+            $('#event-actions').fadeOut();
         })
     });
     $('#save').on('click', function(e) {

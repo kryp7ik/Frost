@@ -13,8 +13,10 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass("app.scss");
-    mix.styles([
+    mix.sass([
+        "app.scss"
+    ])
+        .styles([
         "libs/bootstrap.min.css",
         "libs/bootstrap-editable.css",
         "libs/bootstrap-material-design.css",
@@ -23,12 +25,12 @@ elixir(function(mix) {
         "libs/datatables.min.css",
         "libs/bootstrap-datetimepicker.min.css",
         "partials/snow.css"
+        ])
 
-    ]);
+        .copy('node_modules/chart.js/dist/Chart.min.js', 'public/js/chart.min.js')
+        .copy('node_modules/font-awesome/fonts', 'public/fonts')
 
-    mix.copy('node_modules/chart.js/dist/Chart.min.js', 'public/js/chart.min.js');
-
-    mix.scripts([
+        .scripts([
         'jquery.min.js',
         'bootstrap.min.js',
         'moment.min.js',

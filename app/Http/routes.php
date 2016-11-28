@@ -63,6 +63,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
     Route::post('store/recipes/{id?}/update', 'Store\RecipeController@update');
     Route::get('store/recipes/{id?}/remove/{iid?}', 'Store\RecipeController@remove');
     Route::post('store/recipes/add', 'Store\RecipeController@add');
+    Route::get('store/recipes/data-tables', 'Store\RecipeController@dataTables');
 
     Route::get('store/discounts', 'Store\DiscountController@index');
     Route::post('store/discounts/create', 'Store\DiscountController@store');
@@ -97,7 +98,6 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
  * Route group for authenticated users who are not 'Admin' (/*)
  */
 Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
-    Route::get('/', 'PagesController@home');
 
     Route::get('customers', 'Store\CustomerController@index');
     Route::get('customers/data-tables', 'Store\CustomerController@dataTables');
@@ -130,4 +130,14 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
 
     Route::get('shift/clock', 'Store\ShiftController@clock');
     Route::resource('shift', 'Store\ShiftController', ['except' => ['create', 'show', 'edit'] ]);
+
+    Route::get('/', 'AccountController@dashboard');
+    Route::get('account/edit', 'AccountController@edit');
+    Route::post('account/edit', 'AccountController@update');
+
+    Route::get('announcements/create', 'AnnouncementController@create');
+    Route::post('announcements/create', 'AnnouncementController@store');
+    Route::get('announcements/{id?}/edit', 'AnnouncementController@edit');
+    Route::post('announcements/{id?}/edit', 'AnnouncementController@update');
+    Route::get('announcements/{id?}/delete', 'AnnouncementController@delete');
 });

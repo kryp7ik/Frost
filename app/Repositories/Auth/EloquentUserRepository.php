@@ -66,12 +66,12 @@ class EloquentUserRepository implements UserRepositoryContract
         $user = $this->findById($user_id);
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->store = $data['store'];
+        if(isset($data['store'])) $user->store = $data['store'];
         if ($data['password'] != '') {
             $user->password = Hash::make($data['password']);
         }
         $user->save();
-        $this->syncRoles($user, $data['role']);
+        if(isset($data['role'])) $this->syncRoles($user, $data['role']);
         flash('The user has been successfully updated', 'success');
         return $user;
 

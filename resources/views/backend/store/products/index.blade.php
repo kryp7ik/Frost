@@ -5,8 +5,11 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-tags" aria-hidden="true"></i>
                     All Products
-                    <a href="/admin/store/products/create" class="btn btn-lg btn-raised btn-success pull-right">Add New Product</a>
+                    <a href="/admin/store/products/create" class="btn btn-lg btn-raised btn-success pull-right">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Add New Product
+                    </a>
                 </h2>
             </div>
             @if ($products->isEmpty())

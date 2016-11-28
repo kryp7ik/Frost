@@ -2,9 +2,10 @@
 @section('title', 'Redline Product Instances')
 @section('content')
     <div class="container col-md-8 col-md-offset-2">
-        <div class="panel panel-info">
+        <div class="panel panel-warning">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-warning" aria-hidden="true"></i>
                     Redline Product Instances
                 </h2>
             </div>

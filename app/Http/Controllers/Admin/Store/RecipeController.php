@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin\Store;
 
+use App\Models\Store\Recipe;
 use App\Repositories\Store\Ingredient\IngredientRepositoryContract;
 use App\Repositories\Store\Recipe\RecipeRepositoryContract;
+use App\Transformers\RecipeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\RecipeFormRequest;
+use Yajra\Datatables\Facades\Datatables;
 
 class RecipeController extends Controller
 {
@@ -37,8 +40,15 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        $recipes = $this->recipes->getAll();
-        return view('backend.store.recipes.index', compact('recipes'));
+        return view('backend.store.recipes.index');
+    }
+
+    public function dataTables()
+    {
+        $recipes = Recipe::select(['id', 'name', 'active', 'created_at', 'updated_at']);
+        return Datatables::of($recipes)
+            ->setTransformer(new RecipeTransformer())
+            ->make(true);
     }
 
     /**

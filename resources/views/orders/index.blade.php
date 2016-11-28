@@ -4,13 +4,20 @@
     <div class="col-md-12 ">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h2>All Orders</h2>
+                <h2>
+                    <i class="fa fa-server" aria-hidden="true"></i>
+                    All Orders
+                </h2>
             </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="panel panel-default">
-                                <div class="panel-heading"><h3>Filters</h3></div>
+                                <div class="panel-heading">
+                                    <h3>
+                                        <i class="fa fa-filters" aria-hidden="true"></i> Filters
+                                    </h3>
+                                </div>
                                 <div class="panel-body">
                                     <form method="post" class="form-horizontal">
                                         {{ csrf_field() }}
@@ -19,7 +26,7 @@
                                             <div class="input-group col-md-10">
                                                 <input type="text" name="start" class="form-control" id="datepicker" value="{{ $date }}"/>
                                                 <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                    <span class="fa fa-calendar"></span>
                                                 </span>
                                                 <button type="submit" class="btn btn-raised btn-success">Apply</button>
                                             </div>
@@ -40,7 +47,10 @@
                                             <span class="input-group-addon">#</span>
                                             <input type="text" class="form-control" id="order-id" />
                                         </div>
-                                        <a href="#" id="lookup" class="btn btn-raised btn-primary pull-right">Lookup</a>
+                                        <a href="#" id="lookup" class="btn btn-raised btn-primary pull-right">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                            Lookup
+                                        </a>
                                     </div>
                                     </div>
                                 </div>

@@ -5,12 +5,19 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-users" aria-hidden="true"></i>
                     All users
                     @if (!app('request')->input('trashed'))
-                        <a href="/admin/users?trashed=true" class="btn btn-raised btn-info pull-right">View Deleted Users</a>
+                        <a href="/admin/users?trashed=true" class="btn btn-raised btn-info pull-right">
+                            <i class="fa fa-trash" aria-hidden="true"></i> View Deleted Users
+                        </a>
                     @endif
-                    <a href="/admin/users/create" class="btn btn-raised btn-success pull-right">Create a new User</a>
-                    <a href="/admin/roles" class="btn btn-raised btn-warning pull-right">Manage Roles</a>
+                    <a href="/admin/users/create" class="btn btn-raised btn-success pull-right">
+                        <i class="fa fa-user-plus" aria-hidden="true"></i> Create a new User
+                    </a>
+                    <a href="/admin/roles" class="btn btn-raised btn-warning pull-right">
+                        <i class="fa fa-id-card" aria-hidden="true"></i> Manage Roles
+                    </a>
                 </h2>
             </div>
             @if ($users->isEmpty())

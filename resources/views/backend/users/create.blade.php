@@ -39,13 +39,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group password">
                         <label for="password" class="col-lg-2 control-label">Password</label>
                         <div class="col-lg-10">
                             <input type="password" class="form-control" name="password">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group confirm-password">
                         <label for="password" class="col-lg-2 control-label">Confirm password</label>
                         <div class="col-lg-10">
                             <input type="password" class="form-control" name="password_confirmation">

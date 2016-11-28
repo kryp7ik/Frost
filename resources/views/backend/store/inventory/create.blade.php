@@ -6,6 +6,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h2>
+                        <i class="fa fa-database" aria-hidden="true"></i>
                         Inventory Count
                         <a href="/pdf/inventory" class="btn btn-raised btn-success pull-right" target="_blank">
                             <span class="glyphicon glyphicon-print"> </span>

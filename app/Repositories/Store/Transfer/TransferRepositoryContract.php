@@ -13,10 +13,9 @@ interface TransferRepositoryContract
 {
     /**
      * Retrieves all Transfers with an optionally specified date
-     * @param string $date
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll($date = null);
+    public function getAll();
 
     /**
      * Retrieves all Transfers that have not been received

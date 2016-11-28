@@ -13,10 +13,9 @@ interface ShipmentRepositoryContract
 {
     /**
      * Retrieves all Shipments with an optionally specified date
-     * @param string $date
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll($date = null);
+    public function getAll();
 
     /**
      * Retrieves a single Shipment by its id

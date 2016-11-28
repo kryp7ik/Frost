@@ -11,18 +11,11 @@ class EloquentShipmentRepository implements ShipmentRepositoryContract
 
     /**
      * Retrieves all Shipments with an optionally specified date
-     * @param string $date
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll($date = null)
+    public function getAll()
     {
-        if($date) {
-            $start = $date . ' 00:00:00';
-            $end = $date . ' 23:59:59';
-            $shipments = Shipment::whereBetween('created_at', [$start, $end])->get();
-        } else {
-            $shipments = Shipment::all();
-        }
+        $shipments = Shipment::orderBy('id', 'desc')->paginate(10);
         return $shipments;
     }
 

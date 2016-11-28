@@ -38,6 +38,20 @@ class EloquentShiftRepository implements ShiftRepositoryContract
     }
 
     /**
+     * Retrieves a users scheduled shifts for the current week or returns false on fail
+     * @param int $user_id
+     * @return bool|array
+     */
+    public function getCurrentWeekForUser($user_id) {
+        $startDate = new \DateTime();
+        $endDate = new \DateTime('+ 2 weeks');
+        $shifts = Shift::whereBetween('start', [$startDate->format('Y-m-d') . 'T00:00:00', $endDate->format('Y-m-d') . 'T23:59:59'])
+            ->where('user_id', '=', $user_id)
+            ->get();
+        return ($shifts) ? $shifts : false;
+    }
+
+    /**
      * Returns a single Shift by it's id
      * @param int $id
      * @return mixed
@@ -49,14 +63,14 @@ class EloquentShiftRepository implements ShiftRepositoryContract
 
     /**
      * Finds a shift for the designated user where the start time is sometime during the current day
-     * @param int $userId
+     * @param int $user_id
      * @return mixed Shift|bool
      */
-    public function findForTodayByUser($userId)
+    public function findForTodayByUser($user_id)
     {
         $today = new \DateTime();
         $shift = Shift::whereBetween('start', [$today->format('Y-m-d') . 'T00:00:00', $today->format('Y-m-d') . 'T23:59:59'])
-            ->where('user_id', '=', $userId)
+            ->where('user_id', '=', $user_id)
             ->first();
         return ($shift instanceof Shift) ? $shift : false;
     }

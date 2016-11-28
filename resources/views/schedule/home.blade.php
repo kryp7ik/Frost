@@ -33,7 +33,9 @@
                     </ul>
                 @endif
             @endif
-            <button id="clock" class="btn btn-raised btn-info btn-sm">Clock In/Out</button>
+            <button id="clock" class="btn btn-raised btn-info btn-sm">
+                <i class="fa fa-clock-o" aria-hidden="true"></i> Clock In/Out
+            </button>
             <div id="clock-status">
 
             </div>

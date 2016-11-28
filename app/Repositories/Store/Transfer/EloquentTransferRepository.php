@@ -11,18 +11,11 @@ class EloquentTransferRepository implements TransferRepositoryContract
 
     /**
      * Retrieves all Transfers with an optionally specified date
-     * @param string $date
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getAll($date = null)
+    public function getAll()
     {
-        if($date) {
-            $start = $date . ' 00:00:00';
-            $end = $date . ' 23:59:59';
-            $transfers = Transfer::whereBetween('created_at', [$start, $end])->get();
-        } else {
-            $transfers = Transfer::all();
-        }
+        $transfers = Transfer::orderBy('id', 'desc')->paginate(10);
         return $transfers;
     }
 

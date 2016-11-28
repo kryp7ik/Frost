@@ -16,7 +16,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 {
     use Authenticatable, CanResetPassword;
     use EntrustUserTrait {
-        EntrustUserTrait::restore insteadof SoftDeletes;
+        SoftDeletes::restore insteadof EntrustUserTrait;
     }
     use SoftDeletes;
 
@@ -59,6 +59,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function shifts()
     {
         return $this->hasmany('App\Models\Store\Shifts');
+    }
+
+    /**
+     * OneToMany relation with App\Models\Announcement
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function announcements()
+    {
+        return $this->hasMany('App\Models\Announcement');
     }
 
     /**

@@ -7,9 +7,9 @@
             <div class="col-md-4">
                 <div class="well">
                     @if($order->customer)
-                        <h3><span class="glyphicon glyphicon-user"></span> {{ $order->customer->name }}</h3>
+                        <h3><span class="fa fa-user"></span> {{ $order->customer->name }}</h3>
                         <div>
-                            <button id="customer-phone" class="btn btn-raised btn-block btn-warning">Phone: {{ $order->customer->phone }}</button>
+                            <button id="customer-phone" class="btn btn-raised btn-block btn-warning animated flipInX">Phone: {{ $order->customer->phone }}</button>
                             <form style="display:none" id="change-customer" class="form-inline" method="post" action="/orders/{{ $order->id }}/customer">
                                 {{ csrf_field() }}
                                 <input id="phone" name="phone" type="text" class="form-control" autocomplete="off"/>
@@ -17,44 +17,35 @@
                                 <button id="cancel-phone" class="btn btn-danger btn-raised btn-sm">Cancel</button>
                             </form>
                         </div>
-                        <button class="btn btn-block btn-warning btn-raised" data-toggle="modal" data-target="#redeem">Points: {{ $order->customer->points }}</button>
-                        <a href="/customers/{{ $order->customer->id }}/show" class="btn btn-block btn-warning btn-raised">Customer Profile</a>
+                        <button class="btn btn-block btn-warning btn-raised animated flipInX" data-toggle="modal" data-target="#redeem">Points: {{ $order->customer->points }}</button>
+                        <a href="/customers/{{ $order->customer->id }}/show" class="btn btn-block btn-warning btn-raised animated flipInX">Customer Profile</a>
                     @else
                         <h3><span class="glyphicon glyphicon-user"></span>Customer Information</h3>
                         <form class="form-inline" method="post" action="/orders/{{ $order->id }}/customer">
                             {{ csrf_field() }}
                             <input name="phone" type="text" class="form-control" placeholder="Add Customer By Phone #" autocomplete="off"/>
-                            <button type="submit" class="btn btn-success btn-raised">Add</button>
+                            <button type="submit" class="btn btn-success btn-raised">
+                                Add <i class="fa fa-plus-square" aria-hidden="true"></i>
+                            </button>
                         </form>
                     @endif
                 </div>
 
                 <div class="well">
-                    <button class="btn btn-block btn-info btn-raised" data-toggle="modal" data-target="#product">
-                        <span class="glyphicon glyphicon-tag"></span> Add a product
+                    <button class="btn btn-block btn-info btn-raised animated flipInX" data-toggle="modal" data-target="#product">
+                        <i class="fa fa-tag" aria-hidden="true"></i> Add a product
                     </button>
-                    <button class="btn btn-block btn-info btn-raised" data-toggle="modal" data-target="#liquid">
-                        <span class="glyphicon glyphicon-tint"></span> Add a liquid
+                    <button class="btn btn-block btn-info btn-raised animated flipInX" data-toggle="modal" data-target="#liquid">
+                        <i class="fa fa-tint" aria-hidden="true"></i> Add a liquid
                     </button>
-                    <button class="btn btn-block btn-info btn-raised" data-toggle="modal" data-target="#discount">
-                        <span class=" glyphicon glyphicon-usd"></span> Apply a discount
+                    <button class="btn btn-block btn-info btn-raised animated flipInX" data-toggle="modal" data-target="#discount">
+                        </i> <i class="fa fa-usd" aria-hidden="true"></i>
+                        Apply a discount
                     </button>
                 </div>
                 <div class="well">
-                    <a class="btn btn-block btn-danger btn-raised" href="/orders/{{ $order->id }}/delete" >
-                        <span class="glyphicon glyphicon-cutlery"></span>
-                        <span class="glyphicon glyphicon-trash"></span>
-                        <span class="glyphicon glyphicon-remove"></span>
-                        <span class="glyphicon glyphicon-warning-sign"></span>
-                        <span class="glyphicon glyphicon-flash"></span>
-                        <span class="glyphicon glyphicon-fire"></span>
-                        Delete Order
-                        <span class="glyphicon glyphicon-fire"></span>
-                        <span class="glyphicon glyphicon-flash"></span>
-                        <span class="glyphicon glyphicon-warning-sign"></span>
-                        <span class="glyphicon glyphicon-remove"></span>
-                        <span class="glyphicon glyphicon-trash"></span>
-                        <span class="glyphicon glyphicon-cutlery"></span>
+                    <a class="btn btn-block btn-danger btn-raised animated flipInX" href="/orders/{{ $order->id }}/delete" >
+                        <i class="fa fa-trash" aria-hidden="true"></i> Delete Order
                     </a>
                 </div>
             </div><!-- ./ Left Column -->
@@ -65,7 +56,9 @@
                 <div class="well">
                     <div class="row">
                         <div class="col-md-4">
-                            <button class="btn btn-success btn-lg btn-raised btn-block" data-toggle="modal" data-target="#cash" style="height:88px">Cash</button>
+                            <button class="btn btn-success btn-lg btn-raised btn-block animated flipInX" data-toggle="modal" data-target="#cash" style="height:88px">
+                                <i class="fa fa-money" aria-hidden="true"></i> Cash
+                            </button>
                         </div>
                         <div class="col-md-4 text-center">
                             <h3>
@@ -77,7 +70,9 @@
                             <form method="post" action="/orders/{{ $order->id }}/payment">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="type" value="credit" />
-                                <button type="submit" class="btn btn-success btn-lg btn-raised btn-block" style="height:88px">Credit</button>
+                                <button type="submit" class="btn btn-success btn-lg btn-raised btn-block animated flipInX" style="height:88px">
+                                    <i class="fa fa-credit-card" aria-hidden="true"></i> Credit
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -97,6 +92,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
         <script type="text/javascript">
 
+            $.fn.extend({
+                animateCss: function (animationName) {
+                    var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+                    this.addClass('animated ' + animationName).one(animationEnd, function() {
+                        $(this).removeClass('animated ' + animationName);
+                    });
+                }
+            });
             var app = new Vue({
                 el: '#app',
 
@@ -167,14 +170,17 @@
                 return false;
             });
             $('#customer-phone').on('click', function() {
-                $('#customer-phone').hide();
-                $('#change-customer').show();
+                $('#customer-phone').animateCss('hinge');
+                $('#change-customer').fadeIn();
+                setTimeout(function() {
+                    $('#customer-phone').fadeOut();
+                }, 2000);
                 $('#phone').focus();
             });
             $('#cancel-phone').on('click', function(e) {
                 e.preventDefault();
-                $('#customer-phone').show();
-                $('#change-customer').hide();
+                $('#customer-phone').fadeIn();
+                $('#change-customer').fadeOut();
             });
             $('#cash').on('shown.bs.modal', function () {
                 $('#amount').focus();

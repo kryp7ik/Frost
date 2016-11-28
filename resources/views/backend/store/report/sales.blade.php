@@ -3,7 +3,10 @@
 @section('content')
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h2>Sales Report</h2>
+            <h2>
+                <i class="fa fa-area-chart" aria-hidden="true"></i>
+                Sales Report
+            </h2>
         </div>
         <div class="panel-body">
 
@@ -13,7 +16,7 @@
                     <div class="input-group col-md-10">
                         <input type="text" id="start" name="start" class="form-control datepicker" value="{{ $filters['start'] }}"/>
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="fa fa-calendar"></span>
                         </span>
                     </div>
                 </div>
@@ -24,14 +27,14 @@
                     <div class="input-group col-md-10">
                         <input type="text" id="end" name="end" class="form-control datepicker" value="{{ $filters['end'] }}"/>
                         <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
+                            <span class="fa fa-calendar"></span>
                         </span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
-                    <label for="store" class="col-md-2 control-label">Store</label>
+
                     <select name="store" id="store-select" style="width:80%">
                         <option value="0">All Stores</option>
                         @foreach(config('store.stores') as $key => $store)
@@ -40,8 +43,19 @@
                     </select>
                 </div>
             </div>
+            <div class="col-md-2">
+                <div class="form-group">
+
+                    <select name="type" id="report-type" style="width:80%">
+                        <option value="detailed">Detailed Report</option>
+                        <option value="minimal">Minimal Report</option>
+                    </select>
+                </div>
+            </div>
             <div class="col-md-1">
-                <button id="filter" class="btn btn-raised btn-success">Generate</button>
+                <button id="filter" class="btn btn-raised btn-success">
+                    Generate <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
     </div>

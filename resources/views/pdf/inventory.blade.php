@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <title>Inventory Count Sheet</title>
-        <link href="http://frost.com/css/bootstrap.css" rel="stylesheet" type="text/css" />
+        <link href="https://frostpos.com/css/bootstrap.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <div class="row">

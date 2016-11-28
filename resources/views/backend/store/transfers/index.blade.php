@@ -5,8 +5,11 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-exchange" aria-hidden="true"></i>
                     All Transfers
-                    <a href="/admin/store/transfers/create" class="btn btn-lg btn-raised btn-success pull-right">Create Transfer</a>
+                    <a href="/admin/store/transfers/create" class="btn btn-lg btn-raised btn-success pull-right">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Transfer
+                    </a>
                 </h2>
             </div>
             @if ($transfers->isEmpty())
@@ -17,16 +20,16 @@
                         <table class="table table-hover display clickable" id="table">
                             <thead>
                                 <th>Date</th>
-                                <th>From Store</th>
-                                <th>To Store</th>
+                                <th>From</th>
+                                <th>To</th>
                                 <th>Status</th>
                             </thead>
                             <tbody>
                             @foreach($transfers as $transfer)
                                 <tr class="{{ ($transfer->received) ? 'success' : 'danger' }}" data-id="{{ $transfer->id }}">
                                     <td>{{ date('m-d-Y h:ia', strtotime($transfer->created_at)) }}</td>
-                                    <td>{{ $transfer->from_store }}</td>
-                                    <td>{{ $transfer->to_store }}</td>
+                                    <td>{{ config('store.stores')[$transfer->from_store] }}</td>
+                                    <td>{{ config('store.stores')[$transfer->to_store] }}</td>
                                     <td>{{ ($transfer->received) ? 'Completed' : 'Pending' }}</td>
                                 </tr>
                             @endforeach
@@ -34,7 +37,13 @@
                         </table>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <p>{{ $transfers->links() }}</p>
+                    </div>
+                </div>
             @endif
+
         </div>
     </div>
 @endsection

@@ -921,7 +921,13 @@ $(document).ready(function() {
     $.material.ripples();
     $('select').select2();
 
+    $('.password').keyup(function() {
+        $('.confirm-password').fadeIn();
+    });
+
 });
 
 $('div.alert').not('.alert-important').delay(3000).fadeOut(250);
+
+
 //# sourceMappingURL=all.js.map

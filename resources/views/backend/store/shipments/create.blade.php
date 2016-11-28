@@ -4,7 +4,10 @@
     <div class="container col-md-8 col-md-offset-2">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h2>Create a new Shipment</h2>
+                <h2>
+                    <i class="fa fa-plus-globe" aria-hidden="true"></i>
+                    Create a new Shipment
+                </h2>
             </div>
             <div class="panel-body">
                 <form method="post" id="shipment-form">
@@ -14,6 +17,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <button type="button" class="btn btn-success btn-lg btn-raised pull-right" data-toggle="modal" data-target="#modal">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             Create Shipment
                         </button>
                         <a href="/admin/store/shipments" class="btn btn-raised btn-warning pull-right">Cancel</a>

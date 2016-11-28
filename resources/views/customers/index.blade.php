@@ -5,9 +5,10 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-users" aria-hidden="true"></i>
                     All Customers
                     <button type="button" class="btn btn-success btn-lg btn-raised pull-right" data-toggle="modal" data-target="#modal">
-                        New Customer
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> New Customer
                     </button>
                 </h2>
             </div>
@@ -74,20 +75,20 @@
     </div>
     @push('scripts')
         <script type="text/javascript">
-            $(document).ready(function() {
-                $('#table').DataTable( {
-                    info: false,
-                    order: [[ 0, "asc" ]],
-                    processing: true,
-                    serverSide: true,
-                    ajax: '/customers/data-tables',
-                    columns: [
-                        { data: 'name', name: 'name' },
-                        { data: 'phone', name: 'phone'},
-                        { data: 'email', name: 'email'}
-                    ]
+                $(document).ready(function() {
+                    $('#table').DataTable( {
+                        info: true,
+                        order: [[ 0, "asc" ]],
+                        processing: true,
+                        serverSide: true,
+                        ajax: '/customers/data-tables',
+                        columns: [
+                            { data: 'name', name: 'name' },
+                            { data: 'phone', name: 'phone'},
+                            { data: 'email', name: 'email'}
+                        ]
+                    });
                 });
-            });
             $('tbody').on('click', 'tr', function() {
                 var url = '/customers/' + $(this).attr('id') + '/show';
                 window.location.href = url;

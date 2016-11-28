@@ -34,6 +34,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->email }} <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
+
                             <li><a href="/users/logout">Logout</a></li>
                         </ul>
                     </li>
@@ -49,20 +50,28 @@
         <div id="sidebar-wrapper" >
             <ul class="sidebar-nav nav" >
                 <li>
-                    <a href="/schedule"><span class="glyphicon glyphicon-calendar"></span> Schedule</a>
+                    <a href="/"><span class="fa fa-dashboard"></span> Dashboard</a>
                 </li>
                 <li>
-                    <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
+                    <a href="/schedule"><span class="fa fa-calendar"></span> Schedule</a>
                 </li>
                 <li>
-                    <a href="/orders"><span class="glyphicon glyphicon-th-list"></span> All Orders</a>
+                    <a href="/customers"><span class="fa fa-users"></span> Customers</a>
                 </li>
                 <li>
-                    <a href="/orders/create"><span class="glyphicon glyphicon-ok"></span> New Order</a>
+                    <a href="/orders"><span class="fa fa-server"></span> All Orders</a>
+                </li>
+                <li>
+                    <a href="/orders/create"><span class="fa fa-plus-square"></span> New Order</a>
                 </li>
                 @foreach($suspended->getSuspendedOrders() as $order)
                     <li>
-                        <a href="/orders/{{ $order->id }}/show"><span class="text-info">Suspended {{ $order->total }}</span></a>
+                        <a href="/orders/{{ $order->id }}/show">
+                            <span class="text-info">
+                                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                                Suspended {{ $order->total }}
+                            </span>
+                        </a>
                     </li>
                 @endforeach
             </ul>
@@ -75,61 +84,61 @@
                 <ul class="asidebar-nav">
                     <li>
                         <a href="/admin/store/products/index">
-                            <i class="glyphicon glyphicon-tag"></i>
+                            <i class="fa fa-tags"></i>
                             <span class="nav-text">Products</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/products/redline">
-                            <i class="glyphicon glyphicon-alert"></i>
+                            <i class="fa fa-warning"></i>
                             <span class="nav-text">Redline</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/shipments">
-                            <i class="glyphicon glyphicon-globe"></i>
+                            <i class="fa fa-globe"></i>
                             <span class="nav-text">Shipments</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/transfers">
-                            <i class="glyphicon glyphicon-transfer"></i>
+                            <i class="fa fa-exchange"></i>
                             <span class="nav-text">Transfers</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/inventory/create">
-                            <i class="glyphicon glyphicon-flash"></i>
+                            <i class="fa fa-database"></i>
                             <span class="nav-text">Inventory</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/discounts">
-                            <i class="glyphicon glyphicon-usd"></i>
+                            <i class="fa fa-usd"></i>
                             <span class="nav-text">Discounts</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/recipes">
-                            <i class="glyphicon glyphicon-tint"></i>
+                            <i class="fa fa-tint"></i>
                             <span class="nav-text">Recipes</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/report/sales">
-                            <i class="glyphicon glyphicon-signal"></i>
+                            <i class="fa fa-area-chart"></i>
                             <span class="nav-text">Reports</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/store/touch">
-                            <i class="glyphicon glyphicon-hand-up"></i>
+                            <i class="fa fa-hand-pointer-o"></i>
                             <span class="nav-text">Touch</span>
                         </a>
                     </li>
                     <li>
                         <a href="/admin/users">
-                            <i class="glyphicon glyphicon-user"></i>
+                            <i class="fa fa-users"></i>
                             <span class="nav-text">Users</span>
                         </a>
                     </li>

@@ -5,8 +5,11 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-globe" aria-hidden="true"></i>
                     All Shipments
-                    <a href="/admin/store/shipments/create" class="btn btn-lg btn-raised btn-success pull-right">Create Shipment</a>
+                    <a href="/admin/store/shipments/create" class="btn btn-lg btn-raised btn-success pull-right">
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Create Shipment
+                    </a>
                 </h2>
             </div>
             @if ($shipments->isEmpty())
@@ -23,11 +26,16 @@
                             @foreach($shipments as $shipment)
                                 <tr data-id="{{ $shipment->id }}">
                                     <td>{{ date('m-d-Y h:ia', strtotime($shipment->created_at)) }}</td>
-                                    <td>{{ $shipment->store }}</td>
+                                    <td>{{ config('store.stores')[$shipment->store] }}</td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <p>{{ $shipments->links() }}</p>
                     </div>
                 </div>
             @endif

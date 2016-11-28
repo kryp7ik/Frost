@@ -20,6 +20,13 @@ interface ShiftRepositoryContract
     public function getAll($startDate, $endDate, $array = false);
 
     /**
+     * Retrieves a users scheduled shifts for the current week or returns false on fail
+     * @param int $user_id
+     * @return bool|array
+     */
+    public function getCurrentWeekForUser($user_id);
+
+    /**
      * Returns a single Shift by it's id
      * @param int $id
      * @return mixed

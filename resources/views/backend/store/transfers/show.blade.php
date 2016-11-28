@@ -1,7 +1,7 @@
 @extends('master')
 @section('title', 'View Transfer')
 @section('content')
-    <div class="container col-md-8 col-md-offset-2">
+    <div class="container col-md-6 col-md-offset-3">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
@@ -16,22 +16,26 @@
                 <div class="col-md-10 col-md-offset-1">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4>From: {{ config('store.stores')[$transfer->from_store] }}</h4>
-                            <h4>To: {{ config('store.stores')[$transfer->to_store] }}</h4>
+                            <h4>
+                                {{ config('store.stores')[$transfer->from_store] }}
+                                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                                {{ config('store.stores')[$transfer->to_store] }}
+                            </h4>
+                            @if($transfer->received)
+                                <span class="text-info">
+                                    Received On: {{ date('m-d-Y h:ia', strtotime($transfer->updated_at)) }}
+                                </span>
+                            @else
+                                @if(Auth::user()->store == $transfer->to_store)
+                                    <a href="/admin/store/transfers/{{ $transfer->id }}/receive" class="btn btn-raised btn-success">Confirm Received</a>
+                                @else
+                                    <span class="text-danger">Transfer Pending...</span>
+                                @endif
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <div class="text-center">
-                                @if($transfer->received)
-                                    <h4>
-                                        Received On: {{ date('m-d-Y h:ia', strtotime($transfer->updated_at)) }}
-                                    </h4>
-                                @else
-                                    @if(Auth::user()->store == $transfer->to_store)
-                                        <a href="/admin/store/transfers/{{ $transfer->id }}/receive" class="btn btn-raised btn-success">Confirm Received</a>
-                                    @else
-                                        <h4>Transfer Pending</h4>
-                                    @endif
-                                @endif
+
                             </div>
                         </div>
                     </div>

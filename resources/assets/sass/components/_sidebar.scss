@@ -66,12 +66,13 @@ body {
   display: block;
   text-decoration: $sidebarTextDecoration;
   color: $sidebarButtonTextColor;
+  padding: 10px 0px;
 }
 
-.sidebar-nav li a:hover {
-  text-decoration: none;
-  color: $sidebarButtonTextHoverColor;
-  background: $sidebarButtonBgHoverColor;
+@each $anchor, $color in $aSidebarButtonBgHoverColors {
+  #{".sidebar-nav li:nth-child(" + (0 + $anchor) + ") a:hover"} {
+    background-color: $color;
+  }
 }
 
 .sidebar-nav li a:active,

@@ -7,14 +7,14 @@
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
         <link href="/css/all.css" rel="stylesheet" />
         <link href="/css/app.css" rel="stylesheet" />
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
         @stack('css')
 
     </head>
     <body>
         @include('shared.navbar')
         <div id="wrapper">
-            <div id="page-content-wrapper">
+            <div class="" id="page-content-wrapper">
                 @yield('content')
             </div>
         </div>

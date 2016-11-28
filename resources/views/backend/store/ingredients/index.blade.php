@@ -5,10 +5,11 @@
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h2>
+                    <i class="fa fa-flask" aria-hidden="true"></i>
                     All Ingredients
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-success btn-lg btn-raised pull-right" data-toggle="modal" data-target="#modal">
-                        New Ingredient
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i> New Ingredient
                     </button>
                 </h2>
 
