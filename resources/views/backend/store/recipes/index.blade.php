@@ -24,7 +24,6 @@
                         <th>Name</th>
                         <th>Active</th>
                         <th>Date Created</th>
-
                         </thead>
                         <tbody>
 
