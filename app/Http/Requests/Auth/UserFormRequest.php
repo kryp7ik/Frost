@@ -26,7 +26,6 @@ class UserFormRequest extends Request
         return [
             'name' => 'required',
             'email' => 'required',
-            'role' => 'required',
             'store' => 'required',
             'password' => 'min:6|confirmed',
             'password_confirmation' => 'min:6',

@@ -5,6 +5,8 @@
  * Schedule - Duplicate week
  * Duplicate liquid from order screen
  * Custom discounts on the fly
+ * Automatic 10% Discount for preferred customers
+ * Optionally e-mail announcements
  */
 
 /**
