@@ -29,16 +29,18 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="select" class="col-lg-2 control-label">Role</label>
-                        <div class="col-lg-10">
-                            <select class="form-control" id="role" name="role[]" multiple>
-                                @foreach($roles as $role)
-                                    <option value="{!! $role->id !!}">{!! $role->display_name !!}</option>
-                                @endforeach
-                            </select>
+                    @if(Auth::user()->hasRole('admin'))
+                        <div class="form-group">
+                            <label for="select" class="col-lg-2 control-label">Role</label>
+                            <div class="col-lg-10">
+                                <select class="form-control" id="role" name="role[]" multiple>
+                                    @foreach($roles as $role)
+                                        <option value="{!! $role->id !!}">{!! $role->display_name !!}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     <div class="form-group password">
                         <label for="password" class="col-lg-2 control-label">Password</label>
                         <div class="col-lg-10">

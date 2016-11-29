@@ -45,7 +45,7 @@
             Order #: {{ $order->id }}
         </div>
         <br/>
-        <table class="table table-striped" style="width:100%">
+        <table class="table" style="width:100%">
             <tr>
                 <td width="50%"><strong><u>Product</u></strong></td>
                 <td width="20%"><strong><u>Price</u></strong></td>

@@ -137,6 +137,8 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('account/edit', 'AccountController@edit');
     Route::post('account/edit', 'AccountController@update');
 
+    Route::get('announcements', 'AnnouncementController@index');
+    Route::get('announcements/{id?}/show', 'AnnouncementController@show');
     Route::get('announcements/create', 'AnnouncementController@create');
     Route::post('announcements/create', 'AnnouncementController@store');
     Route::get('announcements/{id?}/edit', 'AnnouncementController@edit');

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Announcement extends Model
+class Comment extends Model
 {
     /**
      * @var array
@@ -16,11 +16,9 @@ class Announcement extends Model
      * @var array
      */
     protected $fillable = [
-        'type',
-        'title',
-        'content',
-        'sticky',
+        'announcement_id',
         'user_id',
+        'content',
     ];
 
 
@@ -32,8 +30,11 @@ class Announcement extends Model
         return $this->belongsTo('App\Models\Auth\User')->withTrashed();
     }
 
-    public function comments()
+    /**
+     * ManyToOne Relation with Announcement
+     */
+    public function announcement()
     {
-        return $this->hasMany('App\Models\Comments');
+        return $this->belongsTo('App\Models\Announcement');
     }
 }

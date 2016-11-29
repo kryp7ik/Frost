@@ -18,9 +18,15 @@ class PdfController extends Controller
      */
     public function orderReceipt($id, ShopOrderRepositoryContract $orders)
     {
-        $order = $orders->findById($id);
+        $order = $orders->findById($id, true);
+        $height = '135';
+        $height += $order->liquidProducts->count() * 8;
+        $height += $order->productInstances->count() * 8;
+        $height += $order->discounts->count() * 8;
         $pdf = app()->make('snappy.pdf.wrapper');
-        $pdf->loadView('pdf.order.receipt', compact('order'));
+        $pdf->loadView('pdf.order.receipt', compact('order'))
+            ->setOption('page-height', $height)
+            ->setOption('page-width', '180');
         return $pdf->inline();
     }
 

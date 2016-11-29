@@ -19,30 +19,32 @@
                                     <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="{{ $user->email }}">
                                 </div>
                         </div>
-                        <div class="form-group">
-                            <label for="store" class="col-lg-2 control-label">Store</label>
-                            <div class="col-lg-10">
-                                <select class="form-control" name="store">
-                                    @foreach(config('store.stores') as $key => $value)
-                                        <option value="{{ $key }}" {{ ($user->store == $key) ? 'selected' : '' }}>{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="select" class="col-lg-2 control-label">Role</label>
+                        @if(Auth::user()->hasRole('admin'))
+                            <div class="form-group">
+                                <label for="store" class="col-lg-2 control-label">Store</label>
                                 <div class="col-lg-10">
-                                    <select class="form-control" id="role" name="role[]" multiple>
-                                        @foreach($roles as $role)
-                                            <option value="{!! $role->id !!}"
-                                                    @if(in_array($role->id, $selectedRoles))
-                                                    selected="selected"
-                                                    @endif >{!! $role->display_name !!}
-                                            </option>
+                                    <select class="form-control" name="store">
+                                        @foreach(config('store.stores') as $key => $value)
+                                            <option value="{{ $key }}" {{ ($user->store == $key) ? 'selected' : '' }}>{{ $value }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                        </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="select" class="col-lg-2 control-label">Role</label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control" id="role" name="role[]" multiple>
+                                            @foreach($roles as $role)
+                                                <option value="{!! $role->id !!}"
+                                                        @if(in_array($role->id, $selectedRoles))
+                                                        selected="selected"
+                                                        @endif >{!! $role->display_name !!}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                            </div>
+                        @endif
                         <div class="form-group password">
                             <label for="password" class="col-lg-2 control-label">Password</label>
                             <div class="col-lg-10">

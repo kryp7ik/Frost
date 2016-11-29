@@ -70,6 +70,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany('App\Models\Announcement');
     }
 
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comments');
+    }
+
     /**
      * Retrieves the users 'store' attribute based upon the location of the shift they are currently clocked in at except
      * in the case of admin's who can manually set which store they want to be acting as.

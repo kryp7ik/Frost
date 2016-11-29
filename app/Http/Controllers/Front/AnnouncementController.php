@@ -16,6 +16,11 @@ class AnnouncementController extends Controller
         $this->announcementRepo = $announcementRepositoryContract;
     }
 
+    public function index()
+    {
+
+    }
+
     public function create()
     {
         return view('announcements.create');
@@ -25,6 +30,11 @@ class AnnouncementController extends Controller
     {
         $this->announcementRepo->create(Auth::user()->id, $request->all());
         return redirect('/');
+    }
+
+    public function show($id)
+    {
+
     }
 
     public function edit($id)
