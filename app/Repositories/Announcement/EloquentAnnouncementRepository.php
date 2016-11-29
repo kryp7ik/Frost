@@ -15,7 +15,7 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
      * @param int $limit
      * @return array $announcements['sticky' => [...], 'standard' => [...] ]
      */
-    public function getAll($limit = 1) {
+    public function getAll($limit = 5) {
         $announcements['sticky'] = $this->getSticky();
         $announcements['standard'] = $this->getStandard($limit);
         return $announcements;

@@ -71,7 +71,7 @@
                     </span>
                     <li>|</li>
                     <li>
-                        <<button data-id="{{ $announcement->id }}" class="read-more">Read More...</button>
+                        <button data-id="{{ $announcement->id }}" class="read-more">Read More...</button>
                     </li>
 
                 </ul>

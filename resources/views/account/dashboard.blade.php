@@ -109,6 +109,7 @@
                 $('#announcement-content').html(anncmnt.content);
                 $('#created-at').html(anncmnt.created);
                 $('#announcement-id').val(id);
+                $('#comments').html('');
                 $.each(anncmnt.comments, function(key, value) {
                     $('#comments').append('<div class="well"><p>' + value.content + '</p><h6>-' + value.user + '</h6></div>')
                 })
