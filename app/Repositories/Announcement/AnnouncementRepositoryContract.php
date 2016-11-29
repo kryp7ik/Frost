@@ -17,7 +17,7 @@ interface AnnouncementRepositoryContract
      * @param int $limit
      * @return array $announcements['sticky' => [...], 'standard' => [...] ]
      */
-    public function getRecent($limit = 5);
+    public function getAll($limit = 5);
 
     /**
      * Retrieves the most recent Announcements that are not sticky
@@ -34,9 +34,11 @@ interface AnnouncementRepositoryContract
 
     /**
      * @param int $id
+     * @param bool $eager Eager load comments?
+     * @param bool $mutate mutate the result into an array for view
      * @return mixed
      */
-    public function findById($id);
+    public function findById($id, $eager, $mutate);
 
     /**
      * @param int $user_id
@@ -56,4 +58,12 @@ interface AnnouncementRepositoryContract
      * @param int $id
      */
     public function delete($id);
+
+    /**
+     * @param int $announcement_id
+     * @param int $user_id
+     * @param array $data
+     * @return string
+     */
+    public function addComment($announcement_id, $user_id, $data);
 }

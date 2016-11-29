@@ -144,4 +144,5 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('announcements/{id?}/edit', 'AnnouncementController@edit');
     Route::post('announcements/{id?}/edit', 'AnnouncementController@update');
     Route::get('announcements/{id?}/delete', 'AnnouncementController@delete');
+    Route::post('announcements/{id?}/add-comment', 'AnnouncementController@addComment');
 });

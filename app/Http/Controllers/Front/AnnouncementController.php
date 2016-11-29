@@ -16,15 +16,11 @@ class AnnouncementController extends Controller
         $this->announcementRepo = $announcementRepositoryContract;
     }
 
-    public function index()
-    {
-
-    }
-
     public function create()
     {
         return view('announcements.create');
     }
+
 
     public function store(Request $request)
     {
@@ -34,12 +30,13 @@ class AnnouncementController extends Controller
 
     public function show($id)
     {
-
+        $announcement = $this->announcementRepo->findById($id, true, true);
+        return response()->json($announcement);
     }
 
     public function edit($id)
     {
-        $announcement = $this->announcementRepo->findById($id);
+        $announcement = $this->announcementRepo->findById($id, false, false);
         return view('announcements.edit', compact('announcement'));
     }
 
@@ -53,6 +50,12 @@ class AnnouncementController extends Controller
     {
         $this->announcementRepo->delete($id);
         return redirect('/');
+    }
+
+    public function addComment($id, Request $request)
+    {
+        $status = $this->announcementRepo->addComment($id, Auth::user()->id, $request->get('content'));
+        return response()->json($status);
     }
 
 }

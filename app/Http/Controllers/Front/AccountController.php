@@ -22,7 +22,7 @@ class AccountController extends Controller
     {
         $user = $this->userRepo->findById(Auth::user()->id);
         $shifts = $shiftRepo->getCurrentWeekForUser(Auth::user()->id);
-        $announcements = $announcementRepo->getRecent();
+        $announcements = $announcementRepo->getAll();
         return view('account.dashboard', compact('user', 'shifts', 'announcements'));
     }
 

@@ -3,7 +3,9 @@
 namespace App\Repositories\Announcement;
 
 
+use App\Helpers\DateHelper;
 use App\Models\Announcement;
+use App\Models\Comment;
 
 class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
 {
@@ -13,7 +15,7 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
      * @param int $limit
      * @return array $announcements['sticky' => [...], 'standard' => [...] ]
      */
-    public function getRecent($limit = 5) {
+    public function getAll($limit = 1) {
         $announcements['sticky'] = $this->getSticky();
         $announcements['standard'] = $this->getStandard($limit);
         return $announcements;
@@ -27,8 +29,7 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
     public function getStandard($limit = 5) {
         $announcements = Announcement::orderBy('id', 'desc')
             ->where('sticky', '=', 0)
-            ->limit($limit)
-            ->get();
+            ->paginate($limit);
         return $announcements;
     }
 
@@ -45,10 +46,32 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
 
     /**
      * @param int $id
+     * @param bool $eager Eager load comments?
      * @return mixed
      */
-    public function findById($id) {
-        return Announcement::where('id', '=', $id)->firstOrFail();
+    public function findById($id, $eager = true, $mutate = false) {
+        $announcement = Announcement::where('id', '=', $id)
+            ->with('comments')
+            ->firstOrFail();
+        if ($mutate) {
+            $announcementMutated = [
+                'id' => $announcement->id,
+                'title' => $announcement->title,
+                'user' => $announcement->user->name,
+                'user_id' => $announcement->user->id,
+                'content' => $announcement->content,
+                'comments' => [],
+                'created' => DateHelper::timeElapsed($announcement->created_at)
+            ];
+            foreach ($announcement->comments as $comment) {
+                $announcementMutated['comments'][] = [
+                    'content' => $comment->content,
+                    'user' => $comment->user->name
+                ];
+            }
+            return $announcementMutated;
+        }
+        return $announcement;
     }
 
     /**
@@ -105,6 +128,28 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
         if ($announcement) {
             $announcement->delete();
             flash('The Announcement has been deleted', 'warning');
+        }
+    }
+
+    /**
+     * @param int $announcement_id
+     * @param int $user_id
+     * @param array $data
+     * @return string
+     */
+    public function addComment($announcement_id, $user_id, $data)
+    {
+        $comment = new Comment([
+            'announcement_id' => $announcement_id,
+            'user_id' => $user_id,
+            'content' => $data
+        ]);
+        if($comment->save()) {
+            flash('Your comment has been posted successfully', 'success');
+            return 'success';
+        } else {
+            flash('Something went wrong while trying to post your comment', 'danger');
+            return 'fail';
         }
     }
 

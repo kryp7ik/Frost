@@ -63,73 +63,81 @@
                     </h2>
                 </div>
                 <div class="panel-body">
-                    @foreach($announcements['sticky'] as $announcement)
-                        <div class="well">
-                            <div class="media">
-                                <div class="pull-left" href="#">
-                                    <i class="fa fa-thumb-tack fa-2x" aria-hidden="true"></i>
-                                </div>
-                                <div class="media-body">
-                                    <h3 class="media-heading">
-                                        {{ $announcement->title }}
-                                        <small class="text-right">
-                                            By {{ $announcement->user->name }}
-                                            @if(Auth::user()->id == $announcement->user_id)
-                                                <a href="/announcements/{{ $announcement->id }}/edit">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            @endif
-                                        </small>
-                                        <small class="pull-right">
-                                            <span><i class="fa fa-calendar"></i>
-                                                {{ DateHelper::timeElapsed($announcement->created_at) }}
-                                            </span>
-                                        </small>
-                                    </h3>
-                                    <p>{!! $announcement->content !!}</p>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    @include('account.partials.announcement-list')
 
-                    @foreach($announcements['standard'] as $announcement)
-                            <div class="well">
-                                <div class="media">
-                                    <div class="pull-left" href="#">
-                                        <i class="{{ config('store.announcement_types')[$announcement->type]['icon'] }}" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <h3 class="media-heading">
-                                            {{ $announcement->title }}
-                                            <small class="text-right">
-                                                By {{ $announcement->user->name }}
-                                                @if(Auth::user()->id == $announcement->user_id)
-                                                    <a href="/announcements/{{ $announcement->id }}/edit">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                                @endif
-                                            </small>
-                                            <small class="pull-right">
-                                            <span><i class="glyphicon glyphicon-calendar"></i>
-                                                {{ DateHelper::timeElapsed($announcement->created_at) }}
-                                            </span>
-                                            </small>
-                                        </h3>
-                                        <p>{!! $announcement->content !!}</p>
-                                    </div>
-                                </div>
-                            </div>
-                    @endforeach
                 </div>
             </div>
         </div>
     </div>
+    @include('account.partials.announcement-modal')
 @endsection
 
 @push('scripts')
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>
-        $(document).ready(function() {
-
+        tinymce.init({
+            selector:'textarea',
+            theme: 'modern',
+            menubar: false,
+            statusbar: false,
+            plugins: [
+                'advlist autolink lists link image',
+                'media',
+                'emoticons textcolor colorpicker textpattern imagetools codesample toc'
+            ],
+            toolbar1: 'undo redo | insert | forecolor backcolor emoticons | bold italic | bullist numlist outdent indent | link image',
+            image_advtab: true,
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'
+            ]
         });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+            }
+        });
+
+
+        $('.read-more').on('click', function () {
+            var id = $(this).attr('data-id');
+            $.getJSON('/announcements/' + id + '/show', function(data) {
+                var anncmnt = data;
+                $('#title').html(anncmnt.title);
+                $('#user-name').html(anncmnt.user);
+                $('#announcement-content').html(anncmnt.content);
+                $('#created-at').html(anncmnt.created);
+                $('#announcement-id').val(id);
+                $.each(anncmnt.comments, function(key, value) {
+                    $('#comments').append('<div class="well"><p>' + value.content + '</p><h6>-' + value.user + '</h6></div>')
+                })
+            });
+            $('#announcement-modal').modal('show');
+        });
+        $('#post-reply').on('click', function() {
+            tinyMCE.triggerSave();
+            var replyContent = $('textarea#reply').val();
+            $.ajax({
+                url: '/announcements/' + $('#announcement-id').val() + '/add-comment',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'content' : replyContent
+                }
+            }).done(function( json ) {
+                if(json == 'success') {
+                    $('#comments').append('<div class="well">' + replyContent + '</div>');
+                }
+            });
+        })
     </script>
+@endpush
+
+@push('css')
+    <style>
+        .modal-dialog {
+            width: 70%;
+        }
+    </style>
 @endpush

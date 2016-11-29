@@ -34,6 +34,6 @@ class Announcement extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comments');
+        return $this->hasMany('App\Models\Comment');
     }
 }
