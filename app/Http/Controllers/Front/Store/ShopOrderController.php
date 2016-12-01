@@ -226,13 +226,14 @@ class ShopOrderController extends Controller
      * @param int $id
      * @param Request $request
      * @param CustomerRepositoryContract $customerRepo
+     * @param DiscountRepositoryContract $discountRepo
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function customer($id, Request $request, CustomerRepositoryContract $customerRepo)
+    public function customer($id, Request $request, CustomerRepositoryContract $customerRepo, DiscountRepositoryContract $discountRepo)
     {
         $customer = $customerRepo->findByPhone($request->get('phone'));
         if (!$customer) return back();
-        $this->orders->addCustomerToOrder($this->orders->findById($id), $customer);
+        $this->orders->addCustomerToOrder($this->orders->findById($id), $customer, $discountRepo);
         return back();
     }
 

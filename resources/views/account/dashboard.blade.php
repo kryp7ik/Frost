@@ -111,7 +111,7 @@
                 $('#announcement-id').val(id);
                 $('#comments').html('');
                 $.each(anncmnt.comments, function(key, value) {
-                    $('#comments').append('<div class="well"><p>' + value.content + '</p><h6>-' + value.user + '</h6></div>')
+                    $('#comments').append('<div class="well"><p>' + value.content + '</p><h6>By: ' + value.user + ' - ' + value.date + '</h6></div>')
                 })
             });
             $('#announcement-modal').modal('show');
@@ -129,6 +129,7 @@
             }).done(function( json ) {
                 if(json == 'success') {
                     $('#comments').append('<div class="well">' + replyContent + '</div>');
+                    tinyMCE.activeEditor.setContent('');
                 }
             });
         })

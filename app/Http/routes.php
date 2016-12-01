@@ -5,7 +5,6 @@
  * Schedule - Duplicate week
  * Duplicate liquid from order screen
  * Custom discounts on the fly
- * Automatic 10% Discount for preferred customers
  * Optionally e-mail announcements
  */
 
@@ -97,7 +96,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
 });
 
 /**
- * Route group for authenticated users who are not 'Admin' (/*)
+ * Route group for authenticated users who are not 'managers' (/*)
  */
 Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
 

@@ -26,11 +26,12 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
     {
         $liquids = LiquidProduct::
             where('store', $store_id)
-            ->where('mixed', 0)->get();
+            ->where('mixed', 0)
+            ->get();
         if($mutate) {
             $sorted = [];
             foreach ($liquids as $liquid) {
-                $sorted[] = [
+                $liquidArray = [
                     'id' => $liquid->id,
                     'recipe_id' => $liquid->recipe->id,
                     'recipe' => $liquid->recipe->name,
@@ -42,6 +43,14 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
                     'menthol' => $liquid->menthol,
                     'vg' => $liquid->vg,
                 ];
+                foreach ($liquid->recipe->ingredients as $ingredient) {
+                    $liquidArray['ingredients'][] = [
+                        'name' => $ingredient->name,
+                        'vendor' => $ingredient->vendor,
+                        'amount' => $ingredient->pivot->amount
+                    ];
+                }
+                $sorted[] = $liquidArray;
             }
             return $sorted;
         } else {

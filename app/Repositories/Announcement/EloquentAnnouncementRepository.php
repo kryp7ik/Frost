@@ -66,7 +66,8 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
             foreach ($announcement->comments as $comment) {
                 $announcementMutated['comments'][] = [
                     'content' => $comment->content,
-                    'user' => $comment->user->name
+                    'user' => $comment->user->name,
+                    'date' => date('m-d-y h:ia', strtotime($comment->created_at))
                 ];
             }
             return $announcementMutated;

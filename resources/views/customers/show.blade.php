@@ -71,6 +71,17 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <td><strong>Preferred Customer:</strong></td>
+                        <td>
+                            <button id="preferred"
+                                    data-id="{{ $customer->id }}"
+                                    data-pref="{{ $customer->preferred }}"
+                                    class="btn btn-raised btn-xs {{ ($customer->preferred) ? 'btn-success' : 'btn-danger' }}">
+                                {{ ($customer->preferred) ? 'Yes' : 'No' }}
+                            </button>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -110,6 +121,38 @@
 @push('scripts')
 @include('shared.editable')
 <script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+        }
+    });
+    $('#preferred').on('click', function() {
+        var button = $(this);
+        var value = ($(this).attr('data-pref') == 0) ? 1 : 0;
+        $.ajax({
+            url: '/customers/' + $(this).attr('data-id') + '/ajax',
+            type: "POST",
+            dataType: "json",
+            data: {
+                'name' : 'preferred',
+                'value' : value
+            }
+        }).done(function( json ) {
+            if(json.status == 1) {
+                if (value == 0) {
+                    $(button).attr('data-pref', 0);
+                    $(button).html('No');
+                    $(button).removeClass('btn-success');
+                    $(button).addClass('btn-danger');
+                } else {
+                    $(button).attr('data-pref', 1);
+                    $(button).html('Yes');
+                    $(button).removeClass('btn-danger');
+                    $(button).addClass('btn-success');
+                }
+            }
+        });
+    });
     $(document).ready(function() {
         $('#table').DataTable( {
             "paging": false,

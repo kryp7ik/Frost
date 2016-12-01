@@ -7,6 +7,7 @@ use App\Models\Store\Customer;
 use App\Models\Store\Discount;
 use App\Models\Store\Payment;
 use App\Models\Store\ShopOrder;
+use App\Repositories\Store\Discount\DiscountRepositoryContract;
 use App\Repositories\Store\LiquidProduct\LiquidProductRepositoryContract;
 use Illuminate\Support\Facades\DB;
 
@@ -249,8 +250,9 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      * If customer is being added after the order is complete update customers points
      * @param ShopOrder $order
      * @param Customer $customer
+     * @param DiscountRepositoryContract
      */
-    public function addCustomerToOrder(ShopOrder $order, Customer $customer)
+    public function addCustomerToOrder(ShopOrder $order, Customer $customer, DiscountRepositoryContract $discountRepo)
     {
         if($order->complete) {
             $order->customer_id = $customer->id;
@@ -259,6 +261,10 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
             $customer->save();
         } else {
             $order->customer_id = $customer->id;
+            if ($customer->preferred) {
+                $discount = $discountRepo->findById(config('store.preferred_discount'));
+                $this->addDiscountToOrder($order, $discount);
+            }
             $order->save();
         }
         flash('A customer has been successfully added to the order', 'success');

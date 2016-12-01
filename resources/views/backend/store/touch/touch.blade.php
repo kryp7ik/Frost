@@ -9,7 +9,7 @@
     <body>
         @include('shared.touch-navbar')
         <div id="app">
-            <table class="table table-striped">
+            <table class="table table-striped" style="cursor:pointer">
                 <thead>
                     <th>Complete</th>
                     <th>Recipe</th>
@@ -23,13 +23,13 @@
                 <tbody>
                     <tr v-for="liquid in liquids">
                         <td><button v-on:click="completeOrder( liquid.id )" class="btn btn-info btn-lg">Complete</button></td>
-                        <td>@{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }}</td>
-                        <td>@{{ liquid.size + 'ml' }}</td>
-                        <td>@{{ mentholDisplay[liquid.menthol] }}</td>
-                        <td>@{{ iceToAdd( liquid ) + 'ml' }}</td>
-                        <td>@{{ liquid.nicotine }}mg Add: @{{ nicotineToAdd( liquid ) }}ml</td>
-                        <td>@{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }}</td>
-                        <td>@{{ addPremix( liquid ) }}ml</td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }} </td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.size + 'ml' }}</td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ mentholDisplay[liquid.menthol] }}</td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ iceToAdd( liquid ) + 'ml' }}</td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.nicotine }}mg Add: @{{ nicotineToAdd( liquid ) }}ml</td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }}</td>
+                        <td v-on:click="displayRecipe( liquid )">@{{ addPremix( liquid ) }}ml</td>
                     </tr>
                 </tbody>
             </table>
@@ -49,9 +49,42 @@
                 </table>
             </div>
             <button v-on:click="completeAll" class="btn btn-success complete">Complete All</button>
+            <div class="modal fade" id="recipe-modal" tabindex="-1" role="dialog" aria-labelledby="recipe-modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Recipe Details</h3>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <th>Ingredient</th>
+                                <th>Vendor</th>
+                                <th>Amount</th>
+                                </thead>
+                                <tbody>
+                                <tr v-for="ingredient in recipe.ingredients">
+                                    <td>@{{ ingredient.name }}</td>
+                                    <td>@{{ ingredient.vendor }}</td>
+                                    <td>@{{ getIngredientAmount(recipe, ingredient) }}ml</td>
+                                </tr>
+                                <tr v-show="nicotineToAdd(recipe) > 0">
+                                    <td colspan="2">Nicotine</td>
+                                    <td>@{{ nicotineToAdd(recipe) }}ml</td>
+                                </tr>
+                                <tr v-show="iceToAdd(recipe) > 0">
+                                    <td colspan="2">Menthol</td>
+                                    <td>@{{ iceToAdd( recipe ) + 'ml' }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.5.1/socket.io.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -68,6 +101,7 @@
 
                 data: {
                     liquids: [],
+                    recipe: {},
                     show: false,
                     recent: [],
                     iceMultipliers: {
@@ -91,7 +125,7 @@
                         return (liquid.size * this.iceMultipliers[liquid.menthol]).toFixed(1);
                     },
                     nicotineToAdd: function(liquid) {
-                        return (liquid.nicotine * (liquid.size / 100)).toFixed(1);
+                        return (liquid.nicotine * liquid.size / 100).toFixed(1);
                     },
                     addPremix: function(liquid) {
                         return (liquid.size - ((liquid.nicotine * (liquid.size / 100)) + (liquid.size * this.iceMultipliers[liquid.menthol]))).toFixed(1);
@@ -126,6 +160,15 @@
                     unmix: function(id) {
                         $.getJSON('/admin/store/touch/unmix/' + id);
                         this.recentlyCompleted();
+                    },
+                    displayRecipe: function(liquid) {
+                        this.recipe = liquid;
+                        $('#recipe-modal').modal('show');
+                    },
+                    getIngredientAmount: function(recipe, ingredient) {
+                        var amount =(ingredient.amount / 100 * recipe.size).toFixed(1);
+                        if(recipe.extra) amount = amount * 2;
+                        return amount;
                     }
 
                 },
@@ -144,6 +187,7 @@
                     this.refreshLiquids();
                 }
             });
+
         </script>
     </body>
 </html>

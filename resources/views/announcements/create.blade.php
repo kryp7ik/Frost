@@ -1,7 +1,7 @@
 @extends('master')
 @section('title', 'Create A New Announcement')
 @section('content')
-    <div class="container col-md-8 col-md-offset-2">
+    <div class="container col-md-10 col-md-offset-1">
         <div class="panel panel-success">
             <div class="panel-heading">
                 <h2>Create a new announcement</h2>

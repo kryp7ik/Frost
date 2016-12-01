@@ -9,6 +9,8 @@ return [
 
     'tax' => 0.06,
 
+    'preferred_discount' => 1,
+
     'manager_pin' => 133769,
 
     'stores' => [

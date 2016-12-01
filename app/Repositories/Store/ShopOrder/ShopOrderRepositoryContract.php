@@ -11,6 +11,7 @@ use App\Models\Auth\User;
 use App\Models\Store\Discount;
 use App\Models\Store\ShopOrder;
 use App\Models\Store\Customer;
+use App\Repositories\Store\Discount\DiscountRepositoryContract;
 
 interface ShopOrderRepositoryContract
 {
@@ -119,10 +120,12 @@ interface ShopOrderRepositoryContract
 
     /**
      * Adds or updates the customer for the given order
+     * If customer is being added after the order is complete update customers points
      * @param ShopOrder $order
      * @param Customer $customer
+     * @param DiscountRepositoryContract
      */
-    public function addCustomerToOrder(ShopOrder $order, Customer $customer);
+    public function addCustomerToOrder(ShopOrder $order, Customer $customer, DiscountRepositoryContract $discountRepo);
 
     /**
      * @param ShopOrder $order

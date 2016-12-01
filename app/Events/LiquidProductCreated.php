@@ -31,6 +31,13 @@ class LiquidProductCreated extends Event implements ShouldBroadcast
             'menthol' => $liquid->menthol,
             'vg' => $liquid->vg,
         ];
+        foreach ($liquid->recipe->ingredients as $ingredient) {
+            $this->liquid['ingredients'][] = [
+                'name' => $ingredient->name,
+                'vendor' => $ingredient->vendor,
+                'amount' => $ingredient->pivot->amount
+            ];
+        }
     }
 
     /**

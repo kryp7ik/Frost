@@ -52,7 +52,8 @@ class EloquentCustomerRepository implements CustomerRepositoryContract
         $customer = new Customer(array(
             'phone' => $data['phone'],
             'name' => (isset($data['name'])) ? $data['name'] : '',
-            'email' => (isset($data['email'])) ? $data['email'] : ''
+            'email' => (isset($data['email'])) ? $data['email'] : '',
+            'preferred' => (isset($data['preferred'])) ? true : false
         ));
         $customer->save();
         return $customer;

@@ -26,13 +26,19 @@ class ReportController extends Controller
     
     public function sales(Request $request)
     {
-        $data = $this->reportService->generateSalesReport($request->input('store'), $request->input('start'), $request->input('end'));
+        $data = $this->reportService->generateSalesReport($request->get('store'), $request->get('start'), $request->get('end'), $request->get('type'));
         $filters = [
             'start' => $request->input('start'),
             'end' => $request->input('end'),
-            'store' => $request->input('store')
+            'store' => $request->input('store'),
+            'type' => $request->get('type')
         ];
-        return view('backend.store.report.sales', compact('data','filters'));
+        if ($filters['type'] == 'minimal') {
+            return view('backend.store.report.sales.minimal', compact('data','filters'));
+        } else {
+            return view('backend.store.report.sales.detailed', compact('data','filters'));
+        }
+
     }
 
 

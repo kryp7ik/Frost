@@ -6,11 +6,6 @@
                     <span id="title"> </span>
                     <small class="text-right">
                         By <span id="user-name"></span>
-
-                            <a id="edit-link" href="">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-
                     </small>
                     <small class="pull-right">
                         <span><i class="fa fa-calendar"></i>

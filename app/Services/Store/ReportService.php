@@ -28,7 +28,7 @@ class ReportService {
      * @param null|string $endDate
      * @return array
      */
-    public function generateSalesReport($store = null, $startDate = null, $endDate = null)
+    public function generateSalesReport($store = null, $startDate = null, $endDate = null, $type = 'detailed')
     {
         $start = ($startDate) ? new \DateTime($startDate) : new \DateTime();
         $end = ($endDate) ? new \DateTime($endDate) : new \DateTime();
@@ -37,8 +37,24 @@ class ReportService {
         } else {
             $orders = $this->orderRepo->getAll($start->format('Y-m-d'), $end->format('Y-m-d'));
         }
-        $reportData = $this->parseOrdersForSalesReport($orders);
+        if($type == 'detailed') {
+            $reportData = $this->parseOrdersForDetailedSalesReport($orders);
+        } elseif($type == 'minimal') {
+            $reportData = $this->parseOrdersForMinimalSalesReport($orders);
+        } else {
+            $reportData = $this->parseOrdersForDetailedSalesReport($orders);
+        }
         return $reportData;
+    }
+
+    public function parseOrdersForMinimalSalesReport($orders)
+    {
+        $data = ['subtotal' => 0, 'gross' => 0];
+        foreach ($orders as $order) {
+            $data['subtotal'] += $order->subtotal;
+            $data['gross'] += $order->total;
+        }
+        return $data;
     }
 
     /**
@@ -46,7 +62,7 @@ class ReportService {
      * @param array $orders The array of ShopOrders
      * @return array $data
      */
-    private function parseOrdersForSalesReport($orders)
+    private function parseOrdersForDetailedSalesReport($orders)
     {
         $data = $this->getSalesReportDataArray();
         foreach ($orders as $order) {
