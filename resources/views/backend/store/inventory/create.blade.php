@@ -80,27 +80,7 @@
 @endsection
 @push('scripts')
 <script>
-    $(document).on('click', '.product-add', function(e) {
-        e.preventDefault();
-        var controlForm = $('.product-group'),
-            currentEntry = $(this).parents('.product-group fieldset:first');
-        $("select").select2("destroy");
-        var newEntry = $(currentEntry.clone()).appendTo(controlForm);
-        var currentCount = ($('.product-group fieldset').length -1);
-        newEntry.find('.p-select').attr('name', 'products[' + currentCount + '][instance]');
-        newEntry.find('.p-quantity').attr('name', 'products[' + currentCount + '][quantity]');
-        newEntry.find('.p-quantity').val('');
-        newEntry.find('.expected').html('');
-        controlForm.find('fieldset:not(:last) .product-add')
-            .removeClass('product-add').addClass('product-remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span class="glyphicon glyphicon-minus"></span>');
-        $("select").select2();
-    }).on('click', '.product-remove', function(e) {
-        $(this).parents('fieldset:first').remove();
-        e.preventDefault();
-        return false;
-    }).on('select2:select', 'select', function(e) {
+    $(document).on('select2:select', 'select', function(e) {
         $(this).parent().find('.expected').html(e.params.data.element.attributes[0].value);
     });
 </script>

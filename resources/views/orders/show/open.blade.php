@@ -91,15 +91,6 @@
     @push('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
         <script type="text/javascript">
-
-            $.fn.extend({
-                animateCss: function (animationName) {
-                    var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-                    this.addClass('animated ' + animationName).one(animationEnd, function() {
-                        $(this).removeClass('animated ' + animationName);
-                    });
-                }
-            });
             var app = new Vue({
                 el: '#app',
 
@@ -119,71 +110,6 @@
                 ready: function() {
                     this.getLastThreeLiquids();
                 }
-            });
-            $(document).on('click', '.liquid-add', function(e)
-            {
-                e.preventDefault();
-                var controlForm = $('.liquid-group'),
-                        currentEntry = $(this).parents('.liquid-group fieldset:first');
-                $("select").select2("destroy");
-                var newEntry = $(currentEntry.clone()).appendTo(controlForm);
-                var currentCount = ($('.liquid-group fieldset').length -1);
-                newEntry.find('.l-size').attr('name', 'liquids[' + currentCount + '][size]');
-                newEntry.find('.l-select').attr('name', 'liquids[' + currentCount + '][recipe]');
-                newEntry.find('.l-nicotine').attr('name', 'liquids[' + currentCount + '][nicotine]');
-                newEntry.find('.l-nicotine').val(currentEntry.find('.l-nicotine').val());
-                newEntry.find('.l-extra').attr('name', 'liquids[' + currentCount + '][extra]');
-                newEntry.find('.l-menthol').attr('name', 'liquids[' + currentCount + '][menthol]');
-                newEntry.find('.l-menthol').val(currentEntry.find('.l-menthol').val());
-                newEntry.find('.l-vg').attr('name', 'liquids[' + currentCount + '][vg]');
-                newEntry.find('.l-vg').val(currentEntry.find('.l-vg').val());
-                controlForm.find('fieldset:not(:last) .liquid-add')
-                        .removeClass('liquid-add').addClass('liquid-remove')
-                        .removeClass('btn-success').addClass('btn-danger')
-                        .html('<span class="glyphicon glyphicon-minus"></span>');
-                $("select").select2();
-            }).on('click', '.product-add', function(e)
-            {
-                e.preventDefault();
-                var controlForm = $('.product-group'),
-                        currentEntry = $(this).parents('.product-group fieldset:first');
-                $("select").select2("destroy");
-                var newEntry = $(currentEntry.clone()).appendTo(controlForm);
-                var currentCount = ($('.product-group fieldset').length -1);
-                newEntry.find('.p-select').attr('name', 'products[' + currentCount + '][instance]');
-                newEntry.find('.p-quantity').attr('name', 'products[' + currentCount + '][quantity]');
-                newEntry.find('.p-quantity').val('');
-                controlForm.find('fieldset:not(:last) .product-add')
-                        .removeClass('product-add').addClass('product-remove')
-                        .removeClass('btn-success').addClass('btn-danger')
-                        .html('<span class="glyphicon glyphicon-minus"></span>');
-                $("select").select2();
-            }).on('click', '.product-remove', function(e)
-            {
-                $(this).parents('fieldset:first').remove();
-                e.preventDefault();
-                return false;
-            }).on('click', '.liquid-remove', function(e)
-            {
-                $(this).parents('fieldset:first').remove();
-                e.preventDefault();
-                return false;
-            });
-            $('#customer-phone').on('click', function() {
-                $('#customer-phone').animateCss('hinge');
-                $('#change-customer').fadeIn();
-                setTimeout(function() {
-                    $('#customer-phone').fadeOut();
-                }, 2000);
-                $('#phone').focus();
-            });
-            $('#cancel-phone').on('click', function(e) {
-                e.preventDefault();
-                $('#customer-phone').fadeIn();
-                $('#change-customer').fadeOut();
-            });
-            $('#cash').on('shown.bs.modal', function () {
-                $('#amount').focus();
             });
         </script>
     @endpush

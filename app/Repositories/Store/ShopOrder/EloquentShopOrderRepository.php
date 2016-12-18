@@ -203,6 +203,19 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
     }
 
     /**
+     * Duplicates a liquid
+     * @param int $liquid_id
+     */
+    public function duplicateLiquid($liquid_id)
+    {
+        $liquid = $this->findById($liquid_id);
+        if ($liquid) {
+            $new = $liquid->replicate();
+            $new->save();
+        }
+    }
+
+    /**
      * @param ShopOrder $order
      * @param Discount $discount
      */

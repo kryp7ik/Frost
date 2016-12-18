@@ -22,7 +22,7 @@
                                 {{ config('store.stores')[$transfer->to_store] }}
                             </h4>
                             @if($transfer->received)
-                                <span class="text-info">
+                                <span class="text-success">
                                     Received On: {{ date('m-d-Y h:ia', strtotime($transfer->updated_at)) }}
                                 </span>
                             @else

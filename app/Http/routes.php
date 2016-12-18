@@ -117,6 +117,7 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders/{id?}/remove-product/{pid?}', 'Store\ShopOrderController@removeProduct');
     Route::post('orders/{id?}/add-liquid', 'Store\ShopOrderController@addLiquid');
     Route::get('orders/{id?}/remove-liquid/{lid?}', 'Store\ShopOrderController@removeLiquid');
+    Route::get('orders/duplicate-liquid/{id?}', 'Store\ShopOrderController@duplicateLiquid');
     Route::get('orders/{id?}/last-liquid', 'Store\ShopOrderController@lastLiquid');
     Route::post('orders/{id?}/add-discount', 'Store\ShopOrderController@addDiscount');
     Route::get('orders/{id?}/remove-discount/{did?}', 'Store\ShopOrderController@removeDiscount');

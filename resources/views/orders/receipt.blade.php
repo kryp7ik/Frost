@@ -25,7 +25,7 @@
                             @if($order->customer->email)
                                 <div class="col-md-4">
                                     <button
-                                            id="email"
+                                            id="email-receipt"
                                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Sending E-mail"
                                             data-order="{{ $order->id }}"
                                             class="btn btn-raised btn-info btn-block">
@@ -71,11 +71,6 @@
     @push('scripts')
         <script type="text/javascript">
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
-                }
-            });
             $('#customer-phone').on('click', function() {
                 $('#customer-phone').hide();
                 $('#change-customer').show();
@@ -86,20 +81,7 @@
                 $('#customer-phone').show();
                 $('#change-customer').hide();
             });
-            $('#email').on('click', function() {
-                var $this = $(this);
-                $this.button('loading');
-                setTimeout(function() {
-                    $this.button('reset');
-                }, 4000);
-                $.post('/orders/email-receipt',{ 'order' : $(this).attr('data-order') }, function(data) {
-                    if(data.status == 'success') {
-                        $('body').append('<div class="alert alert-success">The e-mail was sent successfully</div>');
-                    } else {
-                        $('body').append('<div class="alert alert-danger">An error occurred while sending the e-mail please ensure the customers e-mail is correct</div>');
-                    }
-                });
-            });
+
         </script>
     @endpush
 @endsection

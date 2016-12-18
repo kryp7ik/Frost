@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="col-md-1">
-        <button id="filter" class="btn btn-raised btn-success">
+        <button id="report-filter" class="btn btn-raised btn-success">
             Generate <i class="fa fa-spinner fa-pulse fa-fw" aria-hidden="true"></i>
         </button>
     </div>

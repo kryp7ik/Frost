@@ -32,7 +32,10 @@
     </tr>
     @foreach($order->liquidProducts as $liquid)
         <tr>
-            <td><a href="/orders/{{ $order->id }}/remove-liquid/{{ $liquid->id }}" class="btn btn-sm btn-danger" style="margin:0px">x</a></td>
+            <td>
+                <a href="/orders/{{ $order->id }}/remove-liquid/{{ $liquid->id }}" class="btn btn-sm btn-danger" style="margin:0px">x</a>
+                <a href="/orders/duplicate-liquid/{{ $liquid->id }}" class="btn btn-sm btn-success" style="margin:0px">+</a>
+            </td>
             <td>{{ $liquid->recipe->name }} {{ ($liquid->extra) ? 'XTRA' : '' }}</td>
             <td>{{ $liquid->size }}ml</td>
             <td>{{ $liquid->nicotine }}mg</td>
