@@ -6,7 +6,6 @@ use App\Events\OrderCompleted;
 use App\Models\Store\Discount;
 use App\Models\Store\ShopOrder;
 use Illuminate\Support\Facades\DB;
-use App\Services\Store\InventoryService;
 
 class ShopOrderCalculator {
 

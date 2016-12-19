@@ -4,6 +4,10 @@
   width: 100% !important;
 }
 
+.modal {
+  z-index: 9999 !important;
+}
+
 .modal-dialog {
   margin: 80px auto !important;
 }

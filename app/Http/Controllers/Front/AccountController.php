@@ -35,7 +35,7 @@ class AccountController extends Controller
     public function update(AccountEditRequest $request)
     {
         $this->userRepo->update(Auth::user()->id, $request->all());
-        return redirect('/account');
+        return redirect('/');
     }
 
 }

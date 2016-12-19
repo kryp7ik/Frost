@@ -47,7 +47,7 @@ class EloquentAnnouncementRepository implements AnnouncementRepositoryContract
     /**
      * @param int $id
      * @param bool $eager Eager load comments?
-     * @return mixed
+     * @return array|Announcement
      */
     public function findById($id, $eager = true, $mutate = false) {
         $announcement = Announcement::where('id', '=', $id)
