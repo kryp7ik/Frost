@@ -19,7 +19,7 @@ class PdfController extends Controller
     public function orderReceipt($id, ShopOrderRepositoryContract $orders)
     {
         $order = $orders->findById($id, true);
-        $height = '180';
+        $height = '270';
         $height += $order->liquidProducts->count() * 8;
         $height += $order->productInstances->count() * 8;
         $height += $order->discounts->count() * 8;
