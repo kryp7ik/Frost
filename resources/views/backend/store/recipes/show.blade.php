@@ -27,6 +27,10 @@
                             </td>
                         </tr>
                         <tr>
+                            <td><strong>SKU Prefix</strong></td>
+                            <td>{{ $recipe->sku }}</td>
+                        </tr>
+                        <tr>
                             <td><strong>Active:</strong></td>
                             <td>
                                 <form method="post" action="/admin/store/recipes/{{ $recipe->id }}/update">

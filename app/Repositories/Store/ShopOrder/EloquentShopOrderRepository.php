@@ -119,7 +119,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
             return false;
         } else {
             foreach ($order->liquidProducts as $liquid) {
-                $liquid->delete();
+                $this->liquidProductsRepository->delete($liquid->id);
             }
             foreach ($order->payments as $payment) {
                 $payment->delete();

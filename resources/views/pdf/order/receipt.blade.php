@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="text-center">
-                    <img src="http://frost.com/img/joltreceipt.jpg" style=""/>
+                    <img src="{{ URL::asset('img/joltreceipt.jpg') }}" style=""/>
                 </div>
             </div>
         </div>
@@ -103,6 +103,16 @@
                     <td colspan="4"><strong>Point Balance: {{ $order->customer->points }}</strong></td>
                 </tr>
             @endif
+            <tr>
+                <td colspan="4" align="center">
+                    <img width="200px" src="{{ URL::asset('img/jolt-qr-facebook.jpg') }}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <strong>Like Us On Facebook!</strong>
+                </td>
+            </tr>
             <tr>
                 <td colspan="4" align="center">
                     All sales are final and cannot be returned for the following items: Tanks, Coils, E-Liquid, and Accessories.
