@@ -23,6 +23,7 @@ class PdfController extends Controller
         $height += $order->liquidProducts->count() * 8;
         $height += $order->productInstances->count() * 8;
         $height += $order->discounts->count() * 8;
+        if ($order->customer) $height += 30;
         $pdf = app()->make('snappy.pdf.wrapper');
         $pdf->loadView('pdf.order.receipt', compact('order'))
             ->setOption('page-height', $height)
