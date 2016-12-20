@@ -104,6 +104,7 @@
                     recipe: {},
                     show: false,
                     recent: [],
+                    store: {{ Auth::user()->store }},
                     iceMultipliers: {
                         0:0,
                         1:0.04,
@@ -175,7 +176,9 @@
 
                 ready: function() {
                     socket.on('touch:App\\Events\\LiquidProductCreated', function(data) {
-                        this.liquids.push(data.liquid);
+                        if(data.liquid.store == this.store) {
+                            this.liquids.push(data.liquid);
+                        }
                     }.bind(this));
 
                     socket.on('touch:App\\Events\\LiquidProductDeleted', function(data) {
