@@ -16,7 +16,7 @@
                 </form>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button type="button" class="btn btn-success btn-lg btn-raised pull-right" data-toggle="modal" data-target="#modal">
+                        <button type="button" class="btn btn-success btn-lg btn-raised pull-right" data-toggle="modal" data-target="#shipment-modal">
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             Create Shipment
                         </button>
@@ -30,7 +30,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="Confirm">
+    <div class="modal fade" id="shipment-modal" tabindex="-1" role="dialog" aria-labelledby="Confirm">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -61,47 +61,4 @@
             </div>
         </div>
     </div>
-
-    @push('scripts')
-        <script type="text/javascript">
-            // Script to add and remove product fieldsets
-            $(document).on('click', '.product-add', function(e) {
-                e.preventDefault();
-                var controlForm = $('.product-group'),
-                        currentEntry = $(this).parents('.product-group fieldset:first');
-                $("select").select2("destroy");
-                var newEntry = $(currentEntry.clone()).appendTo(controlForm);
-                var currentCount = ($('.product-group fieldset').length -1);
-                newEntry.find('.p-select').attr('name', 'products[' + currentCount + '][instance]');
-                newEntry.find('.p-quantity').attr('name', 'products[' + currentCount + '][quantity]');
-                newEntry.find('.p-quantity').val('');
-                controlForm.find('fieldset:not(:last) .product-add')
-                        .removeClass('product-add').addClass('product-remove')
-                        .removeClass('btn-success').addClass('btn-danger')
-                        .html('<span class="glyphicon glyphicon-minus"></span>');
-                $("select").select2();
-            }).on('click', '.product-remove', function(e) {
-                $(this).parents('fieldset:first').remove();
-                e.preventDefault();
-                return false;
-            }).on('click', '#confirm', function() {
-                $('#shipment-form').submit();
-            });
-
-            // Gathers form data and compiles into a table for user confirmation
-            $('#modal').on('show.bs.modal', function () {
-                var modal = $(this);
-                $('fieldset').each(function() {
-                    var qty = $(this).find('input').val();
-                    if (qty > 0) {
-                        var product = $(this).find('select :selected').text();
-                        var html = '<tr><td>' + product + '</td><td>' + qty + '</td></tr>';
-                        modal.find('#details').append(html);
-                    }
-                });
-            }).on('hide.bs.modal', function () {
-                $(this).find('#details').empty();
-            });
-        </script>
-    @endpush
 @endsection

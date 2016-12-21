@@ -93,46 +93,8 @@
             ]
         });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
-            }
-        });
 
 
-        $('.read-more').on('click', function () {
-            var id = $(this).attr('data-id');
-            $.getJSON('/announcements/' + id + '/show', function(data) {
-                var anncmnt = data;
-                $('#title').html(anncmnt.title);
-                $('#user-name').html(anncmnt.user);
-                $('#announcement-content').html(anncmnt.content);
-                $('#created-at').html(anncmnt.created);
-                $('#announcement-id').val(id);
-                $('#comments').html('');
-                $.each(anncmnt.comments, function(key, value) {
-                    $('#comments').append('<div class="well"><p>' + value.content + '</p><h6>By: ' + value.user + ' - ' + value.date + '</h6></div>')
-                })
-            });
-            $('#announcement-modal').modal('show');
-        });
-        $('#post-reply').on('click', function() {
-            tinyMCE.triggerSave();
-            var replyContent = $('textarea#reply').val();
-            $.ajax({
-                url: '/announcements/' + $('#announcement-id').val() + '/add-comment',
-                type: "POST",
-                dataType: "json",
-                data: {
-                    'content' : replyContent
-                }
-            }).done(function( json ) {
-                if(json == 'success') {
-                    $('#comments').append('<div class="well">' + replyContent + '</div>');
-                    tinyMCE.activeEditor.setContent('');
-                }
-            });
-        })
     </script>
 @endpush
 

@@ -36,23 +36,3 @@
         </div>
     </div>
 @endsection
-
-@push('scripts')
-<script>
-    $(document).ready(function() {
-        $('.datepicker').datetimepicker({
-            format: 'YYYY-MM-DD'
-        });
-    });
-
-    $('#filter').on('click', function() {
-
-        var start = "start=" + $('#start').val();
-        var end = "end=" + $('#end').val();
-        var store = "store=" + $('#store-select :selected').val();
-        var type = "type=" + $('#report-type :selected').val();
-        var url = "/admin/store/report/sales?" + start + '&' + end + '&' + store + '&' + type;
-        window.location.href = url;
-    });
-</script>
-@endpush

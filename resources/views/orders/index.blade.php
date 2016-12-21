@@ -102,19 +102,13 @@
     </div>
     @push('scripts')
         <script type="text/javascript">
-            $('#order-id').keyup(function() {
-                    var orderId = this.value;
-                $('#lookup').attr('href', '/orders/' + orderId + '/show');
-            });
             $(document).ready(function() {
                 $('#table').DataTable( {
                     "paging": false,
                     "info" : false,
                     "order" : [[ 0, "desc" ]]
                 });
-                $('#datepicker').datetimepicker({
-                    format: 'YYYY-MM-DD'
-                });
+
             });
         </script>
     @endpush

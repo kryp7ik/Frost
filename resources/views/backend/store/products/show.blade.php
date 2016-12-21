@@ -93,7 +93,10 @@
                                         <td>{{ $instance->stock }}</td>
                                         <td>{{ $instance->redline }}</td>
                                         <td>{{ ($instance->active) ? 'Yes' : 'No' }}</td>
-                                        <td><a href="/admin/store/products/instance/{!! $instance->id !!}/edit" class="btn btn-raised btn-warning btn-xs">Edit</a></td>
+                                        <td>
+
+                                            <a href="/admin/store/products/instance/{!! $instance->id !!}/edit" class="btn btn-raised btn-warning btn-xs">Edit</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

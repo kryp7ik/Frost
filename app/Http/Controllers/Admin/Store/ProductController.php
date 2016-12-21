@@ -141,6 +141,10 @@ class ProductController extends Controller
     public function editInstance($id)
     {
         $instance = $this->productInstances->findById($id);
+        if(Auth::user()->store != $instance->store  && !Auth::user()->hasRole('admin')) {
+            flash('You can only edit product instances for your store!', 'danger');
+            return back();
+        }
         return view('backend.store.products.editinstance', compact('instance'));
     }
 
