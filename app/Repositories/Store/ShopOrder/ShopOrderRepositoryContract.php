@@ -100,6 +100,12 @@ interface ShopOrderRepositoryContract
     public function removeLiquidFromOrder(ShopOrder $order, $liquid_id);
 
     /**
+     * Duplicates a liquid
+     * @param int $liquid_id
+     */
+    public function duplicateLiquid($liquid_id);
+
+    /**
      * @param ShopOrder $order
      * @param Discount $discount
      */

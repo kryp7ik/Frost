@@ -166,6 +166,17 @@ class ShopOrderController extends Controller
     }
 
     /**
+     * Duplicates a liquid product by its id
+     * @param int $id
+     * @return mixed
+     */
+    public function duplicateLiquid($id)
+    {
+        $this->orders->duplicateLiquid($id);
+        return back();
+    }
+
+    /**
      * Finds the last LiquidProduct that the customer who belongs to the specified ShopOrder ordered
      * @param int $id ShopOrder id
      * @param LiquidProductRepositoryContract $liquidRepo
