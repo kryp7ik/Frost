@@ -51,7 +51,7 @@
                         </thead>
                         <tbody>
                         @foreach($transfer->productInstances as $instance)
-                            <tr>
+                            <tr class="{{ ($instance->pivot->received) ? 'success' : 'danger' }}">
                                 <td><a href="/admin/store/products/{{ $instance->product->id }}/show">{{ $instance->product->name }}</a></td>
                                 <td>{{ $instance->pivot->quantity }}</td>
                             </tr>

@@ -60,6 +60,6 @@ class ProductInstance extends Model
      * Many to Many with App\Models\Store\Transfer
      */
     public function productTransfer() {
-        return $this->belongsToMany('App\Models\Store\Transfer', 'instance_transfer')->withPivot('quantity', 'id');
+        return $this->belongsToMany('App\Models\Store\Transfer', 'instance_transfer')->withPivot('quantity', 'id', 'received');
     }
 }

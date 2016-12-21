@@ -7,6 +7,7 @@ class CreateInstanceTransferTable extends Migration
 {
     /**
      * Run the migrations.
+     * NOTE: added 'received' (bool) column in another migration
      *
      * @return void
      */

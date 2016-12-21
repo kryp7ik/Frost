@@ -92,7 +92,7 @@ class SampleDataSeeder extends Seeder
         DB::table('customers')->insert([
             [
                 'name' => 'John Doe',
-                'phone' => 6162180611,
+                'phone' => 1234567890,
                 'email' => 'john@gmail.com',
                 'points' => 500,
                 'created_at' => new DateTime(),
@@ -100,7 +100,7 @@ class SampleDataSeeder extends Seeder
             ],
             [
                 'name' => 'Jim Jones',
-                'phone' => 6163185537,
+                'phone' => 9876543210,
                 'email' => 'jim@hotmail.com',
                 'points' => 500,
                 'created_at' => new DateTime(),

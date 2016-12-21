@@ -7,6 +7,7 @@ class CreateRecipeIngredientTable extends Migration
 {
     /**
      * Run the migrations.
+     * NOTE: added 'sku' (string) to this table in another migration
      *
      * @return void
      */

@@ -76,7 +76,7 @@ class TransferController extends Controller
         $transfer = $this->transfersRepo->findById($id);
         if ($inventoryService->adjustInventoryForTransfer($transfer)) {
             $this->transfersRepo->receiveTransfer($transfer);
-            return redirect('/admin/store/products');
+            return redirect('/admin/store/transfers');
         }
         return back();
     }
