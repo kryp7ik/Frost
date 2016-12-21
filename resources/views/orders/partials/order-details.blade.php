@@ -1,6 +1,6 @@
 <table class="table">
     <tr class="active">
-        <td width="10%"><strong>Products</strong></td>
+        <td width="13%"><strong>Products</strong></td>
         <td colspan="4"><strong>Name</strong></td>
         <td><strong>Quantity</strong></td>
         <td><strong>Price</strong></td>

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Store\ShopOrder;
 
+use App\Events\LiquidProductCreated;
 use App\Models\Auth\User;
 use App\Models\Store\Customer;
 use App\Models\Store\Discount;
@@ -208,10 +209,11 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      */
     public function duplicateLiquid($liquid_id)
     {
-        $liquid = $this->findById($liquid_id);
+        $liquid = $this->liquidProductsRepository->findById($liquid_id);
         if ($liquid) {
             $new = $liquid->replicate();
             $new->save();
+            event(new LiquidProductCreated($new));
         }
     }
 
