@@ -214,6 +214,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
             $new = $liquid->replicate();
             $new->save();
             event(new LiquidProductCreated($new));
+            $liquid->shopOrder()->calculator()->calculateTotal();
         }
     }
 

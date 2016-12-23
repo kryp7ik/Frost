@@ -8,6 +8,7 @@ use App\Models\Store\ShopOrder;
 use App\Models\Store\Transfer;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InventoryService {
 
@@ -68,19 +69,24 @@ class InventoryService {
      */
     public function adjustInventoryForTransfer(Transfer $transfer)
     {
+        $error = false;
         foreach ($transfer->productInstances as $instance) {
+            if ($instance->pivot->received) continue;
             $related = $this->productRepo->findRelatedForStore($instance, $transfer->to_store);
             if ($related instanceof ProductInstance) {
                 $this->productRepo->adjustStock($related, $instance->pivot->quantity);
                 $this->productRepo->adjustStock($instance, -($instance->pivot->quantity));
+                DB::table('instance_transfer')->where('id', $instance->pivot->id)->update(['received' => true]);
             } else {
-                flash('Could not find the product instance for the receiving store.  Please ensure you have an instance
-                for all the products in the transfer and that they belong to your store and are active', 'danger');
-                return false;
+                $error = true;
             }
         }
-        flash('Your inventory has been updated successfully', 'success');
-        return true;
+        if ($error) {
+            flash('Some products were unable to transfer.  Please ensure you have an active instance for each product in the transfer and then click receive again to complete the transfer.', 'danger');
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

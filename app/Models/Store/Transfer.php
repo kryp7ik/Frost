@@ -29,6 +29,6 @@ class Transfer extends Model
 
     public function productInstances()
     {
-        return $this->belongsToMany('App\Models\Store\ProductInstance', 'instance_transfer')->withPivot('quantity', 'id');
+        return $this->belongsToMany('App\Models\Store\ProductInstance', 'instance_transfer')->withPivot('quantity', 'id', 'received');
     }
 }
