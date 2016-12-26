@@ -6,8 +6,8 @@
             <div class="input-group col-md-10">
                 <input type="text" id="start" name="start" class="form-control datepicker" value="{{ $filters['start'] }}"/>
                 <span class="input-group-addon">
-                            <span class="fa fa-calendar"></span>
-                        </span>
+                    <span class="fa fa-calendar"></span>
+                </span>
             </div>
         </div>
     </div>
@@ -17,14 +17,13 @@
             <div class="input-group col-md-10">
                 <input type="text" id="end" name="end" class="form-control datepicker" value="{{ $filters['end'] }}"/>
                 <span class="input-group-addon">
-                            <span class="fa fa-calendar"></span>
-                        </span>
+                    <span class="fa fa-calendar"></span>
+                </span>
             </div>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-
             <select name="store" id="store-select" style="width:80%">
                 <option value="0">All Stores</option>
                 @foreach(config('store.stores') as $key => $store)
@@ -35,7 +34,6 @@
     </div>
     <div class="col-md-2">
         <div class="form-group">
-
             <select name="type" id="report-type" style="width:80%">
                 <option value="detailed" {{ ($filters['type'] == 'detailed') ? 'selected' : '' }}>Detailed Report</option>
                 <option value="minimal" {{ ($filters['type'] == 'minimal') ? 'selected' : '' }}>Minimal Report</option>

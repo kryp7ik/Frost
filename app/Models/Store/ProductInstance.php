@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * actions for this entity can be found in...
  * App\Http\Controllers\Admin\Store\ProductController
  * App\Http\Controllers\Admin\Store\InventoryController
+ *
  * Class ProductInstance
  * @package App\Models\Store
  */
