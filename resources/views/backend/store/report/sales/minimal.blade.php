@@ -6,9 +6,10 @@
             <h2>
                 <i class="fa fa-area-chart" aria-hidden="true"></i>
                 Sales Report
+                <a href="/admin/store/report/inventory" class="btn btn-success btn-raised pull-right">Inventory Report</a>
             </h2>
         </div>
-        @include('backend.store.report.partials.filters')
+        @include('backend.store.report.partials.sales-filters')
     </div>
     <!-- Start Sales Details -->
     <div class="row">

@@ -8,7 +8,19 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
 {
 
     /**
+     * Retrieves all active Product Instances from all stores
+     *
+     * @return mixed
+     */
+    public function getAllActive()
+    {
+        $instances = ProductInstance::where('active', 1)->get();
+        return $instances;
+    }
+
+    /**
      * Retrieves all active Product Instances that belong to the designated store
+     *
      * @param int $store The id of the store belonging to the current user
      * @param bool $sorted If true returns a sorted array by category for usage in optgroups
      * @return array
@@ -27,6 +39,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
 
     /**
      * Sorts ProductInstances into an array by category for usage in optgroups [$category][]['instance_id' => $id, 'name' => $instance->product->name]
+     *
      * @param array $instances
      * @return array
      */
@@ -38,10 +51,11 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
                 array('instance_id' => $instance->id, 'name' => $instance->product->name, 'stock' => $instance->stock);
         }
         return $sortedInstances;
-
     }
 
     /**
+     * Find an Instance by its ID or fail
+     *
      * @param int $id
      * @return ProductInstance|boolean
      */
@@ -52,6 +66,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
 
     /**
      * Find another Instance that falls under the same Product as the provided instance and belongs to the designated store
+     *
      * @param ProductInstance $instance
      * @param int $store
      * @return ProductInstance $relatedInstance
@@ -69,6 +84,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     /**
      * Returns all products where the stock is equal to or lower than redline
      * Optionally filter by a specific store default returns all.
+     *
      * @param int $store
      * @return mixed
      */
@@ -80,6 +96,8 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     }
 
     /**
+     * Creates and saves a new ProductInstance
+     *
      * @param int $store_id
      * @param array $data
      * @return ProductInstance|bool
@@ -103,6 +121,8 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     }
 
     /**
+     * Update an Instance
+     *
      * @param int $id
      * @param array $data
      * @return ProductInstance
@@ -124,6 +144,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
 
     /**
      * Adjust the stock of a ProductInstance by a positive or negative value or if $replace is true completely change the stock
+     *
      * @param ProductInstance $product
      * @param int $adjustment
      * @param bool $replace

@@ -11,6 +11,13 @@ use App\Models\Store\ProductInstance;
 
 interface ProductInstanceRepositoryContract
 {
+
+    /**
+     * Retrieves all active Product Instances from all stores
+     * @return mixed
+     */
+    public function getAllActive();
+
     /**
      * Retrieves all active Product Instances that belong the the designated store
      * @param int $store The id of the store belonging to the current user
