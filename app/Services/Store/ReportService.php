@@ -62,6 +62,7 @@ class ReportService {
             'products' => []
         ];
         foreach ($instances as $instance) {
+            if($instance->stock < 0) continue;
             if(!isset($data['products'][$instance->product_id])) {
                 $data['products'][$instance->product_id] = [
                     'name' => $instance->product->name,
