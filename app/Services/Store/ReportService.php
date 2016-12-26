@@ -47,7 +47,7 @@ class ReportService {
     }
 
     /**
-     * Parses through all instances and returns a sorted data array
+     * Parses through all instances and returns a sorted data array for the Inventory Report
      *
      * @param array $instances
      * @return array
@@ -62,7 +62,8 @@ class ReportService {
             'products' => []
         ];
         foreach ($instances as $instance) {
-            if($instance->stock < 0) continue;
+            // For products whose stock is not tracked set the stock to a negative number and it will not affect the report
+            if($instance->stock <= 0) continue;
             if(!isset($data['products'][$instance->product_id])) {
                 $data['products'][$instance->product_id] = [
                     'name' => $instance->product->name,
