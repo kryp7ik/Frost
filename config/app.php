@@ -163,6 +163,7 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        App\Providers\MessengerServiceProvider::class,
 
     ],
 
