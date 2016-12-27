@@ -42,6 +42,7 @@
                                 <button id="cancel-phone" class="btn btn-danger btn-raised">Cancel</button>
                             </form>
                         @endif
+                        <a href="/orders/{{ $order->id }}/receipt" class="btn btn-raised btn-block btn-success">Receipt</a>
                     </div>
                 </div>
 
