@@ -15,15 +15,6 @@
                 <li>
                     <a href="/orders"><span class="glyphicon glyphicon-th-list"></span> All Orders</a>
                 </li>
-                <li>
-                    <a href="/orders/create"><span class="glyphicon glyphicon-ok"></span> New Order</a>
-                </li>
-                <li>
-                    <a href="/schedule"><span class="glyphicon glyphicon-calendar"></span> Schedule</a>
-                </li>
-                <li>
-                    <a href="/customers"><span class="glyphicon glyphicon-user"></span> Customers</a>
-                </li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
