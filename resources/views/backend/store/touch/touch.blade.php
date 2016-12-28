@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<meta name="csrf_token" content="{{ csrf_token() }}">
 <html>
     <head>
+        <meta name="csrf_token" content="{{ csrf_token() }}">
         <title>Touch Order</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="/css/touch.css"/>
@@ -10,7 +10,7 @@
         @include('shared.touch-navbar')
         <div id="app">
             <table class="table table-striped" style="cursor:pointer">
-                <thead>
+                <tr>
                     <th>Complete</th>
                     <th>Recipe</th>
                     <th>Size</th>
@@ -19,21 +19,18 @@
                     <th>Nicotine</th>
                     <th>VG%</th>
                     <th>Add Premix</th>
-                </thead>
-                <tbody>
-                    <tr v-for="liquid in liquids">
-                        <td><button v-on:click="completeOrder( liquid.id )" class="btn btn-info btn-lg">Complete</button></td>
-                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }} </td>
-                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.size + ' ml' }}</td>
-                        <td v-on:click="displayRecipe( liquid )">@{{ mentholDisplay[liquid.menthol] }}</td>
-                        <td v-on:click="displayRecipe( liquid )">@{{ iceToAdd( liquid ) + ' ml' }}</td>
-                        <td v-on:click="displayRecipe( liquid )">"@{{ liquid.nicotine }}" mg Add: @{{ nicotineToAdd( liquid ) }} ml</td>
-                        <td v-on:click="displayRecipe( liquid )">@{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }}</td>
-                        <td v-on:click="displayRecipe( liquid )">@{{ addPremix( liquid ) }} ml</td>
-                    </tr>
-                </tbody>
+                </tr>
+                <tr v-for="liquid in liquids">
+                    <td><button v-on:click="completeOrder( liquid.id )" class="btn btn-info btn-lg">Complete</button></td>
+                    <td v-on:click="displayRecipe( liquid )"> @{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }} </td>
+                    <td v-on:click="displayRecipe( liquid )"> @{{ liquid.size + ' ml' }} </td>
+                    <td v-on:click="displayRecipe( liquid )"> @{{ mentholDisplay[liquid.menthol] }} </td>
+                    <td v-on:click="displayRecipe( liquid )"> @{{ iceToAdd( liquid ) + ' ml' }} </td>
+                    <td v-on:click="displayRecipe( liquid )"> "@{{ liquid.nicotine }}" mg Add: @{{ nicotineToAdd( liquid ) }} ml</td>
+                    <td v-on:click="displayRecipe( liquid )"> @{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }} </td>
+                    <td v-on:click="displayRecipe( liquid )"> @{{ addPremix( liquid ) }} ml</td>
+                </tr>
             </table>
-
 
             <button id="mixed-toggle" v-on:click="recentlyCompleted()" class="btn btn-info">
                 Recently Completed
@@ -42,9 +39,9 @@
                 <table class="table table-hover">
                     <tr v-for="liq in recent">
                         <td><button v-on:click="unmix( liq.id )" class="btn btn-success">Un-Mix</button></td>
-                        <td>@{{ liq.size }}ml</td>
-                        <td>@{{ liq.recipe }}</td>
-                        <td>@{{ liq.nicotine }}mg</td>
+                        <td> @{{ liq.size }}ml</td>
+                        <td> @{{ liq.recipe }}</td>
+                        <td> @{{ liq.nicotine }}mg</td>
                     </tr>
                 </table>
             </div>
@@ -57,26 +54,25 @@
                         </div>
                         <div class="modal-body">
                             <table class="table table-striped">
-                                <thead>
-                                <th>Ingredient</th>
-                                <th>Vendor</th>
-                                <th>Amount</th>
-                                </thead>
-                                <tbody>
+                                <tr>
+                                    <th>Ingredient</th>
+                                    <th>Vendor</th>
+                                    <th>Amount</th>
+                                </tr>
+
                                 <tr v-for="ingredient in recipe.ingredients">
-                                    <td>@{{ ingredient.name }}</td>
-                                    <td>@{{ ingredient.vendor }}</td>
-                                    <td>@{{ getIngredientAmount(recipe, ingredient) }}ml</td>
+                                    <td> @{{ ingredient.name }} </td>
+                                    <td> @{{ ingredient.vendor }} </td>
+                                    <td> @{{ getIngredientAmount(recipe, ingredient) }}ml</td>
                                 </tr>
                                 <tr v-show="nicotineToAdd(recipe) > 0">
                                     <td colspan="2">Nicotine</td>
-                                    <td>@{{ nicotineToAdd(recipe) }}ml</td>
+                                    <td> @{{ nicotineToAdd(recipe) }}ml</td>
                                 </tr>
                                 <tr v-show="iceToAdd(recipe) > 0">
                                     <td colspan="2">Menthol</td>
-                                    <td>@{{ iceToAdd( recipe ) + 'ml' }}</td>
+                                    <td> @{{ iceToAdd( recipe ) + 'ml' }}</td>
                                 </tr>
-                                </tbody>
                             </table>
                         </div>
                     </div>
