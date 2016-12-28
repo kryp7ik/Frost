@@ -24,7 +24,7 @@ Route::get('schedule', 'Front\Store\ScheduleController@home');
 /**
  * Route group for 'manager' users only (/admin/*)
  */
-Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'manager'), function() {
+Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['manager', 'userOnline']), function() {
     Route::get('/', 'PagesController@home');
 
     Route::get('roles', 'RolesController@index');
@@ -100,7 +100,7 @@ Route::group(array('prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 
 /**
  * Route group for authenticated users who are not 'managers' (/*)
  */
-Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
+Route::group(array('namespace' => 'Front', 'middleware' => ['auth', 'userOnline']), function() {
 
     Route::get('customers', 'Store\CustomerController@index');
     Route::get('customers/data-tables', 'Store\CustomerController@dataTables');

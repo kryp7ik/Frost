@@ -2,6 +2,7 @@
 
 namespace App\Models\Auth;
 
+use App\Traits\Messagable;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -18,6 +19,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         SoftDeletes::restore insteadof EntrustUserTrait;
     }
     use SoftDeletes;
+    use Messagable;
 
     /**
      * The attributes that are mass assignable.

@@ -7,7 +7,6 @@ use Illuminate\Support\ServiceProvider;
 class MessengerServiceProvider extends ServiceProvider
 {
 
-
     /**
      * Bootstrap the application services.
      *
@@ -15,7 +14,10 @@ class MessengerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->composer(
+            'messenger.messenger',
+            'App\Http\ViewComposers\MessengerComposer'
+        );
     }
 
     /**
