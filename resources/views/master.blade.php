@@ -16,6 +16,9 @@
         <div id="wrapper">
             <div class="" id="page-content-wrapper">
                 @yield('content')
+                @if (Auth::check())
+                    @include('messenger.messenger')
+                @endif
             </div>
         </div>
         @foreach ($errors->all() as $error)

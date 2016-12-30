@@ -7,6 +7,7 @@ use App\Models\Auth\User;
 use App\Models\Messenger\Conversation;
 use App\Models\Messenger\Message;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EloquentMessengerRepository
@@ -40,27 +41,58 @@ class EloquentMessengerRepository
     }
 
     /**
+     * Retrieves an array of the other users along with the associated conversation between them and the logged in user
+     *
+     * @return array
+     */
+    public function getUserList()
+    {
+        $loggedUser = Auth::user();
+        $userList = [];
+        // May have to use pluck('id', 'name') instead of select
+        $users = User::with('conversations')
+            ->where('id', '!=', $loggedUser->id)
+            ->get();
+        foreach ($users as $user) {
+            $conversation = $this->findConversationWithUsers($loggedUser, $user);
+            $lastread = DB::table('conversation_user')
+                ->select('lastread')
+                ->where('user_id', $loggedUser->id)
+                ->where('conversation_id', $conversation->id)
+                ->get();
+            $userList[] = [
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'online' => $user->isOnline()
+                ],
+                'conversation' => [
+                    'id' => $conversation->id,
+                    'new' => ($conversation->updated_at != $lastread) ? true : false,
+                ]
+            ];
+        }
+        return $userList;
+    }
+
+    /**
      * Accepts an array of User IDs and searches to see if a conversation already exists with those users
      * If a Conversation does not exist it creates a new one
      *
-     * @param array $users
+     * @param User $user_a
+     * @param User $user_b
      * @return Conversation
      *
-     * $users = User::whereHas('posts', function($q){
-    $q->where('created_at', '>=', '2015-01-01 00:00:00');
-    })->get();
      */
-    public function findConversationWithUsers($users)
+    public function findConversationWithUsers($user_a, $user_b)
     {
-        $conversation = Conversation::with(['messages',
-            'users' => function ($q) use ($users) {
-                $q->wherePivotIn('user_id', $users);
-            }
-        ])->first();
-        if(!$conversation) {
-            $conversation = $this->createConversation($users);
+        $collection = $user_a->conversations->intersect($user_b->conversations);
+        if($collection->isEmpty()) {
+            $conversation = $this->createConversation([$user_a->id, $user_b->id]);
+            return $conversation;
+        } else {
+            return $collection->first();
         }
-        return $conversation;
     }
 
     /**
@@ -123,41 +155,5 @@ class EloquentMessengerRepository
         }
         return $unread;
     }
-
-    /**
-     * Retrieves an array of the other users along with the associated conversation between them and the logged in user
-     *
-     * @return array
-     */
-    public function getUserList()
-    {
-        $loggedUser = Auth::user();
-        $userList = [];
-        // May have to use pluck('id', 'name') instead of select
-        $users = User::select('id', 'name')
-            ->where('id', '!=', $loggedUser->id)
-            ->get();
-        foreach ($users as $user) {
-            $conversation = $this->findConversationWithUsers([$loggedUser->id, $user->id]);
-            $lastread = DB::table('conversation_user')
-                ->select('lastread')
-                ->where('user_id', $loggedUser->id)
-                ->where('conversation_id', $conversation->id)
-                ->get();
-            $userList[] = [
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'online' => $user->isOnline()
-                ],
-                'conversation' => [
-                    'id' => $conversation->id,
-                    'new' => ($conversation->updated_at != $lastread) ? true : false,
-                ]
-            ];
-        }
-        return $userList;
-    }
-
 
 }

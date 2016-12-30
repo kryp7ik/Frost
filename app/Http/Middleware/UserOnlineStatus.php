@@ -21,5 +21,6 @@ class UserOnlineStatus
     public function handle($request, Closure $next, $guard = null)
     {
         Cache::put('user-is-online-' . Auth::user()->id, true, Carbon::now()->addMinutes(10));
+        return $next($request);
     }
 }

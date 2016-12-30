@@ -147,4 +147,12 @@ Route::group(array('namespace' => 'Front', 'middleware' => ['auth', 'userOnline'
     Route::post('announcements/{id?}/edit', 'AnnouncementController@update');
     Route::get('announcements/{id?}/delete', 'AnnouncementController@delete');
     Route::post('announcements/{id?}/add-comment', 'AnnouncementController@addComment');
+
+
+});
+
+Route::group(array('middleware' => ['auth', 'userOnline']), function() {
+    Route::get('raven/get-conversation', 'Api\MessengerController@getConversation');
+    Route::post('raven/get-conversation', 'Api\MessengerController@getConversation');
+
 });
