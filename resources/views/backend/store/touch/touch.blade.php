@@ -22,13 +22,13 @@
                 </tr>
                 <tr v-for="liquid in liquids">
                     <td><button v-on:click="completeOrder( liquid.id )" class="btn btn-info btn-lg">Complete</button></td>
-                    <td v-on:click="displayRecipe( liquid )"> @{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }} </td>
-                    <td v-on:click="displayRecipe( liquid )"> @{{ liquid.size + ' ml' }} </td>
-                    <td v-on:click="displayRecipe( liquid )"> @{{ mentholDisplay[liquid.menthol] }} </td>
-                    <td v-on:click="displayRecipe( liquid )"> @{{ iceToAdd( liquid ) + ' ml' }} </td>
-                    <td v-on:click="displayRecipe( liquid )"> "@{{ liquid.nicotine }}" mg Add: @{{ nicotineToAdd( liquid ) }} ml</td>
-                    <td v-on:click="displayRecipe( liquid )"> @{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }} </td>
-                    <td v-on:click="displayRecipe( liquid )"> @{{ addPremix( liquid ) }} ml</td>
+                    <td v-on:click="displayRecipe( liquid )">@{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }}</td>
+                    <td v-on:click="displayRecipe( liquid )">@{{ liquid.size + ' ml' }}</td>
+                    <td v-on:click="displayRecipe( liquid )">@{{ mentholDisplay[liquid.menthol] }}</td>
+                    <td v-on:click="displayRecipe( liquid )">@{{ iceToAdd( liquid ) + ' ml' }}</td>
+                    <td v-on:click="displayRecipe( liquid )">"@{{ liquid.nicotine }}" mg Add: @{{ nicotineToAdd( liquid ) }}ml</td>
+                    <td v-on:click="displayRecipe( liquid )">@{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }}</td>
+                    <td v-on:click="displayRecipe( liquid )">@{{ addPremix( liquid ) }}ml</td>
                 </tr>
             </table>
 
