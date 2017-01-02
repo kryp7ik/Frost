@@ -1,5 +1,5 @@
 <!-- Liquid Modal -->
-<div class="modal fade" id="liquid" role="dialog" aria-labelledby="liquid">
+<div class="modal fade" id="liquid" role="dialog" aria-labelledby="liquid" style="overflow: hidden">
     <div class="modal-dialog" role="document" style="width:60%">
         <div class="modal-content">
             <div class="modal-header">

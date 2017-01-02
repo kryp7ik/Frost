@@ -1,5 +1,5 @@
 <!-- Product Modal -->
-<div class="modal fade" id="product" role="dialog" aria-labelledby="product">
+<div class="modal fade" id="product" role="dialog" aria-labelledby="product" style="overflow:hidden">
     <div class="modal-dialog" role="document" style="width:60%">
         <div class="modal-content">
             <div class="modal-header">
