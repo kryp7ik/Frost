@@ -119,9 +119,6 @@
                     this.getLastThreeLiquids();
                 }
             });
-            $('.p-select').select2({
-                dropdownParent: $('#product')
-            });
             $(document).on('click', '.liquid-add', function(e)
             {
                 e.preventDefault();
