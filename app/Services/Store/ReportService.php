@@ -2,6 +2,7 @@
 
 namespace App\Services\Store;
 
+use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use App\Repositories\Store\ShopOrder\ShopOrderRepositoryContract;
 
 class ReportService {
@@ -12,20 +13,82 @@ class ReportService {
     protected $orderRepo;
 
     /**
-     * ReportService constructor.
-     * @param ShopOrderRepositoryContract $orderRepo
+     * @var ProductInstanceRepositoryContract
      */
-    public function __construct(ShopOrderRepositoryContract $orderRepo)
+    protected $instanceRepo;
+
+    /**
+     * ReportService constructor.
+     *
+     * @param ShopOrderRepositoryContract $orderRepo
+     * @param ProductInstanceRepositoryContract $instanceRepositoryContract
+     */
+    public function __construct(ShopOrderRepositoryContract $orderRepo, ProductInstanceRepositoryContract $instanceRepositoryContract)
     {
         $this->orderRepo = $orderRepo;
+        $this->instanceRepo = $instanceRepositoryContract;
+    }
+
+    /**
+     * Generates an inventory report consisting of the total stock for each product along with price,cost,category & name
+     * If no store is specified it will generate for all stores
+     *
+     * @param int $store
+     * @return array
+     */
+    public function generateInventoryReport($store = 0)
+    {
+        if($store == 0) {
+            $instances = $this->instanceRepo->getAllActive();
+        } else {
+            $instances = $this->instanceRepo->getActiveWhereStore($store);
+        }
+        return $this->parseInstances($instances);
+    }
+
+    /**
+     * Parses through all instances and returns a sorted data array for the Inventory Report
+     *
+     * @param array $instances
+     * @return array
+     */
+    private function parseInstances($instances)
+    {
+        $data = [
+            'totals' => [
+                'cost' => 0,
+                'value' => 0,
+            ],
+            'products' => []
+        ];
+        foreach ($instances as $instance) {
+            // For products whose stock is not tracked set the stock to a negative number and it will not affect the report
+            if($instance->stock <= 0) continue;
+            if(!isset($data['products'][$instance->product_id])) {
+                $data['products'][$instance->product_id] = [
+                    'name' => $instance->product->name,
+                    'category' => $instance->product->category,
+                    'cost' => $instance->product->cost,
+                    'price' => $instance->price,
+                    'stock' => $instance->stock
+                ];
+            } else {
+                $data['products'][$instance->product_id]['stock'] += $instance->stock;
+            }
+            $data['totals']['cost'] += $instance->product->cost * $instance->stock;
+            $data['totals']['value'] += $instance->price * $instance->stock;
+        }
+        return $data;
     }
 
     /**
      * Optionally accepts a store and date range to find all orders within the given parameters
      * Parses through all orders to return a sorted array of all relevant sales data
+     *
      * @param null|int $store
      * @param null|string $startDate
      * @param null|string $endDate
+     * @param string $type expects either 'detailed' or 'minimal'
      * @return array
      */
     public function generateSalesReport($store = null, $startDate = null, $endDate = null, $type = 'detailed')
@@ -47,6 +110,12 @@ class ReportService {
         return $reportData;
     }
 
+    /**
+     * Parses all the orders to retrieve only the gross and subtotal(gross - sales tax)
+     *
+     * @param $orders
+     * @return array
+     */
     public function parseOrdersForMinimalSalesReport($orders)
     {
         $data = ['subtotal' => 0, 'gross' => 0];
@@ -59,6 +128,7 @@ class ReportService {
 
     /**
      * Parses through the orders array and returns the report data
+     *
      * @param array $orders The array of ShopOrders
      * @return array $data
      */
@@ -96,6 +166,7 @@ class ReportService {
 
     /**
      * Returns the data array template for sales report
+     *
      * @return array
      */
     private function getSalesReportDataArray() {
