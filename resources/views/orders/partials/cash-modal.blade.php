@@ -39,13 +39,6 @@
             $('#amount').val(this.id);
             $('#cash-form').submit();
         });
-        $(document).keypress(function(e) {
-            e.preventDefault();
-            if(e.which == 13) {
-                if($('#amount').val() != '') {
-                    $('#cash-form').submit();
-                }
-            }
-        });
+
     </script>
 @endpush
