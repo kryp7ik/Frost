@@ -1,5 +1,5 @@
 <!-- Liquid Modal -->
-<div class="modal fade" id="liquid" role="dialog" aria-labelledby="liquid" style="overflow: hidden">
+<div class="modal fade" id="liquid" role="dialog" aria-labelledby="liquid">
     <div class="modal-dialog" role="document" style="width:60%">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,7 +8,7 @@
             </div>
             <form method="post" action="/orders/{{ $order->id }}/add-liquid">
                 {{ csrf_field() }}
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: hidden">
                     <div id="last-liquid" class="well" v-show="liquids != 'fail'">
                         <h4>Previous Orders</h4>
                         <table class="table">

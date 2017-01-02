@@ -1,5 +1,5 @@
 <!-- Product Modal -->
-<div class="modal fade" id="product" role="dialog" aria-labelledby="product" style="overflow:hidden">
+<div class="modal fade" id="product" role="dialog" aria-labelledby="product" >
     <div class="modal-dialog" role="document" style="width:60%">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,7 +8,7 @@
             </div>
             <form method="post" action="/orders/{{ $order->id }}/add-product">
                 {{ csrf_field() }}
-                <div class="modal-body">
+                <div class="modal-body" style="overflow:hidden">
                     @include('orders.partials.product-fieldset')
                 </div>
                 <div class="modal-footer">
