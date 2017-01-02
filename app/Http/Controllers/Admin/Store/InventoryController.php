@@ -46,6 +46,6 @@ class InventoryController extends Controller
     {
         $alertStack = $inventoryService->processInventoryCount($request->all());
         if (count($alertStack['products']) > 0) $this->dispatch(new SendInventoryCountAlertEmail($alertStack));
-        return redirect('/admin');
+        return redirect('/');
     }
 }
