@@ -81,7 +81,11 @@
         </tr>
         @foreach($order->payments as $payment)
             <tr class="success">
-                <td></td>
+                <td>
+                    @if (Auth::user()->hasRole('manager'))
+                        <a href="/orders/payment/{{ $payment->id }}/delete" class="btn btn-raised btn-danger">Remove</a>
+                    @endif
+                </td>
                 <td colspan="5">{{ ucfirst($payment->type) }}</td>
                 <td>${{ number_format($payment->amount,2) }}</td>
             </tr>
