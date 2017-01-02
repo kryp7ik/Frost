@@ -91,7 +91,6 @@
     @push('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
         <script type="text/javascript">
-
             $.fn.extend({
                 animateCss: function (animationName) {
                     var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -119,6 +118,9 @@
                 ready: function() {
                     this.getLastThreeLiquids();
                 }
+            });
+            $('.p-select').select2({
+                dropdownParent: $('#product')
             });
             $(document).on('click', '.liquid-add', function(e)
             {
