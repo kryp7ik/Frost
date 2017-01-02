@@ -16,12 +16,12 @@
                             <input type="text" class="form-control" id="amount" placeholder="25" name="amount">
                         </div>
                     </div>
-                    <button id="5" class="btn btn-success btn-raised cash">$5</button>
-                    <button id="10" class="btn btn-success btn-raised cash">$10</button>
-                    <button id="20" class="btn btn-success btn-raised cash">$20</button>
-                    <button id="30" class="btn btn-success btn-raised cash">$30</button>
-                    <button id="50" class="btn btn-success btn-raised cash">$50</button>
-                    <button id="100" class="btn btn-success btn-raised cash">$100</button>
+                    <button type="button" id="5" class="btn btn-success btn-raised cash">$5</button>
+                    <button type="button" id="10" class="btn btn-success btn-raised cash">$10</button>
+                    <button type="button" id="20" class="btn btn-success btn-raised cash">$20</button>
+                    <button type="button" id="30" class="btn btn-success btn-raised cash">$30</button>
+                    <button type="button" id="50" class="btn btn-success btn-raised cash">$50</button>
+                    <button type="button" id="100" class="btn btn-success btn-raised cash">$100</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
