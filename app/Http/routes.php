@@ -3,10 +3,11 @@
 /**
  * @todo
  * Schedule - Duplicate week
- * Duplicate liquid from order screen
  * Custom discounts on the fly
  * Optionally e-mail announcements
- *
+ * Order->show->closed view add "return" next to products with option of warranty or regular return.
+ * Algorithm for calculating redline
+ * Add 'received' bool to shipment so can view products that have been ordered but not received yet
  */
 
 /**
