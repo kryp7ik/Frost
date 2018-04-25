@@ -82,7 +82,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     }
 
     /**
-     * Returns all products where the stock is equal to or lower than redline
+     * Returns all products where the stock is lower than redline
      * Optionally filter by a specific store default returns all.
      *
      * @param int $store
@@ -92,6 +92,7 @@ class EloquentProductInstanceRepository implements ProductInstanceRepositoryCont
     {
         $products = ProductInstance::whereRaw('stock < redline');
         if ($store > 0) $products->where('store', $store);
+        $products->where('active', 1);
         return $products->get();
     }
 

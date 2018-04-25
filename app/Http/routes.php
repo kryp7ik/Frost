@@ -20,6 +20,7 @@ Route::post('users/login', 'Auth\AuthController@postLogin');
 Route::get('user/status', 'Auth\AjaxController@status');
 Route::get('warning', 'Front\Store\ScheduleController@warning');
 Route::get('schedule', 'Front\Store\ScheduleController@home');
+Route::get('points/{phone}', 'Front\Store\CustomerController@points');
 
 /**
  * Route group for 'manager' users only (/admin/*)
