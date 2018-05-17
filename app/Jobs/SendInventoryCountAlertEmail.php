@@ -33,7 +33,7 @@ class SendInventoryCountAlertEmail extends Job implements ShouldQueue
     {
         Mail::send('emails.inventory-count-alert', ['alerts' => $this->alertStack], function ($m) {
             $m->from('alerts@joltvapor.com', 'Jolt Vapor Alert');
-            $m->to('cam@joltvapor.com')->cc('josh@joltvapor.com')->cc('joe@joltvapor.com');
+            $m->to('cam@joltvapor.com');
             $m->subject('Inventory Count Alert');
         });
     }

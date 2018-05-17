@@ -76,4 +76,16 @@ class CustomerController extends Controller
             return response()->json(array('status' => 0));
         }
     }
+
+    /**
+     * Accepts phone number and returns customers current points value
+     * @param int $phone
+     * @param CustomerRepositoryContract $customerRepo
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function points($phone, CustomerRepositoryContract $customerRepo)
+    {
+        $customer = $customerRepo->findByPhone($phone);
+        return response()->json($customer->points);
+    }
 }
