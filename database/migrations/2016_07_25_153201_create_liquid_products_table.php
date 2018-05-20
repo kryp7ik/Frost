@@ -23,6 +23,7 @@ class CreateLiquidProductsTable extends Migration
             $table->integer('menthol');
             $table->boolean('extra');
             $table->boolean('mixed');
+            $table->decimal('price');
             $table->timestamps();
         });
     }

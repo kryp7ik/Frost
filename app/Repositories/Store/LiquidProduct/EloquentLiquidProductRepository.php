@@ -173,7 +173,8 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             'vg' => $data['vg'],
             'menthol' => $data['menthol'],
             'extra' => (isset($data['extra'])) ? true : false,
-            'mixed' => false
+            'mixed' => false,
+            'price' => (isset($data['extra'])) ? config('store.bottle_prices')[$data['size']] + 1 : config('store.bottle_prices')[$data['size']]
         ]);
         if ($liquidProduct->save()) {
             event(new LiquidProductCreated($liquidProduct));
@@ -212,6 +213,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
 
     /**
      * @param int $id
+     * @throws \Exception
      */
     public function delete($id) {
         $liquid = $this->findById($id);

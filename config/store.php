@@ -94,6 +94,18 @@ return [
         'beverage' => 'Beverage',
     ],
 
+    'recipe_categories' => [
+        'Tropical',
+        'Signature',
+        'Drinks',
+        'Coffee',
+        'Candy',
+        'Coffee',
+        'Dessert',
+        'Minty',
+        'Tobacco'
+    ],
+
     'announcement_types' => [
         'default' => [
             'icon' => 'fa fa-comment fa-2x',

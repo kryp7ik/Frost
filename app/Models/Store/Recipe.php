@@ -21,12 +21,14 @@ class Recipe extends Model
      */
     protected $fillable = [
         'name',
+        'category',
+        'description',
         'active'
     ];
 
     /**
      * Many to Many
-     * @return $this
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function ingredients() {
         return $this->belongsToMany('App\Models\Store\Ingredient', 'recipe_ingredient')->withPivot('amount');

@@ -4,7 +4,7 @@
     <div class="container col-md-8 col-md-offset-2">
         <div class="well well bs-component">
             <form class="form-horizontal" method="post">
-                <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                {{ csrf_field() }}
                 <fieldset>
                     <legend>Create a new recipe</legend>
                     <div class="form-group">
@@ -12,6 +12,24 @@
                         <div class="col-lg-10">
                             <input type="text" class="form-control" id="name" placeholder="Recipe name" name="name">
                             <span class="help-block">The name of the recipe.</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-lg-2 control-label">Description</label>
+                        <div class="col-lg-10">
+                            <input type="text" class="form-control" id="description" placeholder="Description" name="description">
+                            <span class="help-block">A description of the flavor..</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="col-lg-2 control-label">Category</label>
+                        <div class="col-lg-10">
+                            <select class="form-control" id="category" name="category">
+                                @foreach(config('store.recipe_categories') as $category)
+                                    <option value="{{ $category }}">{{ $category }}</option>
+                                @endforeach
+                            </select>
+                            <span class="help-block">A category for the flavor.</span>
                         </div>
                     </div>
                     <div class="cont">

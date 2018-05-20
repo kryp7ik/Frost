@@ -25,6 +25,8 @@ class RecipeFormRequest extends Request
     {
         return [
             'name' => 'required|min:3',
+            'description' => 'string',
+            'category' => 'string'
         ];
     }
 }

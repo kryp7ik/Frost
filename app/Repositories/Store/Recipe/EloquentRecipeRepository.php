@@ -42,11 +42,15 @@ class EloquentRecipeRepository implements RecipeRepositoryContract
     {
         $recipe = new Recipe(array(
             'name' => $data['name'],
+            'description' => $data['description'],
+            'category' => $data['category'],
             'active' => true,
         ));
         $recipe->save();
-        foreach ($data['ingredients'] as $ingredientFieldset) {
-            $this->addIngredient($recipe, $ingredientFieldset);
+        if(count($data['ingredients']) > 0) {
+            foreach ($data['ingredients'] as $ingredientFieldset) {
+                $this->addIngredient($recipe, $ingredientFieldset);
+            }
         }
         flash('The recipe has been created successfully', 'success');
         return $recipe;

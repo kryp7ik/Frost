@@ -53,5 +53,9 @@
             ]
         });
     });
+    $('tbody').on('click', 'tr', function() {
+        var url = '/admin/store/recipes/' + $(this).attr('id') + '/show';
+        window.location.href = url;
+    });
 </script>
 @endpush

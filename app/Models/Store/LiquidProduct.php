@@ -28,7 +28,8 @@ class LiquidProduct extends Model
         'vg',
         'menthol',
         'extra',
-        'mixed'
+        'mixed',
+        'price'
     ];
 
     /**
@@ -52,7 +53,8 @@ class LiquidProduct extends Model
      * @return float $price
      */
     public function getPrice() {
-        $price = ($this->extra) ? config('store.bottle_prices')[$this->size] + 1 : config('store.bottle_prices')[$this->size];
-        return $price;
+        // $price = ($this->extra) ? config('store.bottle_prices')[$this->size] + 1 : config('store.bottle_prices')[$this->size];
+        // return $price;
+        return $this->price;
     }
 }

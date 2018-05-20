@@ -5,7 +5,12 @@
         <div class="container col-md-4">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h2>Recipe Info</h2>
+                    <h2>
+                        Recipe Info
+                        <a class="btn btn-warning btn-lg btn-raised pull-right" href="/admin/store/recipes/{{ $recipe->id }}/edit">
+                            Edit
+                        </a>
+                    </h2>
                 </div>
                 <table class="table table-hover text-center">
                     <tbody>
@@ -15,20 +20,15 @@
                         </tr>
                         <tr>
                             <td><strong>Name:</strong></td>
-                            <td>
-                                <a class="editable"
-                                   id = "name"
-                                   href="#"
-                                   data-name ="name"
-                                   pk="{{ $recipe->id }}"
-                                   data-type="text"
-                                   data-url="/admin/store/recipes/{{ $recipe->id }}/ajax"
-                                   data-title="Recipe Name">{{ $recipe->name }}</a>
-                            </td>
+                            <td>{{ $recipe->name }}</td>
                         </tr>
                         <tr>
-                            <td><strong>SKU Prefix</strong></td>
-                            <td>{{ $recipe->sku }}</td>
+                            <td><strong>Category</strong></td>
+                            <td>{{ $recipe->category }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Description</strong></td>
+                            <td>{{ $recipe->description }}</td>
                         </tr>
                         <tr>
                             <td><strong>Active:</strong></td>
@@ -121,5 +121,4 @@
 
 @endsection
 @push('scripts')
-@include('shared.editable')
 @endpush

@@ -32,7 +32,6 @@ class RecipeController extends Controller
     {
         $this->recipes = $recipes;
         $this->ingredients = $ingredients;
-
     }
 
     /**
@@ -48,6 +47,7 @@ class RecipeController extends Controller
         $recipes = Recipe::select(['id', 'name', 'active', 'created_at', 'updated_at']);
         return Datatables::of($recipes)
             ->setTransformer(new RecipeTransformer())
+            ->setRowId(function($recipe) { return $recipe->id; })
             ->make(true);
     }
 
@@ -56,7 +56,6 @@ class RecipeController extends Controller
      */
     public function create()
     {
-
         $ingredients = $this->ingredients->getAll();
         return view('backend.store.recipes.create', compact('ingredients'));
     }
@@ -90,6 +89,19 @@ class RecipeController extends Controller
     {
         $recipe = $this->recipes->findById($id);
         return view('backend.store.recipes.edit', compact('recipe'));
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function editUpdate($id, Request $request)
+    {
+        $recipe = $this->recipes->findById($id);
+        $recipe->fill($request->all());
+        $recipe->save();
+        return redirect('/admin/store/recipes');
     }
 
     /**
