@@ -42,6 +42,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
                     'extra' => $liquid->extra,
                     'menthol' => $liquid->menthol,
                     'vg' => $liquid->vg,
+                    'salt' => $liquid->salt
                 ];
                 foreach ($liquid->recipe->ingredients as $ingredient) {
                     $liquidArray['ingredients'][] = [
@@ -144,7 +145,8 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
                     'nicotine' => $liquid->nicotine,
                     'menthol' => config('store.menthol_levels')[$liquid->menthol],
                     'vg' => config('store.vg_levels')[$liquid->vg],
-                    'extra' => $liquid->extra
+                    'extra' => $liquid->extra,
+                    'salt' => $liquid->salt
                 ];
             }
             return $liquidsArray;
@@ -173,6 +175,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
             'vg' => $data['vg'],
             'menthol' => $data['menthol'],
             'extra' => (isset($data['extra'])) ? true : false,
+            'salt' => (isset($data['salt'])) ? true : false,
             'mixed' => false
         ]);
         if ($liquidProduct->save()) {
@@ -212,6 +215,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
 
     /**
      * @param int $id
+     * @throws \Exception
      */
     public function delete($id) {
         $liquid = $this->findById($id);

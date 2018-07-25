@@ -25,7 +25,7 @@
                                     <td>Coming Soon</td>
                                     <td>@{{ liquid.size }}ml</td>
                                     <td>@{{ liquid.recipe }}</td>
-                                    <td>@{{ liquid.nicotine }}mg</td>
+                                    <td>@{{ liquid.nicotine }}mg @{{ liquid.salt ? '(Salt)' : '' }}</td>
                                     <td>@{{ liquid.menthol }}</td>
                                     <td>@{{ liquid.vg }}</td>
                                 </tr>

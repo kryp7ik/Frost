@@ -38,7 +38,7 @@
             </td>
             <td>{{ $liquid->recipe->name }} {{ ($liquid->extra) ? 'XTRA' : '' }}</td>
             <td>{{ $liquid->size }}ml</td>
-            <td>{{ $liquid->nicotine }}mg</td>
+            <td>{{ $liquid->nicotine }}mg {{ ($liquid->salt) ? '(salt)' : '' }}</td>
             <td>{{ config('store.vg_levels')[$liquid->vg] }}</td>
             <td>{{ config('store.menthol_levels')[$liquid->menthol] }}</td>
             <td>${{ $liquid->getPrice() }}</td>

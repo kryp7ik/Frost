@@ -266,7 +266,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      * If customer is being added after the order is complete update customers points
      * @param ShopOrder $order
      * @param Customer $customer
-     * @param DiscountRepositoryContract
+     * @param DiscountRepositoryContract $discountRepo
      */
     public function addCustomerToOrder(ShopOrder $order, Customer $customer, DiscountRepositoryContract $discountRepo)
     {

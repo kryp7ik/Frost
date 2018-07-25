@@ -28,6 +28,13 @@
         <div class="checkbox liquid-form-group" style="padding-top:16px;">
             <div class="togglebutton">
                 <label>
+                    Salt<input type="checkbox" class="l-salt" id="salt" name="liquids[0][salt]" />
+                </label>
+            </div>
+        </div>
+        <div class="checkbox liquid-form-group" style="padding-top:16px;">
+            <div class="togglebutton">
+                <label>
                     Extra<input type="checkbox" class="l-extra" id="extra" name="liquids[0][extra]" />
                 </label>
             </div>

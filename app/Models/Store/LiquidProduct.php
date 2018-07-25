@@ -28,7 +28,8 @@ class LiquidProduct extends Model
         'vg',
         'menthol',
         'extra',
-        'mixed'
+        'mixed',
+        'salt'
     ];
 
     /**

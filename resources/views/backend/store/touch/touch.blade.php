@@ -20,7 +20,7 @@
                     <th>VG%</th>
                     <th>Add Premix</th>
                 </tr>
-                <tr v-for="liquid in liquids">
+                <tr v-for="liquid in liquids" :class="{ 'danger' : liquid.salt }">
                     <td><button v-on:click="completeOrder( liquid.id )" class="btn btn-info btn-lg">Complete</button></td>
                     <td v-on:click="displayRecipe( liquid )" :class="{ 'text-danger' : liquid.extra }">@{{ liquid.extra ? liquid.recipe + ' XTRA' : liquid.recipe }}</td>
                     <td v-on:click="displayRecipe( liquid )">@{{ liquid.size + ' ml' }}</td>
@@ -122,7 +122,13 @@
                         return (liquid.size * this.iceMultipliers[liquid.menthol]).toFixed(1);
                     },
                     nicotineToAdd: function(liquid) {
-                        return (liquid.nicotine * liquid.size / 100).toFixed(1);
+                        var nic = 0;
+                        if (liquid.salt) {
+                            nic = ((liquid.nicotine * liquid.size / 100)/2.5).toFixed(1);
+                        } else {
+                            nic = (liquid.nicotine * liquid.size / 100).toFixed(1);
+                        }
+                        return nic;
                     },
                     addPremix: function(liquid) {
                         return (liquid.size - ((liquid.nicotine * (liquid.size / 100)) + (liquid.size * this.iceMultipliers[liquid.menthol]))).toFixed(1);
