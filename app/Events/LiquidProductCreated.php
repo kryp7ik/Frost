@@ -27,6 +27,7 @@ class LiquidProductCreated extends Event implements ShouldBroadcast
             'size' => $liquid->size,
             'shop_order_id' => $liquid->shopOrder->id,
             'nicotine' => $liquid->nicotine,
+            'salt' => $liquid->salt,
             'extra' => $liquid->extra,
             'menthol' => $liquid->menthol,
             'vg' => $liquid->vg,
