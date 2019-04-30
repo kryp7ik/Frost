@@ -26,7 +26,7 @@
                     <td v-on:click="displayRecipe( liquid )">@{{ liquid.size + ' ml' }}</td>
                     <td v-on:click="displayRecipe( liquid )" :class="{ 'text-danger' : liquid.menthol > 0 }">@{{ mentholDisplay[liquid.menthol] }}</td>
                     <td v-on:click="displayRecipe( liquid )" :class="{ 'text-danger' : liquid.menthol > 0 }">@{{ iceToAdd( liquid ) + ' ml' }}</td>
-                    <td v-on:click="displayRecipe( liquid )">"@{{ liquid.nicotine }}" mg Add: @{{ nicotineToAdd( liquid ) }}ml</td>
+                    <td v-on:click="displayRecipe( liquid )" :class="{ 'text-danger' : liquid.salt }">"@{{ liquid.nicotine }}" mg Add: @{{ nicotineToAdd( liquid ) }}ml</td>
                     <td v-on:click="displayRecipe( liquid )" :class="{ 'text-danger' : liquid.vg != 40 }">@{{ liquid.vg == 100 ? 'MAX' : liquid.vg + '%' }}</td>
                     <td v-on:click="displayRecipe( liquid )">@{{ addPremix( liquid ) }}ml</td>
                 </tr>
@@ -122,7 +122,11 @@
                         return (liquid.size * this.iceMultipliers[liquid.menthol]).toFixed(1);
                     },
                     nicotineToAdd: function(liquid) {
-                        return (liquid.nicotine * liquid.size / 100).toFixed(1);
+                        if (liquid.salt) {
+                            return ((liquid.nicotine * liquid.size / 100)/2.5).toFixed(1);
+                        } else {
+                            return (liquid.nicotine * liquid.size / 100).toFixed(1);
+                        }
                     },
                     addPremix: function(liquid) {
                         return (liquid.size - ((liquid.nicotine * (liquid.size / 100)) + (liquid.size * this.iceMultipliers[liquid.menthol]))).toFixed(1);

@@ -131,6 +131,7 @@
                 newEntry.find('.l-select').attr('name', 'liquids[' + currentCount + '][recipe]');
                 newEntry.find('.l-nicotine').attr('name', 'liquids[' + currentCount + '][nicotine]');
                 newEntry.find('.l-nicotine').val(currentEntry.find('.l-nicotine').val());
+                newEntry.find('.l-salt').attr('name', 'liquids[' + currentCount + '][salt]');
                 newEntry.find('.l-extra').attr('name', 'liquids[' + currentCount + '][extra]');
                 newEntry.find('.l-menthol').attr('name', 'liquids[' + currentCount + '][menthol]');
                 newEntry.find('.l-menthol').val(currentEntry.find('.l-menthol').val());

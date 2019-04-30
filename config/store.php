@@ -79,6 +79,8 @@ return [
         28 => '28mg',
         29 => '29mg',
         30 => '30mg',
+        40 => '40mg',
+        50 => '50mg'
     ],
 
     'product_categories' => [
