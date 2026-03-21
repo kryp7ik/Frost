@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
 
 abstract class Job
 {
@@ -15,7 +16,8 @@ abstract class Job
     | is shared across all of your jobs. The trait included with the class
     | provides access to the "onQueue" and "delay" queue helper methods.
     |
+    | Laravel 5.3+ upgrade: added Dispatchable trait for Job::dispatch() support.
     */
 
-    use Queueable;
+    use Dispatchable, Queueable;
 }

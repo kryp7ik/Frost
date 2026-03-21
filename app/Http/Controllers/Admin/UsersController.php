@@ -43,7 +43,7 @@ class UsersController extends Controller
     {
         $user = $this->userRepo->findById($id);
         $roles = Role::all();
-        $selectedRoles = $user->roles->lists('id')->toArray();
+        $selectedRoles = $user->roles->pluck('id')->toArray();
         return view('backend.users.edit', compact('user', 'roles', 'selectedRoles'));
     }
 

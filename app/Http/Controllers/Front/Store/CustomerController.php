@@ -7,7 +7,7 @@ use App\Repositories\Store\Customer\CustomerRepositoryContract;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\CustomerFormRequest;
-use Yajra\Datatables\Datatables;
+use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
@@ -40,7 +40,7 @@ class CustomerController extends Controller
      */
     public function dataTables()
     {
-        return Datatables::of(Customer::query())->setRowId(function($customer) { return $customer->id; })->make(true);
+        return DataTables::of(Customer::query())->setRowId(function($customer) { return $customer->id; })->make(true);
     }
 
     /**
