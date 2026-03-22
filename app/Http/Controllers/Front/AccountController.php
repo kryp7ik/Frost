@@ -8,6 +8,8 @@ use App\Repositories\Announcement\AnnouncementRepositoryContract;
 use App\Repositories\Auth\UserRepositoryContract;
 use App\Repositories\Store\Shift\ShiftRepositoryContract;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AccountController extends Controller
 {
@@ -36,6 +38,11 @@ class AccountController extends Controller
     {
         $this->userRepo->update(Auth::user()->id, $request->all());
         return redirect('/');
+    }
+
+    public function twoFactor(): Response
+    {
+        return Inertia::render('Profile/TwoFactor');
     }
 
 }

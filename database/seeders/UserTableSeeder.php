@@ -2,57 +2,36 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
-use DateTime;
-
+use App\Models\Auth\Role;
+use App\Models\Auth\User;
 use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        DB::table('users')->insert([
+        $managerRole = Role::firstOrCreate(
+            ['name' => 'manager'],
+            ['display_name' => 'Manager', 'description' => 'Manager role']
+        );
+
+        $adminRole = Role::firstOrCreate(
+            ['name' => 'admin'],
+            ['display_name' => 'Admin', 'description' => 'Admin role']
+        );
+
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@frostpos.com'],
             [
                 'name' => 'Admin',
-                'email' => 'admin@frostpos.com',
-                'password' => bcrypt('password'),
-                'store' => '1',
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime(),
-            ],
-        ]);
-
-        DB::table('roles')->insert([
-            [
-                'name' => 'manager',
-                'display_name' => 'Manager',
-                'description' => ' ',
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime()
-            ],
-            [
-                'name' => 'admin',
-                'display_name' => 'Admin',
-                'description' => ' ',
-                'created_at' => new DateTime(),
-                'updated_at' => new DateTime()
+                'password' => 'password',
+                'store' => 1,
             ]
-        ]);
+        );
 
-        DB::table('role_user')->insert([
-            [
-                'user_id' => '1',
-                'role_id' => '1'
-            ],
-            [
-                'user_id' => '1',
-                'role_id' => '2'
-            ]
-        ]);
+        $admin->roles()->syncWithoutDetaching([$managerRole->id, $adminRole->id]);
     }
 }

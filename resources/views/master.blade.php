@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<meta name="csrf_token" content="{{ csrf_token() }}">
 <html lang="en">
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title> @yield('title') </title>
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
-        <link href="/css/all.css" rel="stylesheet" />
-        <link href="/css/app.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        @vite(['resources/css/app.scss'])
         @stack('css')
-
     </head>
     <body>
         @include('shared.navbar')
@@ -22,7 +22,6 @@
             <p class="alert alert-danger">{{ $error }}</p>
         @endforeach
         @include('flash::message')
-        <script src="/js/all.js"></script>
         @stack('scripts')
     </body>
 </html>

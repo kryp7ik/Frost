@@ -5,24 +5,26 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^8.0.2",
-        "laravel/framework": "^9.0",
-        "laravelcollective/html": "^6.3",
-        "laracasts/flash": "^3.2",
+        "php": "^8.2",
         "barryvdh/laravel-snappy": "^1.0",
-        "predis/predis": "^2.0",
-        "yajra/laravel-datatables-oracle": "^10.0",
-        "h4cc/wkhtmltopdf-amd64": "0.12.x",
-        "h4cc/wkhtmltoimage-amd64": "0.12.x",
         "guzzlehttp/guzzle": "^7.2",
-        "league/fractal": "^0.20"
+        "h4cc/wkhtmltoimage-amd64": "0.12.x",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
+        "inertiajs/inertia-laravel": "^2.0",
+        "laracasts/flash": "^3.2",
+        "laravel/fortify": "^1.36",
+        "laravel/framework": "^13.0",
+        "league/fractal": "^0.21",
+        "predis/predis": "^3.0",
+        "yajra/laravel-datatables-oracle": "^13.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "fakerphp/faker": "^1.23",
+        "laravel/boost": "^2.3",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^12.0",
+        "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -61,7 +63,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         },
         "audit": {
             "abandoned": "report",

@@ -80,4 +80,17 @@ return [
 
     'prefix' => 'laravel',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Serializable Classes
+    |--------------------------------------------------------------------------
+    |
+    | When set to an array, only the listed classes may be deserialized from
+    | the cache. When set to false (the secure default), arbitrary PHP object
+    | deserialization is disabled entirely to prevent gadget-chain attacks.
+    |
+    */
+
+    'serializable_classes' => false,
+
 ];

@@ -2,24 +2,23 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Support\Facades\DB;
-use DateTime;
-
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         Model::unguard();
-        //$this->call('UserTableSeeder');
-        //$this->call('SampleDataSeeder');
+
+        $this->call([
+            UserTableSeeder::class,
+            SampleDataSeeder::class,
+        ]);
+
         Model::reguard();
     }
 }
