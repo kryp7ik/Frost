@@ -1,7 +1,7 @@
-# Laravel 5.2 → 11.x Upgrade Notes
+# Laravel 5.2 → 12.x Upgrade Notes
 
 Environment: PHP 8.3.26, Composer 2.9.5
-Final version: **Laravel 11.50.0**
+Final version: **Laravel 12.55.1**
 
 > Code changes from each upgrade guide were applied incrementally and
 > verified with `composer install` + `php artisan test`.
@@ -115,6 +115,27 @@ Entrust middleware (`role`, `permission`, `ability`) replaced by single `App\Htt
 | `spatie/laravel-ignition` ^1.0 | `^2.4` | L11 compat |
 | *(new)* | `inertiajs/inertia-laravel` ^1.0 | Vue 3 frontend |
 
+## 12.x changes applied
+
+Laravel 12 is a maintenance release — **zero application-code changes required**.
+All 52 existing tests passed immediately after `composer update`.
+
+- Bumped `laravel/framework` ^12.0, `phpunit/phpunit` ^11.0, `yajra/laravel-datatables-oracle` ^12.0, `inertiajs/inertia-laravel` ^2.0
+- Carbon 3 now **required** (was optional in L11) — already installed, no code impact
+- Removed `tests/CreatesApplication.php` — base `TestCase` handles app bootstrap natively since L11
+- `config/filesystems.php` already pins `'root' => storage_path('app')` explicitly, so the L12 default change to `storage/app/private` does not affect us
+- Verified no `HasUuids` trait usage (L12 switches v4→v7; would need `HasVersion4Uuids` for backcompat)
+- Verified no `image` validation rule usage (L12 excludes SVG by default)
+- Verified no `Concurrency::run()` usage (L12 preserves associative keys)
+- Verified no `mergeIfMissing()` with dot-keys (L12 creates nested arrays)
+
+### Undocumented / community-reported gotchas checked
+
+- `minimum-stability` — ours is `stable`, no conflict
+- Third-party packages — all resolved cleanly (snappy, flash, datatables, inertia)
+- `Schema::getTableListing()` schema-qualification — covered by test with `schemaQualified: false`
+- Container nullable-default resolution — L12 respects `= null` instead of auto-resolving; covered by test
+
 ## Frontend: Gulp/Elixir → Vite + Vue 3 + Inertia
 
 - Removed `gulpfile.js`, `laravel-elixir`, legacy `resources/assets/js/main.js`, `server.php`
@@ -135,8 +156,8 @@ Entrust middleware (`role`, `permission`, `ability`) replaced by single `App\Htt
 
 ```
 $ php artisan test
-Tests:  52 passed (94 assertions)
-Duration: 0.73s
+Tests:  67 passed (114 assertions)
+Duration: 0.83s
 ```
 
 - ✅ 100% pass rate, no failures
@@ -154,4 +175,10 @@ Duration: 0.73s
 - ✅ L11: `getAuthPasswordName()` returns `'password'`
 - ✅ L11: Carbon date diff operations work
 - ✅ Inertia: middleware registered, shared props expose auth/flash, legacy Blade routes unaffected
+- ✅ L12: Carbon 3 `diffInDays()` float/signed return
+- ✅ L12: `Schema::getTables(schema:)` / `getTableListing(schemaQualified:)` filters
+- ✅ L12: `HasUuids` generates UUIDv7; `HasVersion4Uuids` available for backcompat
+- ✅ L12: `image` rule rejects SVG by default, `image:allow_svg` accepts
+- ✅ L12: Container respects nullable parameter defaults
+- ✅ L12: `mergeIfMissing()` dot-notation creates nested structure
 - ✅ No deprecation warnings (`php -d error_reporting=E_ALL artisan route:list` clean)
