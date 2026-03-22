@@ -9,7 +9,7 @@ use App\Transformers\RecipeTransformer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\RecipeFormRequest;
-use Yajra\Datatables\Facades\Datatables;
+use Yajra\DataTables\Facades\DataTables;
 
 class RecipeController extends Controller
 {
@@ -46,7 +46,7 @@ class RecipeController extends Controller
     public function dataTables()
     {
         $recipes = Recipe::select(['id', 'name', 'active', 'created_at', 'updated_at']);
-        return Datatables::of($recipes)
+        return DataTables::of($recipes)
             ->setTransformer(new RecipeTransformer())
             ->make(true);
     }

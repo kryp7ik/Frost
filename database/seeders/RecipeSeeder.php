@@ -1,5 +1,10 @@
 <?php
 
+namespace Database\Seeders;
+
+use Illuminate\Support\Facades\DB;
+use DateTime;
+
 use Illuminate\Database\Seeder;
 
 class RecipeSeeder extends Seeder

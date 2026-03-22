@@ -1,16 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kryptik
- * Date: 7/22/16
- * Time: 7:41 PM
- */
 
 namespace App\Models\Auth;
 
-use Zizaco\Entrust\EntrustPermission;
+use Illuminate\Database\Eloquent\Model;
 
-class Permission extends EntrustPermission
+/**
+ * Replaces Zizaco\Entrust\EntrustPermission (package abandoned).
+ */
+class Permission extends Model
 {
+    protected $fillable = ['name', 'display_name', 'description'];
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'permission_role', 'permission_id', 'role_id');
+    }
 }
