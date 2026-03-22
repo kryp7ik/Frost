@@ -2,49 +2,59 @@
 
 namespace App\Models\Auth;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use App\Models\Auth\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+class User extends Authenticatable
 {
-    use Authenticatable, CanResetPassword;
-    use EntrustUserTrait {
-        SoftDeletes::restore insteadof EntrustUserTrait;
+    use HasFactory, Notifiable, SoftDeletes, HasRoles, TwoFactorAuthenticatable;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\UserFactory::new();
     }
-    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name', 'email', 'password', 'store',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
-     * @var array
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    protected $dates = ['deleted_at'];
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
 
     /**
      * OneToMany relation with App\Models\Store\ShopOrder
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orders()
     {
@@ -52,17 +62,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
 
     /**
-     * OneToMany relation with App\Models\Store\Shifts
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * OneToMany relation with App\Models\Store\Shift
      */
     public function shifts()
     {
-        return $this->hasmany('App\Models\Store\Shifts');
+        return $this->hasMany('App\Models\Store\Shift');
     }
 
     /**
      * OneToMany relation with App\Models\Announcement
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function announcements()
     {
@@ -71,24 +79,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comments');
+        return $this->hasMany('App\Models\Comment');
     }
 
     /**
-     * Retrieves the users 'store' attribute based upon the location of the shift they are currently clocked in at except
-     * in the case of admin's who can manually set which store they want to be acting as.
-     * @param $value
-     * @return int|bool
+     * Retrieves the user's 'store' attribute based on the shift location they
+     * are currently clocked in at, except admins who can set it manually.
      */
     public function getStoreAttribute($value)
     {
         if ($this->hasRole('admin')) return $value;
         $shiftRepo = App::make('App\Repositories\Store\Shift\ShiftRepositoryContract');
         $shift = $shiftRepo->findForTodayByUser($this->id);
-        if($shift) {
+        if ($shift) {
             return $shift->store;
-        } else {
-            return false;
         }
+        return false;
     }
 }

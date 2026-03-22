@@ -2,73 +2,87 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Auth\User;
-use Illuminate\Support\Facades\Auth;
-use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use App\Models\Auth\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
+/**
+ * Replaces the Laravel 5.2 AuthenticatesAndRegistersUsers trait which was
+ * removed in Laravel 5.3+. Maintains the same route interface
+ * (getLogin/postLogin/getLogout/getRegister/postRegister) that routes/web.php expects.
+ */
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
-
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
-
     /**
-     * Redirect user to the /schedule page so they can clock in
-     *
-     * @var string
+     * Where to redirect users after login.
      */
-    protected $redirectTo = '/schedule';
+    protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getLogout']]);
+        $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function getLogin()
     {
-        return Validator::make($data, [
+        return view('auth.login');
+    }
+
+    public function postLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended($this->redirectTo);
+        }
+
+        throw ValidationException::withMessages([
+            'email' => [trans('auth.failed')],
+        ]);
+    }
+
+    public function getLogout(Request $request)
+    {
+        return $this->logout($request);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/users/login');
+    }
+
+    public function getRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function postRegister(Request $request)
+    {
+        $data = $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
-    }
 
+        Auth::login($user);
+
+        return redirect($this->redirectTo);
+    }
 }
