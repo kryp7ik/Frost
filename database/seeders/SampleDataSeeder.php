@@ -73,6 +73,7 @@ class SampleDataSeeder extends Seeder
         DB::table('recipes')->insert([
             [
                 'name' => 'Berry Blast',
+                'sku' => 'BB01',
                 'active' => 1,
                 'created_at' => new DateTime(),
                 'updated_at' => new DateTime()
