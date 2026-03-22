@@ -1,11 +1,10 @@
-# Laravel 5.2 → 9.x Upgrade Notes
+# Laravel 5.2 → 11.x Upgrade Notes
 
-Environment: PHP 8.1.2, Composer 2.9.5
-Final version: **Laravel 9.52.21**
+Environment: PHP 8.3.26, Composer 2.9.5
+Final version: **Laravel 11.50.0**
 
-> Because only PHP 8.1 was available (Laravel 5.x–7.x do not run on PHP 8),
-> code changes from each upgrade guide were applied incrementally and
-> verified with `composer install` + `php artisan test` on Laravel 9.
+> Code changes from each upgrade guide were applied incrementally and
+> verified with `composer install` + `php artisan test`.
 
 ---
 
@@ -84,12 +83,60 @@ Entrust middleware (`role`, `permission`, `ability`) replaced by single `App\Htt
 
 ---
 
+## 10.x changes applied
+
+- PHP requirement bumped to `^8.1` (satisfied by 8.3)
+- `AuthServiceProvider::boot()` — removed `$this->registerPolicies()` call (now auto-invoked by framework)
+- `Http\Kernel` — renamed `$routeMiddleware` → `$middlewareAliases`
+- `config/app.php` — replaced explicit framework provider list with `ServiceProvider::defaultProviders()->merge([...])`
+- Verified no `$dates` properties remain (all use `$casts`)
+- Verified no `Bus::dispatchNow()` / `dispatch_now()` usage (all use `dispatch()` / `dispatch_sync()`)
+- Verified no `Redirect::home()` usage
+
+## 11.x changes applied
+
+- PHP requirement bumped to `^8.2`
+- `User` model — converted `$casts` property → `casts()` method; added `'password' => 'hashed'` cast
+- Kept legacy application structure (Http/Kernel, Console/Kernel, Providers) — L11 supports both
+- `RateLimiter` config unchanged — `Limit::perMinute()` still works, framework converts internally
+- Verified `getAuthPasswordName()` available via `Authenticatable` base class
+- Verified native `Schema::getTables()` / `Schema::getColumns()` work (Doctrine DBAL removed)
+- Added `phpunit.xml` with PHPUnit 10 schema (`<source>` element, no `processUncoveredFiles`)
+- Removed `server.php` (no longer needed)
+
+## Package replacements (9 → 11)
+
+| Old | New | Reason |
+|-----|-----|--------|
+| `laravelcollective/html` ^6.3 | *(removed)* | Abandoned, no L11 support. Unused in views — aliases dropped. |
+| `yajra/laravel-datatables-oracle` ^10 | `^11.0` | L11 compat |
+| `nunomaduro/collision` ^6.1 | `^8.1` | L11 required |
+| `phpunit/phpunit` ^9.5 | `^10.5` | PHPUnit 10 schema |
+| `spatie/laravel-ignition` ^1.0 | `^2.4` | L11 compat |
+| *(new)* | `inertiajs/inertia-laravel` ^1.0 | Vue 3 frontend |
+
+## Frontend: Gulp/Elixir → Vite + Vue 3 + Inertia
+
+- Removed `gulpfile.js`, `laravel-elixir`, legacy `resources/assets/js/main.js`, `server.php`
+- New `vite.config.js` with `laravel-vite-plugin` + `@vitejs/plugin-vue`
+- New `package.json`: vite ^5, vue ^3.4, @inertiajs/vue3 ^1.0, bootstrap 5, chart.js 4
+- New `resources/js/app.js` — Inertia app entry with `createInertiaApp()`
+- New `resources/js/Layouts/AppLayout.vue` — shared nav layout
+- New `resources/js/Pages/` — Dashboard, Auth/Login, Customers/Index, Customers/Show
+- New `resources/views/app.blade.php` — Inertia root view with `@vite` + `@inertia`
+- New `App\Http\Middleware\HandleInertiaRequests` — shares `auth.user` + `flash` props; registered in `web` group
+- `resources/views/master.blade.php` — legacy Blade layout now uses `@vite` directive (hybrid mode during migration)
+- `resources/css/app.scss` — imports Bootstrap 5 + Font Awesome 6 + legacy component partials
+- `tests/TestCase.php` — added `withoutVite()` in setUp so tests don't require built manifest
+
+---
+
 ## Acceptance Criteria — PASSED ✓
 
 ```
 $ php artisan test
-Tests:  28 passed
-Time:   2.09s
+Tests:  52 passed (94 assertions)
+Duration: 0.73s
 ```
 
 - ✅ 100% pass rate, no failures
@@ -99,5 +146,12 @@ Time:   2.09s
 - ✅ Storage (Flysystem 3): put/get/delete/assert
 - ✅ Mail (Symfony Mailer): send without exception
 - ✅ Queue: `Job::dispatch()` + `Bus::assertDispatched`
-- ✅ Custom facades/helpers resolve
+- ✅ L10: `$middlewareAliases` resolves custom `role`/`manager` middleware
+- ✅ L10: `RateLimiter::attempt()` returns closure value
+- ✅ L10: `ServiceProvider::defaultProviders()` merges app providers
+- ✅ L11: `casts()` method + `hashed` password cast auto-hashes
+- ✅ L11: `Schema::getTables()`/`getColumns()` native introspection (no DBAL)
+- ✅ L11: `getAuthPasswordName()` returns `'password'`
+- ✅ L11: Carbon date diff operations work
+- ✅ Inertia: middleware registered, shared props expose auth/flash, legacy Blade routes unaffected
 - ✅ No deprecation warnings (`php -d error_reporting=E_ALL artisan route:list` clean)

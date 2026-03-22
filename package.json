@@ -1,19 +1,24 @@
 {
-  "private": true,
-  "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "laravel-elixir": "^5.0.0",
-    "bootstrap-sass": "^3.3.0"
-  },
-  "dependencies": {
-    "chart.js": "^2.3.0",
-    "font-awesome": "^4.7.0",
-    "ioredis": "^2.4.0",
-    "laravel-elixir-vueify": "^2.0.0",
-    "tinymce": "^4.5.0"
-  }
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@inertiajs/vue3": "^1.0.0",
+        "@vitejs/plugin-vue": "^5.0.0",
+        "autoprefixer": "^10.4.16",
+        "axios": "^1.6.4",
+        "laravel-vite-plugin": "^1.0",
+        "postcss": "^8.4.32",
+        "sass": "^1.69.0",
+        "vite": "^5.0",
+        "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.5.0",
+        "bootstrap": "^5.3.0",
+        "chart.js": "^4.4.0"
+    }
 }

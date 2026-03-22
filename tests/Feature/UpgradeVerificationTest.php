@@ -18,7 +18,7 @@ use Tests\TestCase;
 
 /**
  * Regression / smoke test suite verifying critical functionality after
- * the Laravel 5.2 → 9.x upgrade per official upgrade guides.
+ * the Laravel 5.2 → 11.x upgrade per official upgrade guides.
  */
 class UpgradeVerificationTest extends TestCase
 {
@@ -326,10 +326,10 @@ class UpgradeVerificationTest extends TestCase
     {
         Storage::fake('local');
 
-        Storage::disk('local')->put('test.txt', 'Hello Laravel 9');
+        Storage::disk('local')->put('test.txt', 'Hello Laravel 11');
 
         Storage::disk('local')->assertExists('test.txt');
-        $this->assertEquals('Hello Laravel 9', Storage::disk('local')->get('test.txt'));
+        $this->assertEquals('Hello Laravel 11', Storage::disk('local')->get('test.txt'));
 
         Storage::disk('local')->delete('test.txt');
         Storage::disk('local')->assertMissing('test.txt');
@@ -382,8 +382,8 @@ class UpgradeVerificationTest extends TestCase
         );
     }
 
-    public function test_laravel_version_is_9x()
+    public function test_laravel_version_is_11x()
     {
-        $this->assertStringStartsWith('9.', app()->version());
+        $this->assertStringStartsWith('11.', app()->version());
     }
 }

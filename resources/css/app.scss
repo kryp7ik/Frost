@@ -1,0 +1,15 @@
+// Bootstrap 5
+@import 'bootstrap/scss/bootstrap';
+
+// Font Awesome
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import '@fortawesome/fontawesome-free/scss/regular';
+
+// Legacy component styles (migrated from resources/assets/sass)
+@import '../assets/sass/variables';
+@import '../assets/sass/components/panel-click';
+@import '../assets/sass/components/sidebar';
+@import '../assets/sass/components/mods';
+@import '../assets/sass/components/asidebar';
+@import '../assets/sass/components/password-form';
