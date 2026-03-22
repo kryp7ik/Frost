@@ -21,7 +21,7 @@ class InertiaIntegrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
+        $this->withoutMiddleware(\App\Http\Middleware\PreventRequestForgery::class);
     }
 
     protected function createAdminUser(): User

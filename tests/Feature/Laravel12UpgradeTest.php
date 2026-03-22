@@ -188,9 +188,11 @@ class Laravel12UpgradeTest extends TestCase
     // Framework version assertion
     // ========================================================================
 
-    public function test_laravel_version_is_12x()
+    public function test_laravel_version_is_at_least_12()
     {
-        $this->assertStringStartsWith('12.', app()->version());
+        $this->assertTrue(
+            version_compare(app()->version(), '12.0.0', '>=')
+        );
     }
 }
 

@@ -1,7 +1,7 @@
-# Laravel 5.2 → 12.x Upgrade Notes
+# Laravel 5.2 → 13.x Upgrade Notes
 
 Environment: PHP 8.3.26, Composer 2.9.5
-Final version: **Laravel 12.55.1**
+Final version: **Laravel 13.1.1**
 
 > Code changes from each upgrade guide were applied incrementally and
 > verified with `composer install` + `php artisan test`.
@@ -129,6 +129,35 @@ All 52 existing tests passed immediately after `composer update`.
 - Verified no `Concurrency::run()` usage (L12 preserves associative keys)
 - Verified no `mergeIfMissing()` with dot-keys (L12 creates nested arrays)
 
+## 13.x changes applied
+
+- **CSRF rename (High)**: `VerifyCsrfToken` → `PreventRequestForgery`. Renamed `app/Http/Middleware/VerifyCsrfToken.php` → `PreventRequestForgery.php` extending the new framework class; updated `Http\Kernel` web group + 3 test `withoutMiddleware()` calls. Old class remains as deprecated alias in framework.
+- **Cache serialization hardening (Medium)**: Added `'serializable_classes' => false` to `config/cache.php` — explicit secure default preventing arbitrary PHP object deserialization.
+- **Container::call() nullable defaults (Low)**: Extends L12's `make()` change to `call()` — now respects `?Type $x = null` instead of auto-resolving. Covered by test.
+- **Cache/session prefix slug change (Low)**: L13 switches underscore→hyphen in auto-generated prefixes. Immune — `config/cache.php` hardcodes `'laravel'`, `config/session.php` hardcodes `'laravel_session'`, `config/database.php` explicitly defines the Redis prefix formula.
+- **Str factory reset between tests (Low)**: Custom `Str::createUuidsUsing()` no longer leaks across test cases. Covered by two-part test.
+- **Js::from() unescaped unicode (Low)**: Now uses `JSON_UNESCAPED_UNICODE`. Covered by test.
+- **Contract additions (Very Low)**: `Cache\Store::touch()`, `MustVerifyEmail::markEmailAsUnverified()`, `Bus\Dispatcher::dispatchAfterResponse()` — no custom implementations in codebase, framework stores handle natively.
+- Verified no `JobAttempted`/`QueueBusy` event listeners (property renames)
+- Verified no `pagination::default` view references (renamed to `bootstrap-3`)
+- Verified no `Manager::extend()` closure binding reliance
+- Verified no model instantiation inside `boot()` methods
+- Verified no polymorphic pivot classes (table-name pluralization change)
+- Verified no MySQL `DELETE ... JOIN` with `ORDER BY`/`LIMIT`
+- Re-ran `boost:install` to regenerate CLAUDE.md guidelines for L13
+
+## Package replacements (12 → 13)
+
+| Old | New | Reason |
+|-----|-----|--------|
+| `laravel/framework` ^12.0 | `^13.0` | |
+| `phpunit/phpunit` ^11.0 | `^12.0` | L13 required |
+| `yajra/laravel-datatables-oracle` ^12.0 | `^13.0` | L13 compat |
+| `predis/predis` ^2.0 | `^3.0` | Latest major |
+| `league/fractal` ^0.20 | `^0.21` | Latest |
+
+Already L13-compatible, no bump needed: `inertiajs/inertia-laravel` ^2.0, `nunomaduro/collision` ^8.1, `laravel/boost` ^2.3, `spatie/laravel-ignition` ^2.4, `barryvdh/laravel-snappy` ^1.0, `laracasts/flash` ^3.2.
+
 ### Undocumented / community-reported gotchas checked
 
 - `minimum-stability` — ours is `stable`, no conflict
@@ -156,8 +185,8 @@ All 52 existing tests passed immediately after `composer update`.
 
 ```
 $ php artisan test
-Tests:  67 passed (114 assertions)
-Duration: 0.83s
+Tests:  85 passed (135 assertions)
+Duration: 1.00s
 ```
 
 - ✅ 100% pass rate, no failures
@@ -181,4 +210,11 @@ Duration: 0.83s
 - ✅ L12: `image` rule rejects SVG by default, `image:allow_svg` accepts
 - ✅ L12: Container respects nullable parameter defaults
 - ✅ L12: `mergeIfMissing()` dot-notation creates nested structure
+- ✅ L13: `PreventRequestForgery` middleware registered + deprecated `VerifyCsrfToken` alias available
+- ✅ L13: `Container::call()` respects nullable `= null` defaults
+- ✅ L13: `cache.serializable_classes` secure default; scalar/array caching unaffected
+- ✅ L13: `Cache\Store::touch()`, `MustVerifyEmail::markEmailAsUnverified()`, `Dispatcher::dispatchAfterResponse()` contract methods present
+- ✅ L13: `Str` UUID factory resets between tests (no leakage)
+- ✅ L13: `Js::from()` emits unescaped unicode
+- ✅ L13: Cache/session prefix hardcoded — immune to slug-generation change
 - ✅ No deprecation warnings (`php -d error_reporting=E_ALL artisan route:list` clean)
