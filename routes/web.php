@@ -141,6 +141,7 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('/', 'AccountController@dashboard');
     Route::get('account/edit', 'AccountController@edit');
     Route::post('account/edit', 'AccountController@update');
+    Route::get('account/two-factor', 'AccountController@twoFactor')->name('account.two-factor');
 
     Route::get('announcements', 'AnnouncementController@index');
     Route::get('announcements/{id?}/show', 'AnnouncementController@show');

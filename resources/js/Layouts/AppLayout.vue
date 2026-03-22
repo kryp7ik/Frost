@@ -27,13 +27,40 @@ defineProps({
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        <li v-if="$page.props.auth.user" class="nav-item">
-                            <span class="navbar-text me-3">
+                        <li v-if="$page.props.auth.user" class="nav-item dropdown">
+                            <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                            >
                                 {{ $page.props.auth.user.name }}
-                            </span>
-                        </li>
-                        <li v-if="$page.props.auth.user" class="nav-item">
-                            <Link class="nav-link" href="/users/logout">Logout</Link>
+                                <span
+                                    v-if="$page.props.auth.user.two_factor_enabled"
+                                    class="badge bg-success ms-1"
+                                    title="2FA enabled"
+                                >
+                                    <i class="fa fa-shield"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <Link class="dropdown-item" href="/account/edit">
+                                        Account Settings
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link class="dropdown-item" href="/account/two-factor">
+                                        Two-Factor Auth
+                                    </Link>
+                                </li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li>
+                                    <Link class="dropdown-item" href="/users/logout">
+                                        Logout
+                                    </Link>
+                                </li>
+                            </ul>
                         </li>
                         <li v-else class="nav-item">
                             <Link class="nav-link" href="/users/login">Login</Link>

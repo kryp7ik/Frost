@@ -35,6 +35,7 @@ class HandleInertiaRequests extends Middleware
                     'id' => $request->user()->id,
                     'name' => $request->user()->name,
                     'email' => $request->user()->email,
+                    'two_factor_enabled' => ! is_null($request->user()->two_factor_confirmed_at),
                 ] : null,
             ],
             'flash' => [
