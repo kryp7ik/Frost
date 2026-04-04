@@ -42,7 +42,8 @@
                     <div class="row">
                         <div class="col-lg-8 col-lg-offset-2">
                             <h4>Content</h4>
-                            <textarea id="content" name="content" style="height:280px">{{ $announcement->content }}</textarea>
+                            <div id="quill-editor" style="height:280px">{!! $announcement->content !!}</div>
+                            <input type="hidden" name="content" id="content">
                         </div>
                     </div>
                     <div class="form-group">
@@ -58,9 +59,30 @@
     </div>
 @endsection
 
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+@endpush
+
 @push('scripts')
-<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-<script>
-    tinymce.init({ selector:'textarea' });
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+    <script>
+        var quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'code-block'],
+                    ['clean']
+                ]
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('content').value = quill.root.innerHTML;
+        });
+    </script>
 @endpush

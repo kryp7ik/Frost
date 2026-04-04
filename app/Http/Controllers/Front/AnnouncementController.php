@@ -16,6 +16,16 @@ class AnnouncementController extends Controller
         $this->announcementRepo = $announcementRepositoryContract;
     }
 
+    public function index()
+    {
+        $announcements = $this->announcementRepo->getAll(15);
+        return view('account.dashboard', [
+            'user' => Auth::user(),
+            'shifts' => null,
+            'announcements' => $announcements,
+        ]);
+    }
+
     public function create()
     {
         return view('announcements.create');

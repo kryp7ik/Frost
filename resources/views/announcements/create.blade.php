@@ -42,7 +42,8 @@
                     <div class="row">
                         <h4><label for="content" class="col-lg-2 control-label">Content</label></h4>
                         <div class="col-lg-8">
-                            <textarea id="content" name="content" style="height:280px"></textarea>
+                            <div id="quill-editor" style="height:280px"></div>
+                            <input type="hidden" name="content" id="content">
                         </div>
                     </div>
                     <div class="form-group">
@@ -57,29 +58,30 @@
     </div>
 @endsection
 
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+@endpush
+
 @push('scripts')
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
     <script>
-        tinymce.init({
-            selector:'textarea',
-            theme: 'modern',
-            plugins: [
-                'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-                'searchreplace wordcount visualblocks visualchars code fullscreen',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc'
-            ],
-            toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-            toolbar2: 'print preview media | forecolor backcolor emoticons | codesample',
-            image_advtab: true,
-            templates: [
-                { title: 'Test template 1', content: 'Test 1' },
-                { title: 'Test template 2', content: 'Test 2' }
-            ],
-            content_css: [
-                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                '//www.tinymce.com/css/codepen.min.css'
-            ]
+        var quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'code-block'],
+                    ['clean']
+                ]
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('content').value = quill.root.innerHTML;
         });
     </script>
 @endpush

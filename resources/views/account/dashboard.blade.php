@@ -72,25 +72,41 @@
     @include('account.partials.announcement-modal')
 @endsection
 
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+    <style>
+        .modal-dialog {
+            width: 70%;
+        }
+        .ql-editor {
+            min-height: 80px;
+        }
+        .quill-content h1, .quill-content h2, .quill-content h3 {
+            margin-bottom: 0.5em;
+        }
+        .quill-content ul, .quill-content ol {
+            padding-left: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        .quill-content p {
+            margin-bottom: 0.5em;
+        }
+    </style>
+@endpush
+
 @push('scripts')
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
     <script>
-        tinymce.init({
-            selector:'textarea',
-            theme: 'modern',
-            menubar: false,
-            statusbar: false,
-            plugins: [
-                'advlist autolink lists link image',
-                'media',
-                'emoticons textcolor colorpicker textpattern imagetools codesample toc'
-            ],
-            toolbar1: 'undo redo | insert | forecolor backcolor emoticons | bold italic | bullist numlist outdent indent | link image',
-            image_advtab: true,
-            content_css: [
-                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-                '//www.tinymce.com/css/codepen.min.css'
-            ]
+        var replyQuill = new Quill('#reply-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
         });
 
         $.ajaxSetup({
@@ -98,7 +114,6 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
             }
         });
-
 
         $('.read-more').on('click', function () {
             var id = $(this).attr('data-id');
@@ -116,9 +131,10 @@
             });
             $('#announcement-modal').modal('show');
         });
+
         $('#post-reply').on('click', function() {
-            tinyMCE.triggerSave();
-            var replyContent = $('textarea#reply').val();
+            var replyContent = replyQuill.root.innerHTML;
+            if (replyContent === '<p><br></p>') return;
             $.ajax({
                 url: '/announcements/' + $('#announcement-id').val() + '/add-comment',
                 type: "POST",
@@ -129,17 +145,9 @@
             }).done(function( json ) {
                 if(json == 'success') {
                     $('#comments').append('<div class="well">' + replyContent + '</div>');
-                    tinyMCE.activeEditor.setContent('');
+                    replyQuill.setContents([]);
                 }
             });
-        })
+        });
     </script>
-@endpush
-
-@push('css')
-    <style>
-        .modal-dialog {
-            width: 70%;
-        }
-    </style>
 @endpush

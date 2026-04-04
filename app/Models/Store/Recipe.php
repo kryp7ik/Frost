@@ -2,6 +2,7 @@
 
 namespace App\Models\Store;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Recipe extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Database\Factories\RecipeFactory
+    {
+        return \Database\Factories\RecipeFactory::new();
+    }
     /**
      * @var array
      */

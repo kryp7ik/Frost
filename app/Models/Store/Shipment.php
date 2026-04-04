@@ -2,6 +2,7 @@
 
 namespace App\Models\Store;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Shipment extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Database\Factories\ShipmentFactory
+    {
+        return \Database\Factories\ShipmentFactory::new();
+    }
 
     /**
      * @var array
