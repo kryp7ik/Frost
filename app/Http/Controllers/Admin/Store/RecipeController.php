@@ -2,143 +2,121 @@
 
 namespace App\Http\Controllers\Admin\Store;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Store\RecipeFormRequest;
 use App\Models\Store\Recipe;
 use App\Repositories\Store\Ingredient\IngredientRepositoryContract;
 use App\Repositories\Store\Recipe\RecipeRepositoryContract;
 use App\Transformers\RecipeTransformer;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Store\RecipeFormRequest;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Yajra\DataTables\Facades\DataTables;
 
 class RecipeController extends Controller
 {
-    /**
-     * @var RecipeRepositoryContract
-     */
-    protected $recipes;
-
-    /**
-     * @var IngredientRepositoryContract
-     */
-    protected $ingredients;
-
-    /**
-     * RecipeController constructor.
-     * @param RecipeRepositoryContract $recipes
-     * @param IngredientRepositoryContract $ingredients
-     */
-    public function __construct(RecipeRepositoryContract $recipes, IngredientRepositoryContract $ingredients)
-    {
-        $this->recipes = $recipes;
-        $this->ingredients = $ingredients;
-
+    public function __construct(
+        protected RecipeRepositoryContract $recipes,
+        protected IngredientRepositoryContract $ingredients
+    ) {
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): InertiaResponse
     {
-        return view('backend.store.recipes.index');
+        return Inertia::render('Admin/Store/Recipes/Index', [
+            'recipes' => Recipe::select(['id', 'name', 'sku', 'active', 'created_at'])
+                ->orderBy('name')
+                ->get()
+                ->map(fn ($r) => [
+                    'id' => $r->id,
+                    'name' => $r->name,
+                    'sku' => $r->sku,
+                    'active' => (bool) $r->active,
+                ])
+                ->values(),
+        ]);
     }
 
     public function dataTables()
     {
         $recipes = Recipe::select(['id', 'name', 'active', 'created_at', 'updated_at']);
+
         return DataTables::of($recipes)
             ->setTransformer(new RecipeTransformer())
             ->make(true);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create()
+    public function create(): InertiaResponse
     {
-
         $ingredients = $this->ingredients->getAll();
-        return view('backend.store.recipes.create', compact('ingredients'));
+
+        return Inertia::render('Admin/Store/Recipes/Create', [
+            'ingredients' => collect($ingredients)->map(fn ($i) => [
+                'id' => $i->id,
+                'name' => $i->name,
+            ])->values(),
+        ]);
     }
 
-    /**
-     * @param RecipeFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(RecipeFormRequest $request)
+    public function store(RecipeFormRequest $request): RedirectResponse
     {
         $this->recipes->create($request->all());
+
         return redirect('/admin/store/recipes');
     }
 
-    /**
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function show($id)
+    public function show(int $id): InertiaResponse
     {
         $recipe = $this->recipes->findById($id);
         $ingredients = $this->ingredients->getAll();
-        return view('backend.store.recipes.show', compact('recipe', 'ingredients'));
+
+        return Inertia::render('Admin/Store/Recipes/Show', [
+            'recipe' => [
+                'id' => $recipe->id,
+                'name' => $recipe->name,
+                'sku' => $recipe->sku,
+                'active' => (bool) $recipe->active,
+                'ingredients' => $recipe->ingredients->map(fn ($i) => [
+                    'id' => $i->id,
+                    'name' => $i->name,
+                    'amount' => $i->pivot->amount ?? 0,
+                ])->values(),
+            ],
+            'availableIngredients' => collect($ingredients)->map(fn ($i) => [
+                'id' => $i->id,
+                'name' => $i->name,
+            ])->values(),
+        ]);
     }
 
-    /**
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
+    public function ajaxUpdate(int $id, RecipeFormRequest $request): JsonResponse
     {
-        $recipe = $this->recipes->findById($id);
-        return view('backend.store.recipes.edit', compact('recipe'));
+        $status = $this->recipes->updateField($id, $request->get('name'), $request->get('value')) ? 1 : 0;
+
+        return response()->json(['status' => $status]);
     }
 
-    /**
-     * @param int $id
-     * @param RecipeFormRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function ajaxUpdate($id, RecipeFormRequest $request)
-    {
-        if($this->recipes->updateField($id, $request->get('name'), $request->get('value'))) {
-            return response()->json(array('status' => 1));
-        } else {
-            return response()->json(array('status' => 0));
-        }
-    }
-
-    /**
-     * @param int $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update($id, Request $request)
+    public function update(int $id, Request $request): RedirectResponse
     {
         $this->recipes->updateField($id, 'active', $request->get('active'));
+
         return back();
     }
 
-    /**
-     * Removes a single ingredient from a recipe
-     * @param int $id The ID of the recipe being modified
-     * @param int $iid The ID of the ingredient being removed
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function remove($id, $iid)
+    public function remove(int $id, int $iid): RedirectResponse
     {
         $this->recipes->removeIngredient($id, $iid);
+
         return back();
     }
 
-    /**
-     * Adds a single ingredient to a recipe.
-     * The recipe id is defined in a hidden form input 'recipe'.
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function add(Request $request)
+    public function add(Request $request): RedirectResponse
     {
         $recipe = $this->recipes->findById($request->get('recipe'));
         $this->recipes->addIngredient($recipe, $request->all());
+
         return back();
     }
 }

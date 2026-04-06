@@ -3,82 +3,70 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
-    customer: {
-        type: Object,
-        required: true,
-    },
-    orders: {
-        type: Array,
-        default: () => [],
-    },
+    customer: { type: Object, required: true },
+    orders: { type: Array, default: () => [] },
 });
+
+const orderHeaders = [
+    { title: '#', key: 'id' },
+    { title: 'Date', key: 'created_at' },
+    { title: 'Total', key: 'total' },
+    { title: 'Status', key: 'complete' },
+];
 </script>
 
 <template>
-    <Head :title="customer.name" />
-
+    <Head :title="customer.name || `Customer #${customer.id}`" />
     <AppLayout>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>{{ customer.name }}</h1>
-            <Link href="/customers" class="btn btn-secondary">Back</Link>
+        <div class="mb-4 flex items-center justify-between">
+            <h1 class="text-2xl font-semibold text-gray-800">
+                {{ customer.name || `Customer #${customer.id}` }}
+            </h1>
+            <Link href="/customers">
+                <v-btn variant="text"><v-icon start icon="mdi-arrow-left" /> Back</v-btn>
+            </Link>
         </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Details</div>
-                    <div class="card-body">
-                        <dl>
-                            <dt>Phone</dt>
-                            <dd>{{ customer.phone }}</dd>
-                            <dt>Email</dt>
-                            <dd>{{ customer.email || '—' }}</dd>
-                            <dt>Points</dt>
-                            <dd>{{ customer.points }}</dd>
-                            <dt>Preferred</dt>
-                            <dd>{{ customer.preferred ? 'Yes' : 'No' }}</dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <v-card data-testid="customer-details-card">
+                <v-card-title>Details</v-card-title>
+                <v-card-text>
+                    <dl class="grid grid-cols-2 gap-2 text-sm">
+                        <dt class="font-semibold">Phone</dt>
+                        <dd>{{ customer.phone || '—' }}</dd>
+                        <dt class="font-semibold">Email</dt>
+                        <dd>{{ customer.email || '—' }}</dd>
+                        <dt class="font-semibold">Points</dt>
+                        <dd>{{ customer.points ?? 0 }}</dd>
+                        <dt class="font-semibold">Preferred</dt>
+                        <dd>{{ customer.preferred ? 'Yes' : 'No' }}</dd>
+                    </dl>
+                </v-card-text>
+            </v-card>
 
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Order History</div>
-                    <div class="card-body">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="order in orders" :key="order.id">
-                                    <td>{{ order.id }}</td>
-                                    <td>{{ order.created_at }}</td>
-                                    <td>${{ Number(order.total).toFixed(2) }}</td>
-                                    <td>
-                                        <span
-                                            class="badge"
-                                            :class="order.complete ? 'bg-success' : 'bg-warning'"
-                                        >
-                                            {{ order.complete ? 'Complete' : 'Open' }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr v-if="!orders.length">
-                                    <td colspan="4" class="text-center text-muted">
-                                        No orders yet.
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <v-card class="lg:col-span-2" data-testid="customer-orders-card">
+                <v-card-title>Order History</v-card-title>
+                <v-data-table
+                    :headers="orderHeaders"
+                    :items="orders"
+                    item-value="id"
+                    density="comfortable"
+                >
+                    <template #item.total="{ item }">${{ Number(item.total).toFixed(2) }}</template>
+                    <template #item.complete="{ item }">
+                        <v-chip
+                            :color="item.complete ? 'success' : 'warning'"
+                            size="small"
+                            variant="tonal"
+                        >
+                            {{ item.complete ? 'Complete' : 'Open' }}
+                        </v-chip>
+                    </template>
+                </v-data-table>
+                <v-card-text v-if="!orders.length" class="text-center text-sm text-gray-500">
+                    No orders yet.
+                </v-card-text>
+            </v-card>
         </div>
     </AppLayout>
 </template>

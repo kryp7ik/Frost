@@ -2,90 +2,84 @@
 
 namespace App\Http\Controllers\Front\Store;
 
-use App\Models\Store\Customer;
-use App\Repositories\Store\Customer\CustomerRepositoryContract;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\CustomerFormRequest;
+use App\Models\Store\Customer;
+use App\Repositories\Store\Customer\CustomerRepositoryContract;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
-
-    /**
-     * @var CustomerRepositoryContract
-     */
-    protected $customers;
-
-    /**
-     * CustomerController constructor.
-     * @param CustomerRepositoryContract $customerRepository
-     */
-    public function __construct(CustomerRepositoryContract $customerRepository)
+    public function __construct(protected CustomerRepositoryContract $customers)
     {
-        $this->customers = $customerRepository;
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): InertiaResponse
     {
-        return view('customers.index');
+        return Inertia::render('Customers/Index', [
+            'customers' => Customer::orderBy('name')
+                ->get(['id', 'name', 'phone', 'email', 'points'])
+                ->map(fn ($c) => [
+                    'id' => $c->id,
+                    'name' => $c->name,
+                    'phone' => $c->phone,
+                    'email' => $c->email,
+                    'points' => $c->points,
+                ])
+                ->values(),
+        ]);
     }
 
-    /**
-     * Used for ajax calls from dataTables to retrieve Customers
-     * @return mixed
-     */
     public function dataTables()
     {
-        return DataTables::of(Customer::query())->setRowId(function($customer) { return $customer->id; })->make(true);
+        return DataTables::of(Customer::query())
+            ->setRowId(fn ($customer) => $customer->id)
+            ->make(true);
     }
 
-    /**
-     * @param CustomerFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(CustomerFormRequest $request)
+    public function store(CustomerFormRequest $request): RedirectResponse
     {
         $this->customers->create($request->all());
+
         return redirect('/customers');
     }
 
-    /**
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function show($id)
+    public function show(int $id): InertiaResponse
     {
         $customer = $this->customers->findById($id);
-        return view('customers.show', compact('customer'));
+
+        return Inertia::render('Customers/Show', [
+            'customer' => [
+                'id' => $customer->id,
+                'name' => $customer->name,
+                'phone' => $customer->phone,
+                'email' => $customer->email,
+                'points' => $customer->points,
+                'preferred' => $customer->preferred ?? null,
+            ],
+        ]);
     }
 
-    /**
-     * @param int $id
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function ajaxUpdate($id, Request $request)
+    public function ajaxUpdate(int $id, Request $request): JsonResponse
     {
-        if($this->customers->updateField($id, $request->get('name'), $request->get('value'))) {
-            return response()->json(array('status' => 1));
-        } else {
-            return response()->json(array('status' => 0));
-        }
+        $status = $this->customers->updateField(
+            $id,
+            $request->get('name'),
+            $request->get('value')
+        ) ? 1 : 0;
+
+        return response()->json(['status' => $status]);
     }
 
-    /**
-     * Accepts phone number and returns customers current points value
-     * @param int $phone
-     * @param CustomerRepositoryContract $customerRepo
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function points($phone, CustomerRepositoryContract $customerRepo)
+    public function points(string $phone, CustomerRepositoryContract $customerRepo): JsonResponse
     {
         $customer = $customerRepo->findByPhone($phone);
+
         return response()->json($customer->points);
     }
 }

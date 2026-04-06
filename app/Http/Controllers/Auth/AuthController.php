@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 /**
  * Replaces the Laravel 5.2 AuthenticatesAndRegistersUsers trait which was
@@ -27,9 +29,9 @@ class AuthController extends Controller
         $this->middleware('guest', ['except' => ['logout', 'getLogout']]);
     }
 
-    public function getLogin()
+    public function getLogin(): InertiaResponse
     {
-        return view('auth.login');
+        return Inertia::render('Auth/Login');
     }
 
     public function postLogin(Request $request)
@@ -62,9 +64,9 @@ class AuthController extends Controller
         return redirect('/users/login');
     }
 
-    public function getRegister()
+    public function getRegister(): InertiaResponse
     {
-        return view('auth.register');
+        return Inertia::render('Auth/Register');
     }
 
     public function postRegister(Request $request)

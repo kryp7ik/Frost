@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class PagesController extends Controller
 {
-    public function home()
+    public function home(): InertiaResponse
     {
-        return view('backend.home');
+        return Inertia::render('Admin/Home');
     }
 }

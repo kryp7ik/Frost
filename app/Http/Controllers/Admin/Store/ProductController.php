@@ -2,172 +2,166 @@
 
 namespace App\Http\Controllers\Admin\Store;
 
-use App\Repositories\Store\Product\ProductRepositoryContract;
-use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Store\ProductFormRequest;
 use App\Http\Requests\Store\ProductInstanceFormRequest;
+use App\Repositories\Store\Product\ProductRepositoryContract;
+use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ProductController extends Controller
 {
-    /**
-     * @var ProductRepositoryContract
-     */
-    protected $products;
-
-    /**
-     * @var ProductInstanceRepositoryContract
-     */
-    protected $productInstances;
-
-    /**
-     * ProductController constructor.
-     * @param ProductRepositoryContract $products
-     * @param ProductInstanceRepositoryContract $instances
-     */
-    public function __construct(ProductRepositoryContract $products, ProductInstanceRepositoryContract $instances)
-    {
-        $this->products = $products;
-        $this->productInstances = $instances;
+    public function __construct(
+        protected ProductRepositoryContract $products,
+        protected ProductInstanceRepositoryContract $productInstances
+    ) {
     }
 
-    /**
-     * Returns a Product Management dashboard style view
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function home()
+    public function home(): InertiaResponse
     {
-        return view('backend.store.products.home');
+        return Inertia::render('Admin/Store/Products/Home');
     }
 
-    /**
-     * Show all Products
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): InertiaResponse
     {
         $products = $this->products->getAll();
-        return view('backend.store.products.index', compact('products'));
+
+        return Inertia::render('Admin/Store/Products/Index', [
+            'products' => collect($products)->map(fn ($p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'sku' => $p->sku,
+                'category' => $p->category,
+                'cost' => $p->cost,
+            ])->values(),
+        ]);
     }
 
-    /**
-     * Display one Product with all of it's instances
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function show($id)
+    public function show(int $id): InertiaResponse
     {
         $product = $this->products->findById($id);
-        return view('backend.store.products.show', compact('product'));
+
+        return Inertia::render('Admin/Store/Products/Show', [
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'sku' => $product->sku,
+                'category' => $product->category,
+                'cost' => $product->cost,
+                'instances' => $product->productInstances->map(fn ($i) => [
+                    'id' => $i->id,
+                    'store' => $i->store,
+                    'price' => $i->price,
+                    'stock' => $i->stock,
+                    'redline' => $i->redline,
+                    'active' => (bool) $i->active,
+                ])->values(),
+            ],
+            'stores' => collect(config('store.stores'))->map(fn ($name, $id) => [
+                'id' => (int) $id,
+                'name' => $name,
+            ])->values(),
+        ]);
     }
 
-    /**
-     * Create a new product
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create()
+    public function create(): InertiaResponse
     {
-        return view('backend.store.products.create');
+        return Inertia::render('Admin/Store/Products/Create');
     }
 
-    /**
-     * Save the product
-     * @param ProductFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(ProductFormRequest $request)
+    public function store(ProductFormRequest $request): RedirectResponse
     {
         if ($product = $this->products->create($request->all())) {
             return redirect('/admin/store/products/' . $product->id . '/show');
-        } else return redirect('/admin/store/products');
+        }
+
+        return redirect('/admin/store/products/index');
     }
 
-    /**
-     * Edit a Product
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($id)
+    public function edit(int $id): InertiaResponse
     {
         $product = $this->products->findById($id);
-        return view('backend.store.products.edit', compact('product'));
+
+        return Inertia::render('Admin/Store/Products/Edit', [
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name,
+                'sku' => $product->sku,
+                'category' => $product->category,
+                'cost' => $product->cost,
+            ],
+        ]);
     }
 
-    /**
-     * Update a Product
-     * @param int $id
-     * @param ProductFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function update($id, ProductFormRequest $request)
+    public function update(int $id, ProductFormRequest $request): RedirectResponse
     {
         $product = $this->products->update($id, $request->all());
+
         return redirect('/admin/store/products/' . $product->id . '/show');
     }
 
-    /**
-     * Route used for "editable" fields which accepts a Product id and an attribute name ('name') and new value ('value')
-     * @param int $id
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function ajaxUpdate($id, Request $request)
+    public function ajaxUpdate(int $id, Request $request): JsonResponse
     {
-        if($this->products->updateField($id, $request->get('name'), $request->get('value'))) {
-            return response()->json(array('status' => 1));
-        } else {
-            return response()->json(array('status' => 0));
-        }
+        $status = $this->products->updateField($id, $request->get('name'), $request->get('value')) ? 1 : 0;
+
+        return response()->json(['status' => $status]);
     }
 
-    /**
-     * Adds a ProdcutInstance to a Product
-     * @param ProductInstanceFormRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function addInstance(ProductInstanceFormRequest $request)
+    public function addInstance(ProductInstanceFormRequest $request): RedirectResponse
     {
         $this->productInstances->create(Auth::user()->store, $request->all());
+
         return back();
     }
 
-    /**
-     * Display the edit view for a ProductInstance
-     * @param int $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function editInstance($id)
+    public function editInstance(int $id): InertiaResponse|RedirectResponse
     {
         $instance = $this->productInstances->findById($id);
-        if(Auth::user()->store != $instance->store  && !Auth::user()->hasRole('admin')) {
+        if (Auth::user()->store !== $instance->store && ! Auth::user()->hasRole('admin')) {
             flash('You can only edit product instances for your store!', 'danger');
+
             return back();
         }
-        return view('backend.store.products.editinstance', compact('instance'));
+
+        return Inertia::render('Admin/Store/Products/EditInstance', [
+            'instance' => [
+                'id' => $instance->id,
+                'product_id' => $instance->product_id,
+                'store' => $instance->store,
+                'price' => $instance->price,
+                'stock' => $instance->stock,
+                'redline' => $instance->redline,
+                'active' => (bool) $instance->active,
+            ],
+        ]);
     }
 
-    /**
-     * Updates a ProductInstance
-     * @param int $id
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function updateInstance($id, Request $request)
+    public function updateInstance(int $id, Request $request): RedirectResponse
     {
         $instance = $this->productInstances->update($id, $request->all());
+
         return redirect('/admin/store/products/' . $instance->product_id . '/show');
     }
 
-    /**
-     * Displays an index of all ProductInstances that have a stock below the set redline
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function redline()
+    public function redline(): InertiaResponse
     {
-        $store = (Auth::user()->hasRole('manager')) ? 0 : Auth::user()->store;
+        $store = Auth::user()->hasRole('manager') ? 0 : Auth::user()->store;
         $productInstances = $this->productInstances->getBelowRedline($store);
-        return view('backend.store.products.redline', compact('productInstances'));
+
+        return Inertia::render('Admin/Store/Products/Redline', [
+            'productInstances' => collect($productInstances)->map(fn ($i) => [
+                'id' => $i->id,
+                'product_name' => $i->product->name ?? '',
+                'store' => $i->store,
+                'price' => $i->price,
+                'stock' => $i->stock,
+                'redline' => $i->redline,
+            ])->values(),
+        ]);
     }
 }

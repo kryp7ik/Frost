@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Store\SuspendedOrders;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -29,18 +30,34 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        $stores = config('store.stores', []);
+
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'two_factor_enabled' => ! is_null($request->user()->two_factor_confirmed_at),
+                'user' => $user ? [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'store' => $user->store,
+                    'store_name' => $user->store && isset($stores[$user->store])
+                        ? $stores[$user->store]
+                        : null,
+                    'is_manager' => $user->hasRole('manager'),
+                    'is_admin' => $user->hasRole('admin'),
+                    'two_factor_enabled' => ! is_null($user->two_factor_confirmed_at),
                 ] : null,
             ],
             'flash' => [
                 'message' => fn () => $request->session()->get('flash_notification.0.message'),
+                'type' => fn () => $request->session()->get('flash_notification.0.level', 'info'),
             ],
+            'suspendedOrders' => fn () => $user
+                ? app(SuspendedOrders::class)->getSuspendedOrders()->map(fn ($order) => [
+                    'id' => $order->id,
+                    'total' => (float) $order->total,
+                ])->values()
+                : [],
         ]);
     }
 }
