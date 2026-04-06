@@ -2,6 +2,7 @@
 
 namespace App\Models\Store;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Discount extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Database\Factories\DiscountFactory
+    {
+        return \Database\Factories\DiscountFactory::new();
+    }
     /**
      * @var array
      */

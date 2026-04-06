@@ -2,6 +2,7 @@
 
 namespace App\Models\Store;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,6 +12,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Transfer extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Database\Factories\TransferFactory
+    {
+        return \Database\Factories\TransferFactory::new();
+    }
 
     /**
      * @var array

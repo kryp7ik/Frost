@@ -3,6 +3,7 @@
 namespace App\Models\Store;
 
 use App\Services\Store\ShopOrderCalculator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,6 +13,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ShopOrder extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Database\Factories\ShopOrderFactory
+    {
+        return \Database\Factories\ShopOrderFactory::new();
+    }
     protected $guarded = ['id'];
 
     protected $fillable = [

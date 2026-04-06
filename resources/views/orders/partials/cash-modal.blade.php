@@ -34,11 +34,12 @@
 
 @push('scripts')
     <script type="text/javascript">
-        $('.cash').on('click', function(e) {
-            e.preventDefault();
-            $('#amount').val(this.id);
-            $('#cash-form').submit();
+        document.querySelectorAll('.cash').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('amount').value = this.id;
+                document.getElementById('cash-form').submit();
+            });
         });
-
     </script>
 @endpush

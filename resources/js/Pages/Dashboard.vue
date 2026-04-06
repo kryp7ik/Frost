@@ -34,7 +34,7 @@ defineProps({
                             <p class="text-muted small">
                                 {{ announcement.created_at }}
                             </p>
-                            <div v-html="announcement.content"></div>
+                            <div class="quill-content" v-html="announcement.content"></div>
                         </div>
                         <p v-if="!announcements.length" class="text-muted">
                             No announcements yet.

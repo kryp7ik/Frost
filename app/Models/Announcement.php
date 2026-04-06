@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
 class Announcement extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory(): \Database\Factories\AnnouncementFactory
+    {
+        return \Database\Factories\AnnouncementFactory::new();
+    }
     /**
      * @var array
      */

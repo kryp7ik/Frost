@@ -15,13 +15,13 @@
                 </h3>
             </div>
             <div class="modal-body">
-                <div id="announcement-content"></div>
+                <div id="announcement-content" class="quill-content"></div>
                 <div id="comments"></div>
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3 well">
                         <input id="announcement-id" type="hidden" value="" />
-                        <textarea class="" rows="4" id="reply"></textarea>
-                        <button id="post-reply" class="btn btn-block btn-raised btn-info">Add Comment</button>
+                        <div id="reply-editor" style="min-height:80px"></div>
+                        <button id="post-reply" class="btn btn-block btn-raised btn-info" style="margin-top:10px">Add Comment</button>
                     </div>
                 </div>
 

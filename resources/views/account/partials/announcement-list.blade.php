@@ -21,7 +21,7 @@
                         </span>
                     </small>
                 </h3>
-                <p>{!! str_limit(strip_tags($announcement->content), 600) !!}</p>
+                <p>{!! Str::limit(strip_tags($announcement->content), 600) !!}</p>
                 <ul class="list-inline list-unstyled">
                     <li><span><i class="fa fa-calendar"></i> {{ DateHelper::timeElapsed($announcement->created_at) }} </span></li>
                     <li>|</li>
@@ -60,7 +60,7 @@
                     </small>
 
                 </h3>
-                <p>{!! str_limit(strip_tags($announcement->content), 600) !!}</p>
+                <p>{!! Str::limit(strip_tags($announcement->content), 600) !!}</p>
                 <ul class="list-inline list-unstyled">
                     <li><span><i class="fa fa-calendar"></i> {{ DateHelper::timeElapsed($announcement->created_at) }} </span></li>
                     <li>|</li>

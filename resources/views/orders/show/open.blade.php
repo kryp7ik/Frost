@@ -182,8 +182,8 @@
                 $('#customer-phone').fadeIn();
                 $('#change-customer').fadeOut();
             });
-            $('#cash').on('shown.bs.modal', function () {
-                $('#amount').focus();
+            document.getElementById('cash').addEventListener('shown.bs.modal', function () {
+                document.getElementById('amount').focus();
             });
         </script>
     @endpush

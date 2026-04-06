@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserTableSeeder::class,
-            SampleDataSeeder::class,
+            ComprehensiveSeeder::class,
         ]);
 
         Model::reguard();
