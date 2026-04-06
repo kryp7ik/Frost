@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -10,6 +10,9 @@ const page = usePage();
 const adminOpen = ref(false);
 const userMenuOpen = ref(false);
 const mobileMenuOpen = ref(false);
+const ordersDrawer = ref(false);
+
+const suspendedOrders = computed(() => page.props.suspendedOrders || []);
 
 function isActive(path) {
     return page.url.startsWith(path);
@@ -47,6 +50,21 @@ function isActive(path) {
                         <Link href="/orders/create" :class="isActive('/orders/create') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'" class="rounded-md px-3 py-2 text-sm md:py-1.5">
                             <i class="fa fa-plus-square mr-1"></i> New Order
                         </Link>
+
+                        <!-- Pending Orders toggle -->
+                        <button
+                            v-if="suspendedOrders.length"
+                            class="relative rounded-md px-3 py-2 text-sm text-amber-400 hover:bg-gray-800 hover:text-amber-300 md:py-1.5"
+                            @click="ordersDrawer = !ordersDrawer"
+                            data-testid="pending-orders-toggle"
+                        >
+                            <i class="fa fa-clock-o mr-1"></i>
+                            Pending
+                            <span class="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 px-1.5 text-xs font-bold text-gray-900">
+                                {{ suspendedOrders.length }}
+                            </span>
+                        </button>
+
                         <Link href="/announcements" :class="isActive('/announcements') ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'" class="rounded-md px-3 py-2 text-sm md:py-1.5">
                             <i class="fa fa-bullhorn mr-1"></i> Announcements
                         </Link>
@@ -86,6 +104,9 @@ function isActive(path) {
                                 </Link>
                                 <Link href="/admin/store/recipes" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
                                     <i class="fa fa-tint w-4 text-center"></i> Recipes
+                                </Link>
+                                <Link href="/admin/store/touch" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
+                                    <i class="fa fa-hand-pointer-o w-4 text-center"></i> Touch
                                 </Link>
                                 <Link href="/admin/store/report/sales" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
                                     <i class="fa fa-area-chart w-4 text-center"></i> Reports
@@ -143,6 +164,51 @@ function isActive(path) {
             </div>
         </nav>
 
+        <!-- Pending Orders Sidebar Drawer -->
+        <transition name="slide">
+            <div
+                v-if="ordersDrawer && suspendedOrders.length"
+                class="fixed right-0 top-14 z-40 h-[calc(100vh-3.5rem)] w-72 overflow-y-auto border-l border-gray-200 bg-white shadow-xl"
+                data-testid="pending-orders-drawer"
+            >
+                <div class="flex items-center justify-between border-b border-gray-200 px-4 py-3">
+                    <h2 class="text-sm font-semibold text-gray-800">
+                        <i class="fa fa-clock-o mr-1 text-amber-500"></i>
+                        Pending Orders ({{ suspendedOrders.length }})
+                    </h2>
+                    <button class="text-gray-400 hover:text-gray-600" @click="ordersDrawer = false">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    <Link
+                        v-for="order in suspendedOrders"
+                        :key="order.id"
+                        :href="`/orders/${order.id}/show`"
+                        class="block px-4 py-3 hover:bg-gray-50"
+                        :data-testid="`pending-order-${order.id}`"
+                        @click="ordersDrawer = false"
+                    >
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-900">Order #{{ order.id }}</span>
+                            <span class="text-sm font-semibold text-gray-700">${{ order.total.toFixed(2) }}</span>
+                        </div>
+                        <div class="mt-0.5 text-xs text-gray-500">
+                            {{ order.customer_name || 'Walk-in' }}
+                            <span v-if="order.created_at" class="ml-1">&bull; {{ order.created_at }}</span>
+                        </div>
+                    </Link>
+                </div>
+            </div>
+        </transition>
+
+        <!-- Backdrop -->
+        <div
+            v-if="ordersDrawer && suspendedOrders.length"
+            class="fixed inset-0 top-14 z-30 bg-black/20"
+            @click="ordersDrawer = false"
+        />
+
         <!-- Main Content -->
         <main class="pt-14">
             <div class="mx-auto max-w-7xl p-4 lg:p-6">
@@ -158,3 +224,14 @@ function isActive(path) {
         </main>
     </div>
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+    transition: transform 0.2s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+    transform: translateX(100%);
+}
+</style>

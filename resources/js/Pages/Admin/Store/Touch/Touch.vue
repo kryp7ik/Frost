@@ -2,13 +2,44 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, computed } from 'vue';
 
 const liquids = ref([]);
 const mixed = ref([]);
-const selected = ref(new Set());
+const selected = ref([]);
 const loading = ref(false);
 let pollHandle = null;
+
+const mentholLabels = { 0: 'None', 1: 'Light', 2: 'Medium', 3: 'Heavy', 4: 'Super' };
+const vgLabels = { 40: '40%', 60: '60%', 100: 'MAX' };
+
+const pendingHeaders = [
+    { title: 'Order', key: 'shop_order_id', width: '70px' },
+    { title: 'Recipe', key: 'recipe' },
+    { title: 'Size', key: 'size', width: '70px' },
+    { title: 'Nic', key: 'nicotine', width: '60px' },
+    { title: 'VG', key: 'vg_label', width: '70px' },
+    { title: 'Menthol', key: 'menthol_label', width: '90px' },
+    { title: 'Salt', key: 'salt', width: '60px' },
+    { title: 'Extra', key: 'extra', width: '60px' },
+    { title: 'Ingredients', key: 'ingredient_list', sortable: false },
+];
+
+const pendingItems = computed(() =>
+    liquids.value.map((l) => ({
+        ...l,
+        vg_label: vgLabels[l.vg] ?? `${l.vg}%`,
+        menthol_label: mentholLabels[l.menthol] ?? l.menthol,
+        ingredient_list: (l.ingredients || []).map((i) => `${i.name} (${i.amount}ml)`).join(', '),
+    })),
+);
+
+const mixedHeaders = [
+    { title: 'Recipe', key: 'recipe' },
+    { title: 'Size', key: 'size', width: '70px' },
+    { title: 'Nic', key: 'nicotine', width: '60px' },
+    { title: '', key: 'actions', sortable: false, width: '60px' },
+];
 
 async function load() {
     loading.value = true;
@@ -19,26 +50,21 @@ async function load() {
         ]);
         liquids.value = liquidsRes.data || [];
         mixed.value = mixedRes.data || [];
+        // Remove selected items that no longer exist in pending
+        const ids = new Set(liquids.value.map((l) => l.id));
+        selected.value = selected.value.filter((s) => ids.has(s.id));
     } finally {
         loading.value = false;
     }
 }
 
-function toggle(id) {
-    if (selected.value.has(id)) {
-        selected.value.delete(id);
-    } else {
-        selected.value.add(id);
-    }
-    selected.value = new Set(selected.value); // trigger reactivity
-}
-
 async function completeSelected() {
-    if (!selected.value.size) {
-        return;
-    }
-    await axios.post('/admin/store/touch/complete', Array.from(selected.value));
-    selected.value = new Set();
+    if (!selected.value.length) return;
+    await axios.post(
+        '/admin/store/touch/complete',
+        selected.value.map((s) => s.id),
+    );
+    selected.value = [];
     await load();
 }
 
@@ -53,9 +79,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (pollHandle) {
-        clearInterval(pollHandle);
-    }
+    if (pollHandle) clearInterval(pollHandle);
 });
 </script>
 
@@ -64,65 +88,84 @@ onUnmounted(() => {
     <AppLayout>
         <div class="mb-4 flex items-center justify-between">
             <h1 class="text-2xl font-semibold text-gray-800">Liquid Mixer</h1>
-            <v-btn
-                color="primary"
-                :disabled="!selected.size"
-                data-testid="touch-complete"
-                @click="completeSelected"
+            <div class="flex items-center gap-3">
+                <v-progress-circular v-if="loading" size="20" indeterminate color="primary" />
+                <v-btn
+                    color="primary"
+                    :disabled="!selected.length"
+                    data-testid="touch-complete"
+                    @click="completeSelected"
+                >
+                    <v-icon start icon="mdi-check-all" />
+                    Complete{{ selected.length ? ` (${selected.length})` : '' }}
+                </v-btn>
+            </div>
+        </div>
+
+        <!-- Pending Liquids Table (full width) -->
+        <v-card class="mb-4" data-testid="touch-pending-card">
+            <v-card-title>Pending</v-card-title>
+            <v-data-table
+                v-model="selected"
+                :headers="pendingHeaders"
+                :items="pendingItems"
+                item-value="id"
+                show-select
+                return-object
+                :items-per-page="-1"
+                density="compact"
+                class="text-sm"
+                no-data-text="No pending liquids."
             >
-                <v-icon start icon="mdi-check-all" /> Complete {{ selected.size || '' }}
-            </v-btn>
-        </div>
+                <template #item.shop_order_id="{ item }">
+                    <span class="font-medium">#{{ item.shop_order_id }}</span>
+                </template>
+                <template #item.size="{ item }">
+                    {{ item.size }}ml
+                </template>
+                <template #item.nicotine="{ item }">
+                    {{ item.nicotine }}mg
+                </template>
+                <template #item.salt="{ item }">
+                    <v-icon v-if="item.salt" icon="mdi-check" size="small" color="success" />
+                </template>
+                <template #item.extra="{ item }">
+                    <v-icon v-if="item.extra" icon="mdi-check" size="small" color="success" />
+                </template>
+                <template #item.ingredient_list="{ item }">
+                    <span class="text-xs text-gray-600">{{ item.ingredient_list }}</span>
+                </template>
+            </v-data-table>
+        </v-card>
 
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <v-card data-testid="touch-pending-card">
-                <v-card-title>
-                    Pending
-                    <v-spacer />
-                    <v-progress-circular v-if="loading" size="20" indeterminate color="primary" />
-                </v-card-title>
-                <v-card-text>
-                    <p v-if="!liquids.length" class="text-sm text-gray-500">No pending liquids.</p>
-                    <v-list density="compact">
-                        <v-list-item
-                            v-for="liquid in liquids"
-                            :key="liquid.id"
-                            :title="liquid.label || liquid.name || `Liquid #${liquid.id}`"
-                            :subtitle="liquid.ingredients || liquid.description || ''"
-                            :active="selected.has(liquid.id)"
-                            @click="toggle(liquid.id)"
-                        >
-                            <template #prepend>
-                                <v-checkbox-btn :model-value="selected.has(liquid.id)" />
-                            </template>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-            </v-card>
-
-            <v-card data-testid="touch-mixed-card">
-                <v-card-title>Recently Completed</v-card-title>
-                <v-card-text>
-                    <p v-if="!mixed.length" class="text-sm text-gray-500">No recent liquids.</p>
-                    <v-list density="compact">
-                        <v-list-item
-                            v-for="liquid in mixed"
-                            :key="liquid.id"
-                            :title="liquid.label || liquid.name || `Liquid #${liquid.id}`"
-                        >
-                            <template #append>
-                                <v-btn
-                                    size="small"
-                                    variant="text"
-                                    color="warning"
-                                    icon="mdi-undo"
-                                    @click="unmix(liquid.id)"
-                                />
-                            </template>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-            </v-card>
-        </div>
+        <!-- Recently Completed -->
+        <v-card data-testid="touch-mixed-card">
+            <v-card-title>Recently Completed</v-card-title>
+            <v-data-table
+                :headers="mixedHeaders"
+                :items="mixed"
+                :items-per-page="5"
+                density="compact"
+                class="text-sm"
+                no-data-text="No recent liquids."
+                hide-default-footer
+            >
+                <template #item.size="{ item }">
+                    {{ item.size }}ml
+                </template>
+                <template #item.nicotine="{ item }">
+                    {{ item.nicotine }}mg
+                </template>
+                <template #item.actions="{ item }">
+                    <v-btn
+                        size="x-small"
+                        variant="text"
+                        color="warning"
+                        icon="mdi-undo"
+                        @click="unmix(item.id)"
+                    />
+                </template>
+            </v-data-table>
+        </v-card>
     </AppLayout>
 </template>

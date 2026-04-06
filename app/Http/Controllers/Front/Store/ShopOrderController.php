@@ -44,18 +44,13 @@ class ShopOrderController extends Controller
         ]);
     }
 
-    public function create(): InertiaResponse
+    public function create(): RedirectResponse
     {
-        return Inertia::render('Orders/Create');
-    }
-
-    public function store(Request $request): RedirectResponse
-    {
-        $order = $this->orders->create(Auth::user(), $request->all());
+        $order = $this->orders->create(Auth::user(), []);
 
         return $order
             ? redirect('/orders/' . $order->id . '/show')
-            : redirect('/orders/create');
+            : redirect('/orders');
     }
 
     public function show(int $id, DiscountRepositoryContract $discountRepo): InertiaResponse|RedirectResponse
@@ -111,17 +106,48 @@ class ShopOrderController extends Controller
             ]);
         }
 
-        $sortedDiscounts = $discountRepo->getAll(true);
+        $discounts = $discountRepo->getAll();
+
+        $storeInstances = $this->productInstances->getActiveWhereStore(Auth::user()->store);
+        $flatInstances = collect($storeInstances)->map(fn ($i) => [
+            'id' => $i->id,
+            'label' => ($i->product->name ?? 'Product') . ' — $' . number_format($i->price, 2),
+        ])->values()->all();
+
+        $activeRecipes = $this->recipes->getAll(true);
 
         return Inertia::render('Orders/ShowOpen', [
             'order' => $orderPayload,
-            'discounts' => collect($sortedDiscounts)->map(fn ($d) => [
+            'discounts' => collect($discounts)->map(fn ($d) => [
                 'id' => $d->id,
                 'name' => $d->name,
                 'type' => $d->type,
                 'amount' => $d->amount,
                 'approval' => (bool) $d->approval,
             ])->values(),
+            'instances' => $flatInstances,
+            'recipes' => collect($activeRecipes)->map(fn ($r) => [
+                'id' => $r->id,
+                'name' => $r->name,
+            ])->values(),
+            'liquidOptions' => [
+                'sizes' => collect(config('store.bottle_sizes'))->map(fn ($label, $value) => [
+                    'title' => $label,
+                    'value' => $value,
+                ])->values(),
+                'nicotine' => collect(config('store.nicotine_levels'))->map(fn ($label, $value) => [
+                    'title' => $label,
+                    'value' => $value,
+                ])->values(),
+                'menthol' => collect(config('store.menthol_levels'))->map(fn ($label, $value) => [
+                    'title' => $label,
+                    'value' => $value,
+                ])->values(),
+                'vg' => collect(config('store.vg_levels'))->map(fn ($label, $value) => [
+                    'title' => $label,
+                    'value' => $value,
+                ])->values(),
+            ],
         ]);
     }
 

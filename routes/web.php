@@ -114,7 +114,6 @@ Route::group(array('namespace' => 'Front', 'middleware' => 'auth'), function() {
     Route::get('orders', 'Store\ShopOrderController@index');
     Route::post('orders', 'Store\ShopOrderController@index');
     Route::get('orders/create', 'Store\ShopOrderController@create');
-    Route::post('orders/create', 'Store\ShopOrderController@store');
     Route::get('orders/{id?}/show', 'Store\ShopOrderController@show');
     Route::get('orders/{id?}/delete', 'Store\ShopOrderController@delete');
     Route::post('orders/{id?}/add-product', 'Store\ShopOrderController@addProduct');

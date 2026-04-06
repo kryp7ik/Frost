@@ -53,9 +53,11 @@ class HandleInertiaRequests extends Middleware
                 'type' => fn () => $request->session()->get('flash_notification.0.level', 'info'),
             ],
             'suspendedOrders' => fn () => $user
-                ? app(SuspendedOrders::class)->getSuspendedOrders()->map(fn ($order) => [
+                ? app(SuspendedOrders::class)->getSuspendedOrders()->load('customer')->map(fn ($order) => [
                     'id' => $order->id,
                     'total' => (float) $order->total,
+                    'customer_name' => $order->customer?->name,
+                    'created_at' => $order->created_at?->diffForHumans(),
                 ])->values()
                 : [],
         ]);

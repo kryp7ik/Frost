@@ -1,11 +1,32 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import axios from 'axios';
+import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
     order: { type: Object, required: true },
     change: { type: [String, Number], default: null },
 });
+
+const emailSending = ref(false);
+const emailSent = ref(false);
+const emailError = ref(false);
+
+async function emailReceipt() {
+    emailSending.value = true;
+    emailSent.value = false;
+    emailError.value = false;
+    try {
+        const { data } = await axios.post('/orders/email-receipt', { order: props.order.id });
+        emailSent.value = data.status === 'success';
+        emailError.value = data.status !== 'success';
+    } catch {
+        emailError.value = true;
+    } finally {
+        emailSending.value = false;
+    }
+}
 </script>
 
 <template>
@@ -32,7 +53,7 @@ defineProps({
 
                 <p class="mb-3 text-sm text-gray-500">
                     {{ order.created_at }}
-                    <span v-if="order.customer"> • {{ order.customer }}</span>
+                    <span v-if="order.customer"> &bull; {{ order.customer }}</span>
                 </p>
 
                 <v-list density="compact">
@@ -62,6 +83,16 @@ defineProps({
                 <div class="mt-4 flex gap-2">
                     <v-btn variant="tonal" @click="() => window.print()">
                         <v-icon start icon="mdi-printer" /> Print
+                    </v-btn>
+                    <v-btn
+                        variant="tonal"
+                        :loading="emailSending"
+                        :color="emailSent ? 'success' : emailError ? 'error' : undefined"
+                        data-testid="receipt-email"
+                        @click="emailReceipt"
+                    >
+                        <v-icon start :icon="emailSent ? 'mdi-check' : 'mdi-email'" />
+                        {{ emailSent ? 'Sent' : emailError ? 'Failed' : 'Email Receipt' }}
                     </v-btn>
                 </div>
             </v-card-text>

@@ -14,7 +14,7 @@ const routes: Array<{ url: string; testid: string; name: string }> = [
     { url: '/announcements/create', testid: 'announcement-form-card', name: 'Announcement create' },
     { url: '/customers', testid: 'customers-table-card', name: 'Customers' },
     { url: '/orders', testid: 'orders-table-card', name: 'Orders list' },
-    { url: '/orders/create', testid: 'order-create-card', name: 'Order create' },
+    { url: '/orders/create', testid: 'order-items-card', name: 'New order (redirects to ShowOpen)' },
     { url: '/schedule', testid: 'schedule-card', name: 'Schedule home' },
     { url: '/admin', testid: 'admin-card-products', name: 'Admin home' },
     { url: '/admin/roles', testid: 'roles-table-card', name: 'Roles index' },

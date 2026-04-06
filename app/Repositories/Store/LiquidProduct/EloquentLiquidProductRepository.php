@@ -191,7 +191,7 @@ class EloquentLiquidProductRepository implements LiquidProductRepositoryContract
      */
     public function createMultiple($shop_order_id, $store_id, $data)
     {
-        foreach ($data['liquids'] as $liquidData) {
+        foreach ($data['liquids'] ?? [] as $liquidData) {
             $this->create($shop_order_id, $store_id, $liquidData);
         }
     }
