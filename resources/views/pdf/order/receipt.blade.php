@@ -1,21 +1,17 @@
 <html>
     <head>
         <title>Order {{ $order->id }} Receipt</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!--  Helvetica substituting with Nimbus Sans L and Nimbus Sans L (Bold) -->
         <style>
-            td, .big-font {
-                font-size: 30px !important;
-            }
+            body { font-family: Helvetica, Arial, sans-serif; }
+            td, .big-font { font-size: 30px !important; }
+            table { border-collapse: collapse; }
+            .text-center { text-align: center; }
         </style>
     </head>
     <body>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="text-center">
-                    <img src="{{ URL::asset('img/joltreceipt.jpg') }}" style=""/>
-                </div>
-            </div>
+        <div class="text-center">
+            <img src="{{ URL::asset('img/joltreceipt.jpg') }}" alt="" />
         </div>
         <table style="width:100%">
             <tr>

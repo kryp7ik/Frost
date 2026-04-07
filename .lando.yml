@@ -1,0 +1,87 @@
+name: frost
+recipe: laravel
+config:
+  php: '8.3'
+  composer_version: '2'
+  webroot: public
+  database: none
+  cache: redis:7
+  xdebug: false
+
+proxy:
+  appserver:
+    - frost.lndo.site
+
+services:
+  appserver:
+    build_as_root:
+      - curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y --no-install-recommends nodejs libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libicu-dev && docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install -j$(nproc) zip gd intl bcmath pcntl && apt-get clean && rm -rf /var/lib/apt/lists/*
+    build:
+      - composer install --no-interaction
+      - npm ci
+      - npm run build
+    overrides:
+      environment:
+        APP_ENV: local
+        APP_DEBUG: 'true'
+        APP_URL: https://frost.lndo.site
+        DB_CONNECTION: mysql
+        DB_HOST: database
+        DB_PORT: 3306
+        DB_DATABASE: frost
+        DB_USERNAME: frost
+        DB_PASSWORD: frost
+        REDIS_HOST: cache
+        REDIS_PORT: 6379
+        CACHE_STORE: redis
+        SESSION_DRIVER: redis
+        QUEUE_CONNECTION: redis
+        MAIL_MAILER: smtp
+        MAIL_HOST: mailpit
+        MAIL_PORT: 1025
+        MAIL_FROM_ADDRESS: support@joltvapor.com
+        MAIL_FROM_NAME: Frost
+  database:
+    type: mysql:8.0
+    portforward: 3307
+    creds:
+      database: frost
+      user: frost
+      password: frost
+  mailpit:
+    type: compose
+    services:
+      image: axllent/mailpit:latest
+      command: /mailpit
+      ports:
+        - '8025:8025'
+
+tooling:
+  artisan:
+    service: appserver
+    cmd: php artisan
+  npm:
+    service: appserver
+  node:
+    service: appserver
+  test:
+    service: appserver
+    cmd: php artisan test --compact
+  seed:
+    service: appserver
+    cmd: php artisan db:seed --force --no-interaction
+  fresh:
+    service: appserver
+    cmd: php artisan migrate:fresh --seed --force --no-interaction
+  build:
+    service: appserver
+    cmd: npm run build
+    description: Build frontend assets
+  dev:
+    service: appserver
+    cmd: npm run dev
+    description: Start Vite dev server with HMR
+
+events:
+  post-start:
+    - appserver: test -f .env || cp .env.lando .env && php artisan key:generate --no-interaction --force 2>/dev/null; npm run build && php artisan migrate --force --no-interaction && php artisan db:seed --force --no-interaction

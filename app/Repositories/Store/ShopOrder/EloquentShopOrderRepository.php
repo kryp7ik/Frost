@@ -139,7 +139,7 @@ class EloquentShopOrderRepository implements ShopOrderRepositoryContract
      */
     public function addProductsToOrder(ShopOrder $order, $data)
     {
-        foreach ($data['products'] as $productData) {
+        foreach ($data['products'] ?? [] as $productData) {
             if ($productData['quantity'] == 0) return false;
             $order->productInstances()->attach([$productData['instance'] => ['quantity' => $productData['quantity']]]);
         }

@@ -7,42 +7,78 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Announcement\AnnouncementRepositoryContract;
 use App\Repositories\Auth\UserRepositoryContract;
 use App\Repositories\Store\Shift\ShiftRepositoryContract;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\Response as InertiaResponse;
 
 class AccountController extends Controller
 {
-    protected $userRepo;
-
-    public function __construct(UserRepositoryContract $userRepo)
+    public function __construct(protected UserRepositoryContract $userRepo)
     {
-        $this->userRepo = $userRepo;
     }
 
-    public function dashboard(ShiftRepositoryContract $shiftRepo, AnnouncementRepositoryContract $announcementRepo)
-    {
+    public function dashboard(
+        ShiftRepositoryContract $shiftRepo,
+        AnnouncementRepositoryContract $announcementRepo
+    ): InertiaResponse {
         $user = $this->userRepo->findById(Auth::user()->id);
         $shifts = $shiftRepo->getCurrentWeekForUser(Auth::user()->id);
         $announcements = $announcementRepo->getAll();
-        return view('account.dashboard', compact('user', 'shifts', 'announcements'));
+
+        $mapAnnouncement = fn ($a) => [
+            'id' => $a->id,
+            'title' => $a->title,
+            'content' => $a->content,
+            'sticky' => (bool) $a->sticky,
+            'created_at' => $a->created_at?->diffForHumans(),
+        ];
+
+        $sticky = $announcements['sticky'] ?? collect();
+        $standardPaginator = $announcements['standard'] ?? null;
+        $standard = $standardPaginator ? collect($standardPaginator->items()) : collect();
+
+        return Inertia::render('Dashboard', [
+            'dashboardUser' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+            'shifts' => $shifts ? collect($shifts)->map(fn ($s) => [
+                'id' => $s->id,
+                'start' => (string) $s->start,
+                'end' => (string) $s->end,
+                'store' => $s->store,
+            ])->values() : [],
+            'announcements' => [
+                'sticky' => $sticky->map($mapAnnouncement)->values(),
+                'standard' => $standard->map($mapAnnouncement)->values(),
+            ],
+        ]);
     }
 
-    public function edit()
+    public function edit(): InertiaResponse
     {
         $user = $this->userRepo->findById(Auth::user()->id);
-        return view('account.edit', compact('user'));
+
+        return Inertia::render('Account/Edit', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ],
+        ]);
     }
 
-    public function update(AccountEditRequest $request)
+    public function update(AccountEditRequest $request): RedirectResponse
     {
         $this->userRepo->update(Auth::user()->id, $request->all());
+
         return redirect('/');
     }
 
-    public function twoFactor(): Response
+    public function twoFactor(): InertiaResponse
     {
         return Inertia::render('Profile/TwoFactor');
     }
-
 }

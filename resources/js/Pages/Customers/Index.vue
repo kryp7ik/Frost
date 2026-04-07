@@ -4,13 +4,18 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 defineProps({
-    customers: {
-        type: Array,
-        default: () => [],
-    },
+    customers: { type: Array, default: () => [] },
 });
 
-const showCreateForm = ref(false);
+const headers = [
+    { title: 'Name', key: 'name' },
+    { title: 'Phone', key: 'phone' },
+    { title: 'Email', key: 'email' },
+    { title: 'Points', key: 'points' },
+    { title: '', key: 'actions', sortable: false, align: 'end' },
+];
+
+const dialog = ref(false);
 
 const form = useForm({
     name: '',
@@ -18,109 +23,86 @@ const form = useForm({
     email: '',
 });
 
-const submit = () => {
+function submit() {
     form.post('/customers/create', {
         onSuccess: () => {
             form.reset();
-            showCreateForm.value = false;
+            dialog.value = false;
         },
     });
-};
+}
 </script>
 
 <template>
     <Head title="Customers" />
-
     <AppLayout>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Customers</h1>
-            <button
-                class="btn btn-primary"
-                @click="showCreateForm = !showCreateForm"
+        <div class="mb-4 flex items-center justify-between">
+            <h1 class="text-2xl font-semibold text-gray-800">Customers</h1>
+            <v-btn
+                color="primary"
+                data-testid="customers-create-button"
+                @click="dialog = true"
             >
-                {{ showCreateForm ? 'Cancel' : 'New Customer' }}
-            </button>
+                <v-icon start icon="mdi-plus" /> New Customer
+            </v-btn>
         </div>
 
-        <div v-if="showCreateForm" class="card mb-4">
-            <div class="card-body">
-                <form @submit.prevent="submit">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <input
-                                v-model="form.name"
-                                type="text"
-                                class="form-control"
-                                :class="{ 'is-invalid': form.errors.name }"
-                                placeholder="Name"
-                            />
-                        </div>
-                        <div class="col-md-4">
-                            <input
-                                v-model="form.phone"
-                                type="tel"
-                                class="form-control"
-                                :class="{ 'is-invalid': form.errors.phone }"
-                                placeholder="Phone"
-                                required
-                            />
-                        </div>
-                        <div class="col-md-3">
-                            <input
-                                v-model="form.email"
-                                type="email"
-                                class="form-control"
-                                :class="{ 'is-invalid': form.errors.email }"
-                                placeholder="Email"
-                            />
-                        </div>
-                        <div class="col-md-1">
-                            <button
-                                type="submit"
-                                class="btn btn-success w-100"
-                                :disabled="form.processing"
-                            >
-                                Save
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <v-card data-testid="customers-table-card">
+            <v-data-table
+                :headers="headers"
+                :items="customers"
+                item-value="id"
+                density="comfortable"
+                :items-per-page="50"
+            >
+                <template #item.actions="{ item }">
+                    <Link :href="`/customers/${item.id}/show`">
+                        <v-btn size="small" variant="text" icon="mdi-eye" :data-testid="`customer-view-${item.id}`" />
+                    </Link>
+                </template>
+            </v-data-table>
+        </v-card>
 
-        <div class="card">
-            <table class="table table-striped mb-0">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Points</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="customer in customers" :key="customer.id">
-                        <td>{{ customer.name }}</td>
-                        <td>{{ customer.phone }}</td>
-                        <td>{{ customer.email }}</td>
-                        <td>{{ customer.points }}</td>
-                        <td>
-                            <Link
-                                :href="`/customers/${customer.id}/show`"
-                                class="btn btn-sm btn-outline-primary"
-                            >
-                                View
-                            </Link>
-                        </td>
-                    </tr>
-                    <tr v-if="!customers.length">
-                        <td colspan="5" class="text-center text-muted">
-                            No customers found.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <v-dialog v-model="dialog" max-width="520" data-testid="customer-dialog">
+            <v-card>
+                <v-card-title>New Customer</v-card-title>
+                <v-card-text>
+                    <v-form @submit.prevent="submit">
+                        <v-text-field
+                            v-model="form.name"
+                            label="Name"
+                            :error-messages="form.errors.name"
+                            data-testid="customer-name"
+                        />
+                        <v-text-field
+                            v-model="form.phone"
+                            label="Phone"
+                            :error-messages="form.errors.phone"
+                            required
+                            data-testid="customer-phone"
+                        />
+                        <v-text-field
+                            v-model="form.email"
+                            label="Email"
+                            type="email"
+                            :error-messages="form.errors.email"
+                            data-testid="customer-email"
+                        />
+                    </v-form>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn variant="text" @click="dialog = false">Cancel</v-btn>
+                    <v-btn
+                        color="primary"
+                        :loading="form.processing"
+                        data-testid="customer-submit"
+                        @click="submit"
+                    >
+                        Create
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </AppLayout>
 </template>

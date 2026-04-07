@@ -2,49 +2,82 @@
 
 namespace App\Http\Controllers\Admin\Store;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\Store\ProductInstance\ProductInstanceRepositoryContract;
 use App\Repositories\Store\Shipment\ShipmentRepositoryContract;
 use App\Services\Store\InventoryService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ShipmentController extends Controller
 {
-
-    /**
-     * @var ShipmentRepositoryContract
-     */
-    protected $shipmentsRepo;
-
-    public function __construct(ShipmentRepositoryContract $shipmentsRepo)
+    public function __construct(protected ShipmentRepositoryContract $shipmentsRepo)
     {
-        $this->shipmentsRepo = $shipmentsRepo;
     }
 
-    public function index()
+    public function index(): InertiaResponse
     {
-        $shipments = $this->shipmentsRepo->getAll();
-        return view('backend.store.shipments.index', compact('shipments'));
+        $paginator = $this->shipmentsRepo->getAll();
+        $stores = config('store.stores', []);
+
+        return Inertia::render('Admin/Store/Shipments/Index', [
+            'shipments' => collect($paginator->items())->map(fn ($s) => [
+                'id' => $s->id,
+                'store' => $s->store,
+                'store_name' => $stores[$s->store] ?? null,
+                'created_at' => $s->created_at?->toDateTimeString(),
+                'instance_count' => $s->productInstances->count(),
+            ])->values(),
+        ]);
     }
 
-    public function create(ProductInstanceRepositoryContract $instancesRepo)
+    public function create(ProductInstanceRepositoryContract $instancesRepo): InertiaResponse
     {
         $sortedInstances = $instancesRepo->getActiveWhereStore(Auth::user()->store, true);
-        return view('backend.store.shipments.create', compact('sortedInstances'));
+
+        $flat = [];
+        foreach (($sortedInstances ?: []) as $categoryName => $instances) {
+            foreach ($instances as $instance) {
+                $flat[] = [
+                    'id' => $instance['instance_id'],
+                    'category' => $categoryName,
+                    'label' => $instance['name'] . ' (stock: ' . ($instance['stock'] ?? 0) . ')',
+                ];
+            }
+        }
+
+        return Inertia::render('Admin/Store/Shipments/Create', [
+            'instances' => $flat,
+        ]);
     }
 
-    public function store(Request $request, InventoryService $inventoryService)
+    public function store(Request $request, InventoryService $inventoryService): RedirectResponse
     {
         $shipment = $this->shipmentsRepo->create($request->all());
         $inventoryService->adjustInventoryForShipment($shipment);
+
         return redirect('/admin/store/shipments');
     }
 
-    public function show($id)
+    public function show(int $id): InertiaResponse
     {
         $shipment = $this->shipmentsRepo->findById($id);
-        return view('backend.store.shipments.show', compact('shipment'));
-    }
+        $stores = config('store.stores', []);
 
+        return Inertia::render('Admin/Store/Shipments/Show', [
+            'shipment' => [
+                'id' => $shipment->id,
+                'store' => $shipment->store,
+                'store_name' => $stores[$shipment->store] ?? null,
+                'created_at' => $shipment->created_at?->toDateTimeString(),
+                'instances' => $shipment->productInstances->map(fn ($i) => [
+                    'id' => $i->id,
+                    'quantity' => $i->pivot->quantity,
+                ])->values(),
+            ],
+        ]);
+    }
 }

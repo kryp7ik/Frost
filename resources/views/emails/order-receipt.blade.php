@@ -1,15 +1,18 @@
 <html>
 <head>
     <title>Order {{ $order->id }} Receipt</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        body { font-family: Arial, Helvetica, sans-serif; color: #1f2937; }
+        table { border-collapse: collapse; }
+        .text-center { text-align: center; }
+        .receipt-items { width: 100%; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
+        .receipt-items td { padding: 6px 8px; border-bottom: 1px solid #f3f4f6; }
+        .receipt-items tr:last-child td { border-bottom: none; }
+    </style>
 </head>
 <body>
-<div class="row">
-    <div class="col-md-12">
-        <div class="text-center">
-            <img src="http://frost.com/img/joltreceipt.jpg" style=""/>
-        </div>
-    </div>
+<div class="text-center">
+    <img src="http://frost.com/img/joltreceipt.jpg" alt="" style=""/>
 </div>
 <table style="width:100%">
     <tr>
@@ -45,7 +48,7 @@
     Order #: {{ $order->id }}
 </div>
 <br/>
-<table class="table table-striped" style="width:100%">
+<table class="receipt-items" style="width:100%">
     <tr>
         <td width="50%"><strong><u>Product</u></strong></td>
         <td width="20%"><strong><u>Price</u></strong></td>
@@ -113,6 +116,3 @@
 </table>
 </body>
 </html>
-
-
-

@@ -1,0 +1,4 @@
+.auth/*
+!.auth/.gitkeep
+.report/
+test-results/

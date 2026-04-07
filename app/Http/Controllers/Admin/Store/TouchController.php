@@ -22,9 +22,9 @@ class TouchController extends Controller
      * Display view only
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function touch()
+    public function touch(): \Inertia\Response
     {
-        return view('backend.store.touch.touch');
+        return \Inertia\Inertia::render('Admin/Store/Touch/Touch');
     }
 
     /**

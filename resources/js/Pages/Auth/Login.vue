@@ -17,67 +17,63 @@ const submit = () => {
 <template>
     <Head title="Log in" />
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Login</div>
-                    <div class="card-body">
-                        <form @submit.prevent="submit">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input
-                                    id="email"
-                                    v-model="form.email"
-                                    type="email"
-                                    class="form-control"
-                                    :class="{ 'is-invalid': form.errors.email }"
-                                    required
-                                    autofocus
-                                />
-                                <div v-if="form.errors.email" class="invalid-feedback">
-                                    {{ form.errors.email }}
-                                </div>
-                            </div>
+    <v-app>
+        <v-main class="bg-gray-100">
+            <v-container class="d-flex align-center justify-center" style="min-height: 100vh;">
+                <v-card
+                    class="pa-6"
+                    elevation="4"
+                    max-width="420"
+                    width="100%"
+                    data-testid="login-card"
+                >
+                    <v-card-title class="text-h5 mb-4">Log in to Frost</v-card-title>
 
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input
-                                    id="password"
-                                    v-model="form.password"
-                                    type="password"
-                                    class="form-control"
-                                    :class="{ 'is-invalid': form.errors.password }"
-                                    required
-                                />
-                                <div v-if="form.errors.password" class="invalid-feedback">
-                                    {{ form.errors.password }}
-                                </div>
-                            </div>
+                    <v-form @submit.prevent="submit">
+                        <v-text-field
+                            v-model="form.email"
+                            label="Email"
+                            type="email"
+                            autocomplete="username"
+                            :error-messages="form.errors.email"
+                            required
+                            autofocus
+                            data-testid="login-email"
+                        />
 
-                            <div class="mb-3 form-check">
-                                <input
-                                    id="remember"
-                                    v-model="form.remember"
-                                    type="checkbox"
-                                    class="form-check-input"
-                                />
-                                <label class="form-check-label" for="remember">
-                                    Remember me
-                                </label>
-                            </div>
+                        <v-text-field
+                            v-model="form.password"
+                            label="Password"
+                            type="password"
+                            autocomplete="current-password"
+                            :error-messages="form.errors.password"
+                            required
+                            class="mt-2"
+                            data-testid="login-password"
+                        />
 
-                            <button
-                                type="submit"
-                                class="btn btn-primary w-100"
-                                :disabled="form.processing"
-                            >
-                                Log in
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        <v-checkbox
+                            v-model="form.remember"
+                            label="Remember me"
+                            hide-details
+                            class="mb-4"
+                            data-testid="login-remember"
+                        />
+
+                        <v-btn
+                            type="submit"
+                            color="primary"
+                            block
+                            size="large"
+                            :loading="form.processing"
+                            :disabled="form.processing"
+                            data-testid="login-submit"
+                        >
+                            Log in
+                        </v-btn>
+                    </v-form>
+                </v-card>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
